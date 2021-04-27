@@ -1,0 +1,90 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * Project: TI
+ * User: Miguel Cerejo
+ * Date: 4/25/2021
+ * Time: 3:34 PM
+ *
+ * File: container.php
+ */
+
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Slim\Views\PhpRenderer;
+use Slim\App;
+use Slim\Factory\AppFactory;
+use Slim\Middleware\ErrorMiddleware;
+use Selective\BasePath\BasePathMiddleware;
+use Odan\Session\PhpSession;
+use Odan\Session\SessionInterface;
+use Odan\Session\Middleware\SessionMiddleware;
+use App\Factory\LoggerFactory;
+
+return [
+    'settings' => function () {
+        return require __DIR__ . '/settings.php';
+    },
+
+    SessionInterface::class => function (ContainerInterface $container) {
+        $settings = $container->get('settings');
+        $session = new PhpSession();
+        $session->setOptions((array)$settings['session']);
+
+        return $session;
+    },
+
+    SessionMiddleware::class => function (ContainerInterface $container) {
+        return new SessionMiddleware($container->get(SessionInterface::class));
+    },
+
+    App::class => function (ContainerInterface $container) {
+        AppFactory::setContainer($container);
+
+        return AppFactory::create();
+    },
+
+
+    ResponseFactoryInterface::class => function (ContainerInterface $container) {
+        return $container->get(App::class)->getResponseFactory();
+    },
+
+    ErrorMiddleware::class => function (ContainerInterface $container) {
+        $app = $container->get(App::class);
+        $settings = $container->get('settings')['error'];
+
+        return new ErrorMiddleware(
+            $app->getCallableResolver(),
+            $app->getResponseFactory(),
+            (bool)$settings['display_error_details'],
+            (bool)$settings['log_errors'],
+            (bool)$settings['log_error_details']
+        );
+    },
+
+    BasePathMiddleware::class => function (ContainerInterface $container) {
+        return new BasePathMiddleware($container->get(App::class));
+    },
+
+    PDO::class => function (ContainerInterface $container) {
+        $settings = $container->get('settings')['db'];
+
+        $host = $settings['host'];
+        $dbname = $settings['database'];
+        $username = $settings['username'];
+        $password = $settings['password'];
+        $charset = $settings['charset'];
+        $flags = $settings['flags'];
+        $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
+
+        return new PDO($dsn, $username, $password, $flags);
+    },
+
+    PhpRenderer::class => function (ContainerInterface $container) {
+        return new PhpRenderer($container->get('settings')['view']['path']);
+    },
+
+    LoggerFactory::class => function (ContainerInterface $container) {
+        return new LoggerFactory($container->get('settings')['logger']);
+    },
+];

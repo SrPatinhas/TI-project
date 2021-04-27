@@ -50,3 +50,10 @@
 
 # Embedded web-server pid file
 /.web-server-pid
+
+.idea
+vendor
+composer.lock
+/storage/*
+!/storage/.htaccess
+/tmp/upload/*

@@ -1,0 +1,39 @@
+[2021-04-27T03:33:03.117658+01:00] 912c387e-9907-4412-addc-9fd6b3080e6d.NOTICE: Error number [2] Undefined property: Slim\Views\PhpRenderer::$flash on line 2 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:33:06.984676+01:00] 10d07373-69d9-4406-bd4e-b20e71cab03a.NOTICE: Error number [2] Undefined property: Slim\Views\PhpRenderer::$flash on line 2 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:33:09.177917+01:00] 91254d05-9192-4c78-9655-ed841ec91ae5.NOTICE: Error number [2] Undefined property: Slim\Views\PhpRenderer::$flash on line 2 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:35:14.928109+01:00] ecffecbc-94e0-4f79-b8a0-777af7a5e98c.NOTICE: Error number [2] Undefined variable $flash on line 2 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:35:20.015430+01:00] b4cf9ac5-9132-4b16-b6a3-605d707468df.NOTICE: Error number [2] Undefined variable $flash on line 2 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:35:33.564967+01:00] 96020a11-9c43-4b72-bf23-2696bfd4f3e6.NOTICE: Error number [2] Undefined variable $flash on line 2 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:35:43.089725+01:00] 39bd4d82-1314-4af8-9e6d-d7e66633fb35.NOTICE: Error number [2] Undefined variable $flash on line 4 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:35:52.340248+01:00] 0ef75ca2-0639-4e61-8e66-64cbffe0102f.NOTICE: Error number [2] Undefined variable $flash on line 2 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:36:00.208275+01:00] a5a3924c-9129-40e7-8b47-b8791f771c78.NOTICE: Error number [2] Undefined variable $flash on line 4 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:36:04.251625+01:00] 40a480df-3aef-450b-a851-86485066f4f2.NOTICE: Error number [2] Undefined variable $flash on line 4 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:47:28.242190+01:00] 0ec9916b-17ef-42d5-ad3a-7b92d903605c.NOTICE: Error number [2] Undefined array key "email" on line 42 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:47:28.242865+01:00] 0ec9916b-17ef-42d5-ad3a-7b92d903605c.NOTICE: Error number [2] Undefined array key "password" on line 51 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:47:39.354120+01:00] 5aedc3d3-770b-44fe-98ad-c0101efabc7f.NOTICE: Error number [2] Undefined array key "email" on line 42 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:47:39.354756+01:00] 5aedc3d3-770b-44fe-98ad-c0101efabc7f.NOTICE: Error number [2] Undefined array key "password" on line 51 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:47:40.892811+01:00] 27a88300-9195-47dd-be86-6141286e5b95.NOTICE: Error number [2] Undefined array key "email" on line 42 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:47:40.893339+01:00] 27a88300-9195-47dd-be86-6141286e5b95.NOTICE: Error number [2] Undefined array key "password" on line 51 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:47:44.269906+01:00] a7706ad0-884f-4327-b7a4-aeda98d2bc25.NOTICE: Error number [2] Undefined array key "data" on line 56 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:49:04.724777+01:00] 6097bfa1-eaf9-4109-9714-889a7229582b.NOTICE: Error number [2] Undefined array key "data" on line 56 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:50:05.041421+01:00] f19c29ef-008a-4ac0-bf61-72d060ef65f5.NOTICE: Error number [2] Undefined array key "data" on line 58 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:50:35.060836+01:00] cf4b36b9-8531-477a-8aae-5863ebc1fecf.NOTICE: Error number [2] Undefined array key "data" on line 58 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:50:40.651302+01:00] fc6a9590-1a4c-4031-b3ed-4e6446ae861d.NOTICE: Error number [2] Undefined array key "data" on line 58 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:50:44.692734+01:00] 96646204-18c5-430c-8641-c8b0aa4e448c.NOTICE: Error number [2] Undefined array key "data" on line 58 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:51:16.947611+01:00] 0c6372c2-2e19-4c4a-8405-0c4e2ffe20b5.NOTICE: Error number [2] Undefined array key "data" on line 58 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:52:04.471696+01:00] 86fb26a2-fe66-4eb5-8e0c-4ee35e27c35e.NOTICE: Error number [2] Undefined array key "data" on line 58 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:52:47.170539+01:00] befa550e-ca3a-44c1-9a39-767e7ad09ac8.NOTICE: Error number [2] Undefined array key "data" on line 61 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:53:20.274411+01:00] a22d863b-b2de-4dd6-b02f-5654ab89f590.NOTICE: Error number [2] Undefined array key "data" on line 61 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T03:54:40.377345+01:00] a069339d-6397-4759-9581-6d76d2ee9a8b.NOTICE: Error number [2] Undefined array key "data" on line 61 in file C:\xampp\htdocs\TI\templates\login.php  
+[2021-04-27T04:01:54.203149+01:00] 93c140f2-61fe-4c6f-ab86-ae38287318a0.NOTICE: Error number [2] Undefined variable $session on line 2 in file C:\xampp\htdocs\TI\templates\dashboard.php  
+[2021-04-27T04:02:02.305545+01:00] 563f5e49-aa98-4459-b640-32087dacdf9e.NOTICE: Error number [2] Undefined variable $session on line 2 in file C:\xampp\htdocs\TI\templates\dashboard.php  
+[2021-04-27T04:02:02.306193+01:00] 563f5e49-aa98-4459-b640-32087dacdf9e.NOTICE: Error number [2] Undefined variable $user on line 49 in file C:\xampp\htdocs\TI\templates\dashboard.php  
+[2021-04-27T04:02:02.306239+01:00] 563f5e49-aa98-4459-b640-32087dacdf9e.NOTICE: Error number [2] Trying to access array offset on value of type null on line 49 in file C:\xampp\htdocs\TI\templates\dashboard.php  
+[2021-04-27T04:02:37.682409+01:00] 08cafed8-4172-4904-9a21-01fde357f7e0.NOTICE: Error number [2] Undefined variable $session on line 47 in file C:\xampp\htdocs\TI\src\Action\HomeAction.php  
+[2021-04-27T04:04:24.560276+01:00] 5bce8168-5614-4763-89dc-bd59f997bcf6.NOTICE: Error number [2] Undefined variable $session on line 53 in file C:\xampp\htdocs\TI\src\Action\HomeAction.php  
+[2021-04-27T04:04:36.388328+01:00] 8a826de4-5b2f-4302-9d57-329b30f53133.NOTICE: Error number [2] Undefined variable $session on line 53 in file C:\xampp\htdocs\TI\src\Action\HomeAction.php  
+[2021-04-27T04:08:15.915295+01:00] 624de6d0-f036-410d-962f-7c88bdab437b.NOTICE: Error number [2] Undefined property: App\Action\HomeAction::$session on line 47 in file C:\xampp\htdocs\TI\src\Action\HomeAction.php  
+[2021-04-27T17:53:54.810606+01:00] 80866543-eca3-46e4-9144-f5ae54793319.NOTICE: Error number [2] Undefined property: App\Action\UserAction::$session on line 29 in file C:\xampp\htdocs\TI\src\Action\UserAction.php  
+[2021-04-27T17:54:32.305653+01:00] c6fa6b84-d1dc-4044-8676-a75e207f259c.NOTICE: Error number [2] Undefined property: App\Action\UserAction::$session on line 29 in file C:\xampp\htdocs\TI\src\Action\UserAction.php  
+[2021-04-27T17:55:20.903455+01:00] 2dce9e0d-0352-4225-a117-080445877549.NOTICE: Error number [2] Undefined property: App\Action\UserAction::$renderer on line 43 in file C:\xampp\htdocs\TI\src\Action\UserAction.php  
+[2021-04-27T17:55:57.409428+01:00] 49a73ca7-e5a1-4001-9579-994e3b15c77e.NOTICE: Error number [2] Undefined property: App\Action\UserAction::$renderer on line 43 in file C:\xampp\htdocs\TI\src\Action\UserAction.php  
