@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `devices`
+-- Table structure for table `device`
 --
 
 CREATE TABLE `device` (
@@ -57,7 +57,7 @@ CREATE TABLE `log` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `plants`
+-- Table structure for table `plant`
 --
 
 CREATE TABLE `plant` (
@@ -102,9 +102,9 @@ INSERT INTO `user` (`id`, `email`, `name`, `password`, `role`, `is_active`, `cre
 --
 
 --
--- Indexes for table `devices`
+-- Indexes for table `device`
 --
-ALTER TABLE `devices`
+ALTER TABLE `device`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -114,9 +114,9 @@ ALTER TABLE `log`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `plants`
+-- Indexes for table `plant`
 --
-ALTER TABLE `plants`
+ALTER TABLE `plant`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -131,9 +131,9 @@ ALTER TABLE `user`
 --
 
 --
--- AUTO_INCREMENT for table `devices`
+-- AUTO_INCREMENT for table `device`
 --
-ALTER TABLE `devices`
+ALTER TABLE `device`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -143,9 +143,9 @@ ALTER TABLE `log`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `plants`
+-- AUTO_INCREMENT for table `plant`
 --
-ALTER TABLE `plants`
+ALTER TABLE `plant`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
