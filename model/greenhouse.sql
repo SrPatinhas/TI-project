@@ -31,7 +31,7 @@ CREATE TABLE `devices` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `position` varchar(255) NOT NULL,
+  `location` varchar(255) NOT NULL,
   `type` enum('sensor','actuators','other','') NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -61,10 +61,12 @@ CREATE TABLE `log` (
 
 CREATE TABLE `plants` (
   `id` int(11) NOT NULL,
-  `name` int(11) NOT NULL,
-  `location` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `location` varchar(255) NOT NULL,
   `cover` varchar(255) NOT NULL,
   `webcam` varchar(255) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `created_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

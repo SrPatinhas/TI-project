@@ -1,14 +1,23 @@
 # TI-project
- 
+
+# Host config
+###Windows
+    C:\Windows\System32\drivers\etc
+     > host
+    (This file needs to have permissions to be edited)
+    Add the following line to the end of the file
+```
+127.0.0.1       ti.test
+```
 
 # Config
 Qualquer config a fazer e na parte de `config/settings.php`
 
-## BD
-
-
-## URL > ti.test
+### URL > ti.test
 **C:\xampp\apache\conf\extra\httpd-vhosts.conf**
+
+Update the path to the right place of the files (DocumentRoot)
+
 ``` 
     <VirtualHost *>
         ServerName ti.test
@@ -33,6 +42,10 @@ Qualquer config a fazer e na parte de `config/settings.php`
 **C:\Windows\System32\drivers\etc\hosts**
 
 ```127.0.0.1	ti.test```
+
+## BD
+
+    Create the database "greenhouse"
 
 # Tutorials
 

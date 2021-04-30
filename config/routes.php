@@ -24,7 +24,8 @@ return function (App $app) {
     $app->group('/api/v1', function (RouteCollectorProxy $group) {
         $group->get('', \App\Action\ApiAction::class . ":index")->setName('api');
         $group->get('/', \App\Action\ApiAction::class . ":index");
-        $group->post('/log/{device}', \App\Action\ApiAction::class . ":device")->setName('apiDevice');
+        $group->get('/log/{device}', \App\Action\ApiAction::class . ":device")->setName('apiDeviceGet');
+        $group->post('/log/{device}', \App\Action\ApiAction::class . ":device")->setName('apiDeviceLog');
     })->add(UserAuthMiddleware::class);
 
     // Password protected area
