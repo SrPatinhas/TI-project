@@ -24,10 +24,9 @@
                         </h1>
                     </div>
                     <div class="row">
-                        <form method="post" action="/users/<?=($detail["id"] != 0 ? "update" : "create")?>">
+                        <form>
                             <fieldset>
                                 <legend>User Edit</legend>
-                                <input type="hidden" name="id" value="<?=$detail["id"]?>">
                                 <div class="mb-3">
                                     <label for="disabledTextInput" class="form-label">Name</label>
                                     <input type="text" id="disabledTextInput" class="form-control" placeholder="User Name" value="<?=$detail["name"]?>">

@@ -31,9 +31,6 @@ return function (App $app) {
     $app->group('/dashboard', function (RouteCollectorProxy $group) {
         $group->get('', \App\Action\HomeAction::class . ":dashboard")->setName('dashboard');
         $group->get('/', \App\Action\HomeAction::class . ":dashboard");
-
-        $group->get('/plants', \App\Action\UserAction::class);
-
         $group->get('/logs/{device}', \App\Action\UserAction::class);
     })->add(UserAuthMiddleware::class);
 
@@ -41,12 +38,23 @@ return function (App $app) {
     $app->group('/devices', function (RouteCollectorProxy $group) {
         $group->get('', \App\Action\DevicesAction::class . ":index")->setName('devices');
         $group->get('/', \App\Action\DevicesAction::class . ":index");
-        $group->get('/detail/{id}', \App\Action\DevicesAction::class . ":detail");
+        $group->get('/detail/{id}', \App\Action\DevicesAction::class . ":detail")->setName('devices-detail');
         $group->get('/edit/{id}', \App\Action\DevicesAction::class . ":edit");
         $group->get('/new', \App\Action\DevicesAction::class . ":new");
         $group->post('/create', \App\Action\DevicesAction::class . ":create");
         $group->post('/update', \App\Action\DevicesAction::class . ":update");
         $group->get('/delete/{id}', \App\Action\DevicesAction::class . ":delete");
+    })->add(UserAuthMiddleware::class);
+
+    $app->group('/plants', function (RouteCollectorProxy $group) {
+        $group->get('', \App\Action\PlantsAction::class . ":index")->setName('devices');
+        $group->get('/', \App\Action\PlantsAction::class . ":index");
+        $group->get('/detail/{id}', \App\Action\PlantsAction::class . ":detail")->setName('plants-detail');
+        $group->get('/edit/{id}', \App\Action\PlantsAction::class . ":edit");
+        $group->get('/new', \App\Action\PlantsAction::class . ":new");
+        $group->post('/create', \App\Action\PlantsAction::class . ":create");
+        $group->post('/update', \App\Action\PlantsAction::class . ":update");
+        $group->get('/delete/{id}', \App\Action\PlantsAction::class . ":delete");
     })->add(UserAuthMiddleware::class);
 
     $app->group('/users', function (RouteCollectorProxy $group) {

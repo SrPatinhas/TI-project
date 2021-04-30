@@ -87,7 +87,8 @@ final class UserAction
         }
 
         $this->renderer->addAttribute('user', $user);
-        return $this->renderer->render($response, 'users/new.php');
+        $this->renderer->addAttribute('detail', []);
+        return $this->renderer->render($response, 'users/edit.php');
     }
 
     public function create(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
@@ -97,7 +98,6 @@ final class UserAction
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
-
 
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();

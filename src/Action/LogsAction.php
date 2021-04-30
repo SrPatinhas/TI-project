@@ -11,7 +11,7 @@
 
 namespace App\Action;
 
-use App\Domain\User\Service\User;
+use App\Domain\User\Service\Plant;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Routing\RouteContext;
@@ -20,7 +20,7 @@ final class LogsAction
 {
     private $userModel;
 
-    public function __construct(User $userModel)
+    public function __construct(Plant $userModel)
     {
         $this->userModel = $userModel;
     }

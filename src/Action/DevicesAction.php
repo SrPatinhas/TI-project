@@ -20,7 +20,7 @@ final class DevicesAction
 {
     private $userCreator;
 
-    public function __construct(User $userCreator)
+    public function __construct(Plant $userCreator)
     {
         $this->userCreator = $userCreator;
     }

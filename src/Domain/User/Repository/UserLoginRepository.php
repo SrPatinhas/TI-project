@@ -54,6 +54,7 @@ class UserLoginRepository
         if ($user_query && password_verify($user['password'], $user_query['password'])) {
             return (array)[
                 "user" => true,
+                "id" => $user_query["id"],
                 "email" => $user_query["email"],
                 "name" => $user_query["name"],
                 "role" => $user_query["role"],

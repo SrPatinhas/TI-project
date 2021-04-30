@@ -6,25 +6,36 @@
  * Date: 4/25/2021
  * Time: 6:05 PM
  *
- * File: UserCreateAction.php
+ * File: PlantCreateAction.php
  */
 
 namespace App\Action;
 
-use App\Domain\User\Service\User;
+use App\Domain\Plant\Service\Plant;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Routing\RouteContext;
+use Slim\Views\PhpRenderer;
 
 final class PlantsAction
 {
-    private $userModel;
+    private $plantModel;
+    /**
+     * @var SessionInterface
+     */
+    private $session;
+    /**
+     * @var PhpRenderer
+     */
+    private $renderer;
 
-    public function __construct(User $userModel)
+    public function __construct(Plant $plantModel, PhpRenderer $renderer, SessionInterface $session)
     {
-        $this->userModel = $userModel;
+        $this->renderer = $renderer;
+        $this->plantModel = $plantModel;
+        $this->session = $session;
     }
-
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         $user = $this->session->get('user');
         if ($user["role"] != "admin") {
@@ -32,28 +43,24 @@ final class PlantsAction
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
 
-        $list = $this->userModel->getUsersList();
+        $list = $this->plantModel->getPlantsList();
 
         $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('list', $list);
-        return $this->renderer->render($response, 'users/list.php');
+        return $this->renderer->render($response, 'plants/list.php');
     }
 
-    public function detail(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+    public function detail(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
         $user = $this->session->get('user');
         if ($user["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
-
-        // Collect input from the HTTP request
-        $data = (array)$request->getParsedBody();
-
-        $detail = $this->userModel->getUser($data["userid"], $data["email"]);
+        $detail = $this->plantModel->getPlant((int)$params["id"]);
 
         $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', $detail);
-        return $this->renderer->render($response, 'users/detail.php');
+        return $this->renderer->render($response, 'plants/detail.php');
     }
 
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
@@ -64,7 +71,8 @@ final class PlantsAction
         }
 
         $this->renderer->addAttribute('user', $user);
-        return $this->renderer->render($response, 'users/new.php');
+        $this->renderer->addAttribute('detail', []);
+        return $this->renderer->render($response, 'plants/edit.php');
     }
 
     public function create(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
@@ -75,21 +83,21 @@ final class PlantsAction
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
 
-
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();
-        // Invoke the Domain with inputs and retain the result
-        $userId = $this->userModel->createUser($data);
-        // Transform the result into the JSON representation
-        $result = [
-            'user_id' => $userId
-        ];
-        // Build the HTTP response
-        $response->getBody()->write((string)json_encode($result));
+        $data["created_by"] = $user["id"];
 
-        return $response
-            ->withHeader('Content-Type', 'application/json')
-            ->withStatus(201);
+        // Invoke the Domain with inputs and retain the result
+        $plant = $this->plantModel->createPlant($data);
+
+        if (!isset($plant["id"])) {
+            $this->renderer->addAttribute('user', $user);
+            $this->renderer->addAttribute('detail', $data);
+            return $this->renderer->render($response, 'plants/edit.php');
+        }
+
+        $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+        return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('plants-detail', ["id" => $plant["id"]]));
     }
 
 
@@ -103,15 +111,11 @@ final class PlantsAction
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();
         // Invoke the Domain with inputs and retain the result
-        $detail = $this->userModel->updateUser($data);
-        // Transform the result into the JSON representation
-        $result = [
-            'user_id' => $userId
-        ];
+        $detail = $this->plantModel->updatePlant($data);
 
         $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', $detail);
-        return $this->renderer->render($response, 'users/detail.php');
+        return $this->renderer->render($response, 'plants/detail.php');
     }
 
     public function delete(ServerRequestInterface $request, ResponseInterface $response, $id): ResponseInterface {
@@ -120,9 +124,9 @@ final class PlantsAction
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
-        $this->userModel->deleteUser($id);
+        $this->plantModel->deletePlant($id);
 
         $this->renderer->addAttribute('user', $user);
-        return $this->renderer->render($response, 'users/list.php');
+        return $this->renderer->render($response, 'plants/list.php');
     }
 }
