@@ -32,7 +32,8 @@ CREATE TABLE `devices` (
   `name` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `location` varchar(255) NOT NULL,
-  `type` enum('sensor','actuators','other','') NOT NULL,
+  `type` enum('temperature','humidity','wind','light','co2','motion','water','sprinkler','window','fan') NOT NULL,
+  `type` enum('sensor','actuators','other') NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
