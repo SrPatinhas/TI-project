@@ -58,3 +58,6 @@ composer.lock
 !/storage/.htaccess
 /tmp/upload/*
 /logs/*
+
+#ignore settings because of DB credentials
+/

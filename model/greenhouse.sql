@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `devices`
 --
 
-CREATE TABLE `devices` (
+CREATE TABLE `device` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE `log` (
 -- Table structure for table `plants`
 --
 
-CREATE TABLE `plants` (
+CREATE TABLE `plant` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
