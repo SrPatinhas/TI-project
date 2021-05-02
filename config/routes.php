@@ -28,6 +28,12 @@ return function (App $app) {
         $group->post('/log/{device}', \App\Action\ApiAction::class . ":device")->setName('apiDeviceLog');
     })->add(UserAuthMiddleware::class);
 
+
+    $app->get('/settings', \App\Action\HomeAction::class . ":settings")->setName('settings')->add(UserAuthMiddleware::class);
+    $app->get('/webcams', \App\Action\HomeAction::class . ":webcams")->setName('webcams')->add(UserAuthMiddleware::class);
+    $app->get('/device/view/{id}', \App\Action\HomeAction::class . ":device")->setName('deviceView')->add(UserAuthMiddleware::class);
+    $app->get('/plant/view/{id}', \App\Action\HomeAction::class . ":plant")->setName('plantView')->add(UserAuthMiddleware::class);
+
     // Password protected area
     $app->group('/dashboard', function (RouteCollectorProxy $group) {
         $group->get('', \App\Action\HomeAction::class . ":dashboard")->setName('dashboard');

@@ -33,8 +33,8 @@ final class UserAction
     public function __construct(User $userModel, PhpRenderer $renderer, SessionInterface $session)
     {
         $this->renderer = $renderer;
-        $this->userModel = $userModel;
         $this->session = $session;
+        $this->userModel = $userModel;
     }
 
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {

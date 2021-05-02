@@ -47,13 +47,34 @@ final class HomeAction
         return $response->withStatus(302)->withHeader('Location', $routeParser->urlFor('login'));
     }
 
-    public function dashboard(
-        ServerRequestInterface $request,
-        ResponseInterface $response
-    ): ResponseInterface {
+    public function dashboard(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         $user = $this->session->get('user');
         // optional
         $this->renderer->addAttribute('user', $user);
         return $this->renderer->render($response, 'dashboard.php');
+    }
+
+    public function webcams(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        $user = $this->session->get('user');
+        if ($user["role"] != "admin") {
+            // Get RouteParser from request to generate the urls
+            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+            return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
+        }
+        // optional
+        $this->renderer->addAttribute('user', $user);
+        return $this->renderer->render($response, 'webcams.php');
+    }
+
+    public function settings(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        $user = $this->session->get('user');
+        if ($user["role"] != "admin") {
+            // Get RouteParser from request to generate the urls
+            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+            return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
+        }
+        // optional
+        $this->renderer->addAttribute('user', $user);
+        return $this->renderer->render($response, 'settings.php');
     }
 }

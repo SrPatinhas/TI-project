@@ -4,6 +4,7 @@
         <?=$this->fetch('./layout/header.php', ["title" => "Users List"])?>
         <!-- Custom styles for this template -->
         <link href="/assets/css/dashboard.css" rel="stylesheet">
+        <link href="/assets/css/settings.css" rel="stylesheet">
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>
@@ -65,6 +66,25 @@
                                             Is Active
                                         </label>
                                     </div>
+                                </div>
+
+
+                                <div class="greenhouse-grid">
+                                    <?php
+                                    $i = 0;
+                                    while ($greenhouse['line'] > $i) {
+                                        $i++;
+                                        $j = 0;
+                                        echo "<div class='grid-line'>";
+                                        echo "<span>" . $i . "</span>";
+                                        while ($greenhouse['position'] > $j) {
+                                            $j++;
+                                            echo "<input class='d-none' type='radio' name='flexRadioDefault' id='radio_$j$i'>";
+                                            echo "<label class='grid-position' for='radio_$j$i'>$j</label>";
+                                        }
+                                        echo "</div>";
+                                    }
+                                    ?>
                                 </div>
 
                                 <a href="/users/detail/<?=$detail["id"]?>" class="btn btn-secondary">
