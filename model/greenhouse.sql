@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2021 at 10:58 PM
+-- Generation Time: May 03, 2021 at 01:48 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -40,17 +40,17 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `name`, `description`, `measure`, `created_at`) VALUES
-(1, 'Temperature', '', ' ºC', 2147483647),
-(2, 'Air Humidity', '', '%', 2147483647),
-(3, 'Wind', '', '%', 2147483647),
-(4, 'Light', '', '%', 2147483647),
-(5, 'Co2', '', '%', 2147483647),
-(6, 'Motion', '', '%', 2147483647),
-(7, 'Water', '', '%', 2147483647),
-(8, 'Sprinkler', '', '%', 2147483647),
-(9, 'Window', '', '%', 2147483647),
-(10, 'Fan', '', '%', 2147483647),
-(11, 'Soil Moisture', '', '%', 2147483647);
+(1, 'Temperature', '', '', 2147483647),
+(2, 'Air Humidity', '', '', 2147483647),
+(3, 'Wind', '', '', 2147483647),
+(4, 'Light', '', '', 2147483647),
+(5, 'Co2', '', '', 2147483647),
+(6, 'Motion', '', '', 2147483647),
+(7, 'Water', '', '', 2147483647),
+(8, 'Sprinkler', '', '', 2147483647),
+(9, 'Window', '', '', 2147483647),
+(10, 'Fan', '', '', 2147483647),
+(11, 'Soil Moisture', '', '', 2147483647);
 
 -- --------------------------------------------------------
 
@@ -67,6 +67,8 @@ CREATE TABLE `device` (
   `line` int(11) NOT NULL,
   `position` int(11) NOT NULL,
   `type` enum('sensor','actuators','other','') NOT NULL,
+  `force_on` int(11) NOT NULL,
+  `switch_value` int(11) NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -75,9 +77,9 @@ CREATE TABLE `device` (
 -- Dumping data for table `device`
 --
 
-INSERT INTO `device` (`id`, `category_id`, `name_local`, `name`, `description`, `line`, `position`, `type`, `is_active`, `created_at`) VALUES
-(1, 1, 'temp_1_1', 'Temperatura', '', 2, 3, 'sensor', 1, '2021-05-02 14:37:14'),
-(2, 10, 'fan_1_2', 'Fan 1-2', '                                                                                                                                                                                                                                                                                                                                                                                            ', 3, 1, 'actuators', 1, '2021-05-02 15:44:33');
+INSERT INTO `device` (`id`, `category_id`, `name_local`, `name`, `description`, `line`, `position`, `type`, `force_on`, `switch_value`, `is_active`, `created_at`) VALUES
+(1, 1, 'temp_1_1', 'Temperatura', '', 2, 3, 'sensor', 0, 0, 1, '2021-05-02 14:37:14'),
+(2, 10, 'fan_1_2', 'Fan 1-2', '                                                                                                                                                                                                                                                                                                                                                                                            ', 3, 1, 'actuators', 0, 0, 1, '2021-05-02 15:44:33');
 
 -- --------------------------------------------------------
 
@@ -118,7 +120,8 @@ INSERT INTO `log` (`id`, `device_id`, `value`, `date`, `created_at`) VALUES
 (18, 1, '13', '2021-05-02 21:27:00', '2021-05-02 19:18:44'),
 (19, 1, '13', '2021-05-02 21:28:00', '2021-05-02 19:18:44'),
 (20, 1, '10', '2021-05-02 21:29:00', '2021-05-02 19:18:44'),
-(23, 1, '23', '2021-05-02 22:05:00', '2021-05-02 20:58:01');
+(23, 1, '23', '2021-05-02 22:05:00', '2021-05-02 20:58:01'),
+(24, 1, '23', '2021-05-02 22:15:00', '2021-05-02 23:43:15');
 
 -- --------------------------------------------------------
 
@@ -143,24 +146,8 @@ CREATE TABLE `plant` (
 --
 
 INSERT INTO `plant` (`id`, `name`, `line`, `position`, `cover`, `webcam`, `is_active`, `created_at`, `created_by`) VALUES
-(1, 'morangos', 1, 2, '', 'http://192.168.1.254/', 1, '2021-04-29 02:43:18', 1),
+(1, 'morangos', 2, 3, '', 'http://192.168.1.254/', 1, '2021-04-29 02:43:18', 1),
 (2, 'Maças', 3, 3, '', 'http://192.168.1.253/', 1, '2021-04-29 02:43:31', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `settings`
---
-
-CREATE TABLE `settings` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `value` int(11) NOT NULL,
-  `fixed_status` tinyint(1) NOT NULL,
-  `category_id` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -221,13 +208,6 @@ ALTER TABLE `plant`
   ADD KEY `created_by` (`created_by`);
 
 --
--- Indexes for table `settings`
---
-ALTER TABLE `settings`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `category_id` (`category_id`);
-
---
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -254,19 +234,13 @@ ALTER TABLE `device`
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `plant`
 --
 ALTER TABLE `plant`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `settings`
---
-ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`

@@ -30,8 +30,8 @@ return function (App $app) {
 
     $app->get('/settings', \App\Action\HomeAction::class . ":settings")->setName('settings')->add(UserAuthMiddleware::class);
     $app->get('/webcams', \App\Action\HomeAction::class . ":webcams")->setName('webcams')->add(UserAuthMiddleware::class);
-    $app->get('/device/view/{id}', \App\Action\HomeAction::class . ":device")->setName('deviceView')->add(UserAuthMiddleware::class);
-    $app->get('/plant/view/{id}', \App\Action\HomeAction::class . ":plant")->setName('plantView')->add(UserAuthMiddleware::class);
+    $app->get('/device/view/{id}', \App\Action\DevicesAction::class . ":view")->setName('deviceView')->add(UserAuthMiddleware::class);
+    $app->get('/plant/view/{id}', \App\Action\PlantsAction::class . ":view")->setName('plantView')->add(UserAuthMiddleware::class);
     $app->get('/logs[/]', \App\Action\LogsAction::class . ":index")->setName('logIndex')->add(UserAuthMiddleware::class);
 
     // Password protected area

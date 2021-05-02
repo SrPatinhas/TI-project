@@ -67,10 +67,23 @@ final class Log
      *
      * @return int The new user ID
      */
-    public function getLogByDevice(int $logId): array
+    public function getLogByDevice(int $deviceId): array
     {
         // Insert user
-        return $this->repository->getLogByDevice($logId);
+        return $this->repository->getLogByDevice($deviceId);
+    }
+
+    /**
+     * Create a new user.
+     *
+     * @param array $data The form data
+     *
+     * @return int The new user ID
+     */
+    public function getLogByPlant(int $line, int $position): array
+    {
+        // Insert user
+        return $this->repository->getLogByPlant($line, $position);
     }
 
     /**
@@ -89,14 +102,14 @@ final class Log
     /**
      * Create a new user.
      *
-     * @param array $plant The form data
+     * @param array $log The form data
      *
      * @return int The new user ID
      */
-    public function createLog(array $plant): array
+    public function createLog(array $log): array
     {
         // Insert user
-        $logId = $this->repository->insertLog($plant);
+        $logId = $this->repository->insertLog($log);
 
         $result = [
             'id' => $logId

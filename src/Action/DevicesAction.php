@@ -12,6 +12,7 @@
 namespace App\Action;
 
 use App\Domain\Device\Service\Device;
+use App\Domain\Log\Service\Log;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -32,13 +33,16 @@ final class DevicesAction
 
     private $deviceModel;
 
+    private $logModel;
+
     private $greenhouse;
 
-    public function __construct(Device $deviceModel, ContainerInterface $container, PhpRenderer $renderer, SessionInterface $session)
+    public function __construct(Device $deviceModel, Log $logModel, ContainerInterface $container, PhpRenderer $renderer, SessionInterface $session)
     {
         $this->renderer = $renderer;
         $this->session = $session;
         $this->deviceModel = $deviceModel;
+        $this->logModel = $logModel;
         $this->greenhouse = $container->get('greenhouse');
     }
 
@@ -60,13 +64,15 @@ final class DevicesAction
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
         $detail = $this->deviceModel->getDevice((int)$params["id"]);
+        $logs = $this->logModel->getLogByDevice((int)$params["id"]);
         $categories = $this->deviceModel->getCategoriesList();
 
         $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', $detail);
+        $this->renderer->addAttribute('logs', $logs);
         $this->renderer->addAttribute('categories', $categories);
         $this->renderer->addAttribute('greenhouse', $this->greenhouse);
-        return $this->renderer->render($response, 'devices/detail.php');
+        return $this->renderer->render($response, 'devices/view.php');
     }
 
 

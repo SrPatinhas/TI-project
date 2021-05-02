@@ -41,10 +41,9 @@ class LogRepository
      */
     public function getLogsList(): array
     {
-        $sql = "SELECT log.*, device.name as 'device', plant.name as 'plant' 
+        $sql = "SELECT log.*, device.name as 'device'
                 FROM log 
-                LEFT JOIN device ON device.id = log.device_id
-                LEFT JOIN plant ON plant.id = log.plant_id;";
+                LEFT JOIN device ON device.id = log.device_id;";
 
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
@@ -67,9 +66,8 @@ class LogRepository
         $row = [
             "user_id" => $userId
         ];
-        $sql = "SELECT device.name as 'device', category.name as 'category', plant.name as 'plant', CONCAT(log.value, ' ', category.measure), log.date 
+        $sql = "SELECT device.name as 'device', category.name as 'category', CONCAT(log.value, ' ', category.measure), log.date 
                 FROM log 
-                LEFT JOIN plant ON plant.id = log.plant_id 
                 LEFT JOIN device ON device.id = log.device_id
                 LEFT JOIN category ON category.id = device.category_id
                 WHERE plant.created_by = :user_id;";
@@ -85,19 +83,18 @@ class LogRepository
     /**
      *  Get user by fields
      *
-     * @param int|null $LogId
+     * @param int|null $deviceId
      * @param string|null $name
      *
      * @return array
      */
-    public function getLogByDevice(int $LogId = null): array
+    public function getLogByDevice(int $deviceId = null): array
     {
         $row = [
-            "device_id" => $LogId
+            "device_id" => $deviceId
         ];
-        $sql = "SELECT  device.name as 'device', category.name as 'category', plant.name as 'plant', CONCAT(log.value, ' ', category.measure), log.date 
+        $sql = "SELECT category.name as 'category', CONCAT(log.value, ' ', category.measure) as 'value', log.date 
                 FROM log 
-                LEFT JOIN plant ON plant.id = log.plant_id 
                 LEFT JOIN device ON device.id = log.device_id
                 LEFT JOIN category ON category.id = device.category_id
                 WHERE log.device_id = :device_id;";
@@ -106,7 +103,36 @@ class LogRepository
         $stmt->execute($row);
         $Log_query = $stmt->fetchAll();
 
-        return (array)$Log_query;
+        return $Log_query;
+    }
+
+
+    /**
+     *  Get user by fields
+     *
+     * @param int|null $deviceId
+     * @param string|null $name
+     *
+     * @return array
+     */
+    public function getLogByPlant(int $line, int $position): array
+    {
+        $row = [
+            "line" => $line,
+            "position" => $position
+        ];
+
+        $sql = "SELECT  device.name as 'device', category.name as 'category', CONCAT(log.value, ' ', category.measure) as 'value', log.date 
+                FROM log 
+                LEFT JOIN device ON device.id = log.device_id
+                LEFT JOIN category ON category.id = device.category_id
+                WHERE device.line = :line and device.position = :position;";
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($row);
+        $Log_query = $stmt->fetchAll();
+
+        return $Log_query;
     }
 
 

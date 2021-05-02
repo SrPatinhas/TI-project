@@ -11,6 +11,7 @@
 
 namespace App\Action;
 
+use App\Domain\Log\Service\Log;
 use App\Domain\Plant\Service\Plant;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
@@ -22,6 +23,8 @@ use Slim\Views\PhpRenderer;
 final class PlantsAction
 {
     private $plantModel;
+
+    private $logModel;
     /**
      * @var SessionInterface
      */
@@ -33,11 +36,13 @@ final class PlantsAction
 
     private $greenhouse;
 
-    public function __construct(ContainerInterface $container, Plant $plantModel, PhpRenderer $renderer, SessionInterface $session)
+
+    public function __construct(ContainerInterface $container, Plant $plantModel, Log $logModel, PhpRenderer $renderer, SessionInterface $session)
     {
         $this->renderer = $renderer;
         $this->plantModel = $plantModel;
         $this->session = $session;
+        $this->logModel = $logModel;
         $this->greenhouse = $container->get('greenhouse');
     }
 
@@ -54,6 +59,22 @@ final class PlantsAction
         $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('list', $list);
         return $this->renderer->render($response, 'plants/list.php');
+    }
+
+    public function view(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
+        $user = $this->session->get('user');
+        if ($user["role"] != "admin") {
+            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+            return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
+        }
+        $detail = $this->plantModel->getPlant((int)$params["id"]);
+        $logs = $this->logModel->getLogByPlant($detail["line"], $detail["position"]);
+
+        $this->renderer->addAttribute('user', $user);
+        $this->renderer->addAttribute('detail', $detail);
+        $this->renderer->addAttribute('logs', $logs);
+        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
+        return $this->renderer->render($response, 'plants/view.php');
     }
 
     public function detail(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {

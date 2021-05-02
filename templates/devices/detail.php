@@ -76,6 +76,22 @@
                                     </div>
                                 </div>
 
+                                <div class="row align-items-center">
+                                    <div class="col-6 col-md-4">
+                                        <div class="range-wrap">
+                                            <label for="range_temperature" class="form-label">Temperature % for the window to open</label>
+                                            <div class="range-value form-label" id="range_temperature_label"></div>
+                                            <input id="range_temperature" class="form-range" type="range" min="-100" max="100" value="<?=($detail["switch_value"])?>" step="1" oninput="showVal('range_temperature', ' ºC')" name="switch_value">
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-4">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="checkbox_temperature" name="force_on" <?=($detail["force_on"] ? 'checked' : '')?>>
+                                            <label class="form-check-label" for="checkbox_temperature">Always Open</label>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="mb-3">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="checkbox_isActive" name="is_active" <?=($detail["is_active"] ? 'checked' : '')?> >
@@ -97,5 +113,23 @@
             </div>
         </div>
         <?=$this->fetch('./layout/footer.php')?>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", startRangeInput());
+
+            function startRangeInput() {
+                showVal('range_temperature', ' ºC');
+            }
+
+            function showVal(name, unit){
+                const range = document.getElementById(name);
+                const range_label = document.getElementById(name + "_label" );
+                const newValue = Number( (range.value - range.min) * 100 / (range.max - range.min) );
+                const newPosition = 10 - (newValue * 0.2);
+
+                range_label.innerHTML = `<span>${range.value} ${unit}</span>`;
+                range_label.style.left = `calc(${newValue}% + (${newPosition}px))`;
+            }
+        </script>
     </body>
 </html>
