@@ -60,6 +60,22 @@ final class UserLogin
     }
 
     /**
+     * Create a new user.
+     *
+     * @param array $data The form data
+     *
+     * @return int with the response if it has login or not
+     */
+    public function checkUserLogin(string $email, string $password): bool
+    {
+       if(empty($email) || empty($password)) {
+           return false;
+       }
+        // Validates if user has account
+        return $this->repository->checkUserLogin($email, $password);
+    }
+
+    /**
      * Input validation.
      *
      * @param array $data The form data

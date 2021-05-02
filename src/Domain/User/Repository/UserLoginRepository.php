@@ -64,7 +64,31 @@ class UserLoginRepository
         } else {
             return (array)["user" => false, "message" => ["data" => "User not found or inputs wrong!"]];
         }
-
-
     }
+
+    /**
+     * Insert user row.
+     *
+     * @param array $user The user
+     *
+     * @return bool with the response if it has login or not
+     */
+    public function checkUserLogin(string $email, string $password): bool
+    {
+        $row = [
+            'email' => $email
+        ];
+
+        $stmt = $this->connection->prepare("SELECT * FROM user WHERE email = :email");
+        $stmt->execute($row);
+        $user_query = $stmt->fetch();
+
+        if ($user_query && password_verify($password, $user_query['password'])) {
+           return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }

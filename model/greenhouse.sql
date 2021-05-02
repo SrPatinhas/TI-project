@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2021 at 02:12 AM
+-- Generation Time: May 02, 2021 at 10:58 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `greenhouse`
 --
-CREATE DATABASE IF NOT EXISTS `greenhouse` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `greenhouse`;
 
 -- --------------------------------------------------------
 
@@ -34,7 +32,7 @@ CREATE TABLE `category` (
   `name` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `measure` varchar(255) NOT NULL COMMENT '% for humidity or lux for light',
-  `created_at` int(11) NOT NULL DEFAULT current_timestamp()
+  `created_at` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -42,17 +40,17 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `name`, `description`, `measure`, `created_at`) VALUES
-(1, 'Temperature', '', '', 2147483647),
-(2, 'Air Humidity', '', '', 2147483647),
-(3, 'Wind', '', '', 2147483647),
-(4, 'Light', '', '', 2147483647),
-(5, 'Co2', '', '', 2147483647),
-(6, 'Motion', '', '', 2147483647),
-(7, 'Water', '', '', 2147483647),
-(8, 'Sprinkler', '', '', 2147483647),
-(9, 'Window', '', '', 2147483647),
-(10, 'Fan', '', '', 2147483647),
-(11, 'Soil Moisture', '', '', 2147483647);
+(1, 'Temperature', '', ' ºC', 2147483647),
+(2, 'Air Humidity', '', '%', 2147483647),
+(3, 'Wind', '', '%', 2147483647),
+(4, 'Light', '', '%', 2147483647),
+(5, 'Co2', '', '%', 2147483647),
+(6, 'Motion', '', '%', 2147483647),
+(7, 'Water', '', '%', 2147483647),
+(8, 'Sprinkler', '', '%', 2147483647),
+(9, 'Window', '', '%', 2147483647),
+(10, 'Fan', '', '%', 2147483647),
+(11, 'Soil Moisture', '', '%', 2147483647);
 
 -- --------------------------------------------------------
 
@@ -68,7 +66,7 @@ CREATE TABLE `device` (
   `description` text NOT NULL,
   `line` int(11) NOT NULL,
   `position` int(11) NOT NULL,
-  `type` enum('sensor','actuators','other') NOT NULL,
+  `type` enum('sensor','actuators','other','') NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -78,7 +76,8 @@ CREATE TABLE `device` (
 --
 
 INSERT INTO `device` (`id`, `category_id`, `name_local`, `name`, `description`, `line`, `position`, `type`, `is_active`, `created_at`) VALUES
-(1, 1, 'temp_1_1', 'Temperatura', '', 1, 1, 'sensor', 1, '2021-05-01 23:58:13');
+(1, 1, 'temp_1_1', 'Temperatura', '', 2, 3, 'sensor', 1, '2021-05-02 14:37:14'),
+(2, 10, 'fan_1_2', 'Fan 1-2', '                                                                                                                                                                                                                                                                                                                                                                                            ', 3, 1, 'actuators', 1, '2021-05-02 15:44:33');
 
 -- --------------------------------------------------------
 
@@ -89,12 +88,37 @@ INSERT INTO `device` (`id`, `category_id`, `name_local`, `name`, `description`, 
 CREATE TABLE `log` (
   `id` int(11) NOT NULL,
   `device_id` int(11) NOT NULL,
-  `plant_id` int(11) NOT NULL,
   `value` varchar(255) NOT NULL,
   `date` datetime NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `created_by` int(11) NOT NULL
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `log`
+--
+
+INSERT INTO `log` (`id`, `device_id`, `value`, `date`, `created_at`) VALUES
+(1, 1, '20', '2021-05-02 21:10:00', '2021-05-02 19:18:44'),
+(2, 1, '20', '2021-05-02 21:11:00', '2021-05-02 19:18:44'),
+(3, 1, '19', '2021-05-02 21:12:00', '2021-05-02 19:18:44'),
+(4, 1, '19', '2021-05-02 21:13:00', '2021-05-02 19:18:44'),
+(5, 1, '18', '2021-05-02 21:14:00', '2021-05-02 19:18:44'),
+(6, 1, '18', '2021-05-02 21:15:00', '2021-05-02 19:18:44'),
+(7, 1, '17', '2021-05-02 21:16:00', '2021-05-02 19:18:44'),
+(8, 1, '17', '2021-05-02 21:17:00', '2021-05-02 19:18:44'),
+(9, 1, '16', '2021-05-02 21:18:00', '2021-05-02 19:18:44'),
+(10, 1, '16', '2021-05-02 21:19:00', '2021-05-02 19:18:44'),
+(11, 1, '16', '2021-05-02 21:20:00', '2021-05-02 19:18:44'),
+(12, 1, '15', '2021-05-02 21:21:00', '2021-05-02 19:18:44'),
+(13, 1, '15', '2021-05-02 21:22:00', '2021-05-02 19:18:44'),
+(14, 1, '15', '2021-05-02 21:23:00', '2021-05-02 19:18:44'),
+(15, 1, '15', '2021-05-02 21:24:00', '2021-05-02 19:18:44'),
+(16, 1, '14', '2021-05-02 21:25:00', '2021-05-02 19:18:44'),
+(17, 1, '13', '2021-05-02 21:26:00', '2021-05-02 19:18:44'),
+(18, 1, '13', '2021-05-02 21:27:00', '2021-05-02 19:18:44'),
+(19, 1, '13', '2021-05-02 21:28:00', '2021-05-02 19:18:44'),
+(20, 1, '10', '2021-05-02 21:29:00', '2021-05-02 19:18:44'),
+(23, 1, '23', '2021-05-02 22:05:00', '2021-05-02 20:58:01');
 
 -- --------------------------------------------------------
 
@@ -119,8 +143,8 @@ CREATE TABLE `plant` (
 --
 
 INSERT INTO `plant` (`id`, `name`, `line`, `position`, `cover`, `webcam`, `is_active`, `created_at`, `created_by`) VALUES
-(1, 'morangos', 0, 0, '', 'http://192.168.1.254/', 1, '2021-04-29 02:43:18', 1),
-(2, 'maças', 0, 0, '/storage/3c65da52-ba0c-4825-a48d-6c201ad25114.jpg', 'http://192.168.1.253/', 1, '2021-04-29 02:43:31', 1);
+(1, 'morangos', 1, 2, '', 'http://192.168.1.254/', 1, '2021-04-29 02:43:18', 1),
+(2, 'Maças', 3, 3, '', 'http://192.168.1.253/', 1, '2021-04-29 02:43:31', 1);
 
 -- --------------------------------------------------------
 
@@ -161,7 +185,8 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `email`, `name`, `password`, `role`, `is_active`, `created_at`) VALUES
 (1, 'admin@email.com', 'Admin', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'admin', 1, '2021-04-27 12:50:37'),
 (2, 'gardener@email.com', 'Gardener', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'gardener', 1, '2021-04-27 12:50:37'),
-(3, 'user@email.com', 'User', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'user', 1, '2021-04-27 12:50:37');
+(3, 'user@email.com', 'User', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'user', 1, '2021-04-27 12:50:37'),
+(4, 'greenhouse@email.com', 'Greenhouse', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'gardener', 1, '2021-04-27 12:50:37');
 
 --
 -- Indexes for dumped tables
@@ -186,9 +211,7 @@ ALTER TABLE `device`
 --
 ALTER TABLE `log`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `device_id` (`device_id`),
-  ADD KEY `plant_id` (`plant_id`),
-  ADD KEY `user_id` (`created_by`);
+  ADD KEY `device_id` (`device_id`);
 
 --
 -- Indexes for table `plant`
@@ -225,13 +248,13 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `device`
 --
 ALTER TABLE `device`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `plant`
@@ -249,7 +272,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -265,9 +288,7 @@ ALTER TABLE `device`
 -- Constraints for table `log`
 --
 ALTER TABLE `log`
-  ADD CONSTRAINT `device_id` FOREIGN KEY (`device_id`) REFERENCES `device` (`id`),
-  ADD CONSTRAINT `plant_id` FOREIGN KEY (`plant_id`) REFERENCES `plant` (`id`),
-  ADD CONSTRAINT `user_id` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `device_id` FOREIGN KEY (`device_id`) REFERENCES `device` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

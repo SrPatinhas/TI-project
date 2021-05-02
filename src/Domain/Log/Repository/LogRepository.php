@@ -48,16 +48,16 @@ class LogRepository
 
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
-        $device_query = $stmt->fetchAll();
+        $Log_query = $stmt->fetchAll();
 
-        return $device_query;
+        return $Log_query;
     }
 
 
     /**
      *  Get user by fields
      *
-     * @param int|null $deviceId
+     * @param int|null $LogId
      * @param string|null $name
      *
      * @return array
@@ -67,128 +67,144 @@ class LogRepository
         $row = [
             "user_id" => $userId
         ];
-        $sql = "SELECT log.*, device.name as 'device', plant.name as 'plant' 
+        $sql = "SELECT device.name as 'device', category.name as 'category', plant.name as 'plant', CONCAT(log.value, ' ', category.measure), log.date 
                 FROM log 
+                LEFT JOIN plant ON plant.id = log.plant_id 
                 LEFT JOIN device ON device.id = log.device_id
-                LEFT JOIN plant ON plant.id = log.plant_id
+                LEFT JOIN category ON category.id = device.category_id
                 WHERE plant.created_by = :user_id;";
 
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($row);
-        $device_query = $stmt->fetch();
+        $Log_query = $stmt->fetchAll();
 
-        return (array)$device_query;
+        return (array)$Log_query;
     }
 
 
     /**
      *  Get user by fields
      *
-     * @param int|null $deviceId
+     * @param int|null $LogId
      * @param string|null $name
      *
      * @return array
      */
-    public function getLogByDevice(int $deviceId = null): array
+    public function getLogByDevice(int $LogId = null): array
     {
         $row = [
-            "device_id" => $deviceId
+            "device_id" => $LogId
         ];
-        $sql = "SELECT log.*, device.name as 'device', plant.name as 'plant' 
+        $sql = "SELECT  device.name as 'device', category.name as 'category', plant.name as 'plant', CONCAT(log.value, ' ', category.measure), log.date 
                 FROM log 
+                LEFT JOIN plant ON plant.id = log.plant_id 
                 LEFT JOIN device ON device.id = log.device_id
-                LEFT JOIN plant ON plant.id = log.plant_id
+                LEFT JOIN category ON category.id = device.category_id
                 WHERE log.device_id = :device_id;";
 
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($row);
-        $device_query = $stmt->fetch();
+        $Log_query = $stmt->fetchAll();
 
-        return (array)$device_query;
+        return (array)$Log_query;
+    }
+
+
+    /**
+     *  Get user by fields
+     *
+     * @param int|null $LogId
+     * @param string|null $name
+     *
+     * @return array
+     */
+    public function getLastLog(int $line, int $position): array
+    {
+        $row = [
+            "line" => $line,
+            "position" => $position
+        ];
+        $sql = "SELECT category.name, log.value, log.date
+                FROM category
+                LEFT JOIN device as device ON device.category_id = category.id and
+							  device.line = :line and device.position = :position
+                LEFT JOIN 
+                (
+                    SELECT log.value as value, log.date as date, device_id
+                    FROM log
+                    ORDER BY log.date DESC
+                    LIMIT  1
+                ) as log ON log.device_id = device.id;";
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($row);
+        $Log_query = $stmt->fetchAll();
+
+        return (array)$Log_query;
     }
 
 
 
     /**
+     *  Get user by fields
+     *
+     * @param int|null $LogId
+     * @param string|null $name
+     *
+     * @return array
+     */
+    public function getDeviceId(string $localName): int
+    {
+        $row = [
+            "name_local" => $localName
+        ];
+        $sql = "SELECT id 
+                FROM device
+                WHERE name_local = :name_local
+                LIMIT 1;";
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($row);
+        $Log_query = $stmt->fetch();
+
+        return (int)$Log_query['id'];
+    }
+
+
+    /**
      * Insert user row.
      *
-     * @param array $device The user
+     * @param array $log The user
      *
      * @return int The new ID
      */
-    public function insertLog(array $device): int
+    public function insertLog(array $log): int
     {
         $row = [
-            'category_id' => $device['category_id'],
-            'name_local' => $device['name_local'],
-            'name' => $device['name'],
-            'description' => $device['description'],
-            'line' => $device['line'],
-            'position' => $device['position'],
-            'type' => $device['type'],
-            'is_active' => ($device['is_active'] ? 1 : 0)
+            "device_id" => $this->getDeviceId($log["name_local"]),
+            'value' => $log['value'],
+            'date' => $log['date']
         ];
 
-        $sql =  "INSERT INTO device SET
-                    category_id = :category_id,
-                    name_local = :name_local,
-                    name = :name,
-                    description = :description,
-                    line = :line,
-                    position = :position,
-                    type = :type,
-                    is_active = :is_active;";
+        $sql =  "INSERT INTO log SET
+                    device_id = :device_id,
+                    value = :value,
+                    date = :date;";
 
         $this->connection->prepare($sql)->execute($row);
 
         return (int)$this->connection->lastInsertId();
     }
 
-    /**
-     * Insert user row.
-     *
-     * @param array $device The user
-     *
-     * @return int The new ID
-     */
-    public function updateLog(array $device): int
+
+
+    public function deleteLog(int $LogId ): bool
     {
-        $row = [
-            'category_id' => $device['category_id'],
-            'name_local' => $device['name_local'],
-            'name' => $device['name'],
-            'description' => $device['description'],
-            'line' => $device['line'],
-            'position' => $device['position'],
-            'type' => $device['type'],
-            'is_active' => ($device['is_active'] ? 1 : 0),
-            'id' => $device['id']
-        ];
-
-        $sql =  "UPDATE device SET
-                    category_id = :category_id,
-                    name_local = :name_local,
-                    name = :name,
-                    description = :description,
-                    line = :line,
-                    position = :position,
-                    type = :type,
-                    is_active = :is_active
-                    WHERE id = :id;";
-
-        $this->connection->prepare($sql)->execute($row);
-
-        return (int)$device['id'];
-    }
-
-
-    public function deleteLog(int $deviceId ): bool
-    {
-        if ($deviceId) {
+        if ($LogId) {
             $row = [
-                'id' => $deviceId
+                'id' => $LogId
             ];
-            $sql = "DELETE FROM device WHERE id = :id;";
+            $sql = "DELETE FROM log WHERE id = :id;";
 
         } else {
             return  (bool)false;
@@ -196,8 +212,8 @@ class LogRepository
 
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($row);
-        $device_query = $stmt->fetch();
+        $Log_query = $stmt->fetch();
 
-        return (bool)$device_query;
+        return (bool)$Log_query;
     }
 }

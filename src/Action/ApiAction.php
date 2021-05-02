@@ -11,21 +11,24 @@
 
 namespace App\Action;
 
+use App\Domain\User\Service\UserLogin;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Routing\RouteContext;
 use App\Domain\Log\Service\Log;
 
 final class ApiAction
 {
-    private $logModel;
 
-    public function __construct(Log $logModel)
+    private $logModel;
+    private $userModel;
+
+    public function __construct(Log $logModel, UserLogin $userModel)
     {
         $this->logModel = $logModel;
+        $this->userModel = $userModel;
     }
 
-    public function index(ResponseInterface $response): ResponseInterface {
+    public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         $response->getBody()->write(json_encode(['version' => '1.0']));
 
         return $response->withHeader('Content-Type', 'application/json'); //->withStatus(422);
@@ -45,21 +48,27 @@ final class ApiAction
 
 
     public function addLog(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
-            // Get RouteParser from request to generate the urls
-            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-            return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
-        }
+        $user = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '';
+        $pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
 
+        $is_valid = $this->userModel->checkUserLogin($user, $pass);
+
+        if (!$is_valid) {
+            // Build the HTTP response
+            $response->getBody()->write((string)json_encode(['error' => 'user unauthenticated']));
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(401);
+        }
 
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();
+
         // Invoke the Domain with inputs and retain the result
-        $userId = $this->logModel->createLog($data);
+        $log = $this->logModel->createLog($data);
         // Transform the result into the JSON representation
         $result = [
-            'user_id' => $userId
+            'log_id' => $log["id"]
         ];
         // Build the HTTP response
         $response->getBody()->write((string)json_encode($result));
@@ -70,14 +79,26 @@ final class ApiAction
     }
 
     public function getLog(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
-            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-            return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
-        }
-        $this->logModel->getLastLog($params);
+        $user = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '';
+        $pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
 
-        $this->renderer->addAttribute('user', $user);
-        return $this->renderer->render($response, 'users/list.php');
+        $is_valid = $this->userModel->checkUserLogin($user, $pass);
+
+        if (!$is_valid) {
+            // Build the HTTP response
+            $response->getBody()->write((string)json_encode(['error' => 'user unauthenticated']));
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(401);
+        }
+
+        $result = $this->logModel->getLastLog($params['line'], $params['position']);
+
+        // Build the HTTP response
+        $response->getBody()->write((string)json_encode($result));
+
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(201);
     }
 }

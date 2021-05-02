@@ -22,11 +22,10 @@ return function (App $app) {
     $app->redirect('/api[/]', '/api/v1', 301);
 
     $app->group('/api/v1', function (RouteCollectorProxy $group) {
-        $group->get('', \App\Action\ApiAction::class . ":index")->setName('api');
-        $group->get('/', \App\Action\ApiAction::class . ":index");
-        $group->get('/log/{line}/{position}', \App\Action\ApiAction::class . ":getLog")->setName('apiDeviceGet');
-        $group->post('/log', \App\Action\ApiAction::class . ":addLog")->setName('apiDeviceLog');
-    })->add(UserAuthMiddleware::class);
+        $group->get('[/]', \App\Action\ApiAction::class . ":index")->setName('api');
+        $group->get('/log/{line}/{position}', \App\Action\ApiAction::class . ":getLog")->setName('apiLogGet');
+        $group->post('/log[/]', \App\Action\ApiAction::class . ":addLog")->setName('apiLogAdd');
+    });
 
 
     $app->get('/settings', \App\Action\HomeAction::class . ":settings")->setName('settings')->add(UserAuthMiddleware::class);

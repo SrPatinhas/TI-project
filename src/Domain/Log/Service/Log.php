@@ -67,12 +67,24 @@ final class Log
      *
      * @return int The new user ID
      */
-    public function getLogByDevice(int $deviceId): array
+    public function getLogByDevice(int $logId): array
     {
         // Insert user
-        return $this->repository->getLogByDevice($deviceId);
+        return $this->repository->getLogByDevice($logId);
     }
 
+    /**
+     * Create a new user.
+     *
+     * @param array $data The form data
+     *
+     * @return int The new user ID
+     */
+    public function getLastLog(int $line, int $position): array
+    {
+        // Insert user
+        return $this->repository->getLastLog($line, $position);
+    }
 
     /**
      * Create a new user.
@@ -83,21 +95,14 @@ final class Log
      */
     public function createLog(array $plant): array
     {
-        // Input validation
-        $checkData = $this->validateNewLog($plant);
-
-        if ($checkData) {
-            return $checkData;
-        }
-
         // Insert user
-        $deviceId = $this->repository->insertLog($plant);
+        $logId = $this->repository->insertLog($plant);
 
         $result = [
-            'id' => $deviceId
+            'id' => $logId
         ];
         // Logging here: Log created successfully
-        //$this->logger->info(sprintf('Log created successfully: %s', $deviceId));
+        //$this->logger->info(sprintf('Log created successfully: %s', $logId));
         return $result;
     }
 
