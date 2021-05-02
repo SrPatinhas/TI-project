@@ -4,6 +4,7 @@
         <?=$this->fetch('./layout/header.php', ["title" => "Users List"])?>
         <!-- Custom styles for this template -->
         <link href="/assets/css/dashboard.css" rel="stylesheet">
+        <link href="/assets/css/settings.css" rel="stylesheet">
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>
@@ -20,13 +21,13 @@
                                     <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                                 </svg>
                             </a>
-                            User Detail
+                            Device information
                         </h1>
                     </div>
                     <div class="row">
                         <form>
                             <fieldset disabled>
-                                <legend>User Detail</legend>
+                                <legend>Information</legend>
                                 <div class="mb-3">
                                     <label for="disabledTextInput" class="form-label">Name</label>
                                     <input type="text" id="disabledTextInput" class="form-control" placeholder="User Name" value="<?=$detail["name"]?>">
@@ -67,6 +68,23 @@
                                     </div>
                                 </div>
 
+                                <div class="greenhouse-grid">
+                                    <?php
+                                    $i = 0;
+                                    while ($greenhouse['line'] > $i) {
+                                        $i++;
+                                        $j = 0;
+                                        echo "<div class='grid-line'>";
+                                        echo "<span>" . $i . "</span>";
+                                        while ($greenhouse['position'] > $j) {
+                                            $j++;
+                                            echo "<input class='d-none' type='radio' name='flexRadioDefault' id='radio_$j$i' disabled>";
+                                            echo "<label class='grid-position' for='radio_$j$i'>$j</label>";
+                                        }
+                                        echo "</div>";
+                                    }
+                                    ?>
+                                </div>
                             </fieldset>
                         </form>
                         <a href="/users/edit/<?=$detail["id"]?>" class="btn btn-primary">

@@ -68,7 +68,7 @@ CREATE TABLE `device` (
   `description` text NOT NULL,
   `line` int(11) NOT NULL,
   `position` int(11) NOT NULL,
-  `type` enum('sensor','actuators','other','') NOT NULL,
+  `type` enum('sensor','actuators','other') NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
