@@ -13,6 +13,7 @@ namespace App\Action;
 
 use App\Domain\Plant\Service\Plant;
 use Odan\Session\SessionInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Routing\RouteContext;
@@ -30,12 +31,17 @@ final class PlantsAction
      */
     private $renderer;
 
-    public function __construct(Plant $plantModel, PhpRenderer $renderer, SessionInterface $session)
+    private $greenhouse;
+
+    public function __construct(ContainerInterface $container, Plant $plantModel, PhpRenderer $renderer, SessionInterface $session)
     {
         $this->renderer = $renderer;
         $this->plantModel = $plantModel;
         $this->session = $session;
+        $this->greenhouse = $container->get('greenhouse');
     }
+
+
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         $user = $this->session->get('user');
         if ($user["role"] != "admin") {
@@ -60,7 +66,24 @@ final class PlantsAction
 
         $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', $detail);
+        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
         return $this->renderer->render($response, 'plants/detail.php');
+    }
+
+
+    public function edit(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
+        $user = $this->session->get('user');
+        if ($user["role"] != "admin") {
+            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+            return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
+        }
+
+        $detail = $this->plantModel->getPlant((int)$params["id"]);
+
+        $this->renderer->addAttribute('user', $user);
+        $this->renderer->addAttribute('detail', $detail);
+        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
+        return $this->renderer->render($response, 'plants/edit.php');
     }
 
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
@@ -72,6 +95,7 @@ final class PlantsAction
 
         $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', []);
+        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
         return $this->renderer->render($response, 'plants/edit.php');
     }
 
@@ -85,7 +109,11 @@ final class PlantsAction
 
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();
+
         $data["created_by"] = $user["id"];
+        $grid = explode("-", $data["grid-position"]);
+        $data["line"] = $grid[0];
+        $data["position"] = $grid[1];
 
         // Invoke the Domain with inputs and retain the result
         $plant = $this->plantModel->createPlant($data);
@@ -93,6 +121,7 @@ final class PlantsAction
         if (!isset($plant["id"])) {
             $this->renderer->addAttribute('user', $user);
             $this->renderer->addAttribute('detail', $data);
+            $this->renderer->addAttribute('greenhouse', $this->greenhouse);
             return $this->renderer->render($response, 'plants/edit.php');
         }
 
@@ -110,12 +139,24 @@ final class PlantsAction
         }
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();
+
+        $grid = explode("-", $data["grid-position"]);
+        $data["line"] = $grid[0];
+        $data["position"] = $grid[1];
+
         // Invoke the Domain with inputs and retain the result
         $detail = $this->plantModel->updatePlant($data);
 
-        $this->renderer->addAttribute('user', $user);
-        $this->renderer->addAttribute('detail', $detail);
-        return $this->renderer->render($response, 'plants/detail.php');
+        if (!isset($detail["id"])) {
+            $this->renderer->addAttribute('user', $user);
+            $this->renderer->addAttribute('detail', $data);
+            $this->renderer->addAttribute('errors', $detail);
+            $this->renderer->addAttribute('greenhouse', $this->greenhouse);
+            return $this->renderer->render($response, 'plants/edit.php');
+        }
+
+        $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+        return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('plants-detail', ["id" => $detail["id"]]));
     }
 
     public function delete(ServerRequestInterface $request, ResponseInterface $response, $id): ResponseInterface {

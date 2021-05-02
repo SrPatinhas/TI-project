@@ -4,7 +4,6 @@
         <?=$this->fetch('./layout/header.php', ["title" => (isset($detail["id"]) && $detail["id"] != 0 ? "Device Detail" : "New Device")])?>
         <!-- Custom styles for this template -->
         <link href="/assets/css/dashboard.css" rel="stylesheet">
-        <link href="/assets/css/settings.css" rel="stylesheet">
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>

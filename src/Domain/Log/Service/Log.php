@@ -6,7 +6,7 @@
  * Date: 4/25/2021
  * Time: 5:46 PM
  *
- * File: DeviceCreator.php
+ * File: LogCreator.php
  */
 
 namespace App\Domain\Log\Service;
@@ -41,10 +41,10 @@ final class Log
      *
      * @return int The new user ID
      */
-    public function getDevicesList(): array
+    public function getLogsList(): array
     {
         // Insert user
-        return $this->repository->getDevicesList();
+        return $this->repository->getLogsList();
     }
 
     /**
@@ -54,13 +54,10 @@ final class Log
      *
      * @return int The new user ID
      */
-    public function getDevice(int $deviceId = null, string $name = null): array
+    public function getLogByUser(int $userId): array
     {
-        if ($deviceId == null && $name == null) {
-            return [];
-        }
         // Insert user
-        return $this->repository->getDevice($deviceId, $name);
+        return $this->repository->getLogByUser($userId);
     }
 
     /**
@@ -70,11 +67,13 @@ final class Log
      *
      * @return int The new user ID
      */
-    public function getCategoriesList(): array
+    public function getLogByDevice(int $deviceId): array
     {
         // Insert user
-        return $this->repository->getCategoriesList();
+        return $this->repository->getLogByDevice($deviceId);
     }
+
+
     /**
      * Create a new user.
      *
@@ -82,105 +81,24 @@ final class Log
      *
      * @return int The new user ID
      */
-    public function createDevice(array $plant): array
+    public function createLog(array $plant): array
     {
         // Input validation
-        $checkData = $this->validateNewDevice($plant);
+        $checkData = $this->validateNewLog($plant);
 
         if ($checkData) {
             return $checkData;
         }
 
         // Insert user
-        $deviceId = $this->repository->insertDevice($plant);
+        $deviceId = $this->repository->insertLog($plant);
 
         $result = [
             'id' => $deviceId
         ];
-        // Logging here: Device created successfully
-        //$this->logger->info(sprintf('Device created successfully: %s', $deviceId));
+        // Logging here: Log created successfully
+        //$this->logger->info(sprintf('Log created successfully: %s', $deviceId));
         return $result;
     }
 
-    /**
-     * @param array $plant
-     * @return int
-     */
-    public function updateDevice(array $plant): array
-    {
-        // Input validation
-        $checkData = $this->validateNewDevice($plant);
-
-        if ($checkData) {
-            return $checkData;
-        }
-
-        // Insert user
-        $deviceId = $this->repository->updateDevice($plant);
-
-        $result = [
-            'id' => $deviceId
-        ];
-        // Logging here: Device created successfully
-        //$this->logger->info(sprintf('Device created successfully: %s', $deviceId));
-        return $result;
-    }
-
-    /**
-     * @param int $deviceId
-     * @return bool
-     */
-    public function deleteDevice(int $deviceId ): bool
-    {
-        if (!$deviceId) {
-            return (bool)false;
-        }
-        return $this->repository->deleteDevice($deviceId);
-    }
-
-
-    /**
-     * Input validation.
-     *
-     * @param array $data The form data
-     *
-     * @throws ValidationException
-     *
-     * @return void
-     */
-    private function validateNewDevice(array $data): array
-    {
-        $errors = [];
-
-        // Here you can also use your preferred validation library
-
-        if (empty($data['name_local'])) {
-            $errors['name_local'] = 'Local Name required';
-        } else {
-            $nameCheck = $this->repository->checkDeviceName($data['id'], $data['name_local']);
-            if ($nameCheck) {
-                $errors['name_local'] = 'Local Name already exists, try another name';
-            }
-        }
-        if (empty($data['line'])) {
-            $errors['line'] = 'Line required';
-        }
-        if (empty($data['position'])) {
-            $errors['position'] = 'Position required';
-        }
-        if (empty($data['category_id'])) {
-            $errors['category_id'] = 'Category required';
-        }
-        if (empty($data['type'])) {
-            $errors['type'] = 'Type required';
-        }
-        if (empty($data['name'])) {
-            $errors['name'] = 'Name required';
-        }
-
-        /*if ($errors) {
-            //throw new ValidationException('Please check your input', $errors);
-        }*/
-        return $errors;
-    }
 }

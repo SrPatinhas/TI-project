@@ -82,27 +82,47 @@ class PlantRepository
         return (array)$plant_query;
     }
 
+
+
+    /**
+     *  Get users list
+     *
+     * @return array
+     */
+    public function getWebcamsList(): array
+    {
+        $sql = "SELECT name, line, position, webcam FROM plant WHERE webcam <> '' GROUP BY webcam;";
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $plant_query = $stmt->fetchAll();
+
+        return $plant_query;
+    }
+
     /**
      * Insert user row.
      *
-     * @param array $user The user
+     * @param array $plant The user
      *
      * @return int The new ID
      */
-    public function insertPlant(array $user): int
+    public function insertPlant(array $plant): int
     {
         $row = [
-            'name' => $user['name'],
-            'location' => $user['location'],
-            'cover' => $user['cover'],
-            'webcam' => $user['webcam'],
-            'is_active' => ($user['is_active'] ? 1 : 0),
-            'created_by' => $user['created_by']
+            'name' => $plant['name'],
+            'line' => $plant['line'],
+            'position' => $plant['position'],
+            'cover' => $plant['cover'],
+            'webcam' => $plant['webcam'],
+            'is_active' => ($plant['is_active'] ? 1 : 0),
+            'created_by' => $plant['created_by']
         ];
 
         $sql =  "INSERT INTO plant SET
                     name = :name,
-                    location = :location,
+                    line = :line,
+                    position = :position,
                     cover = :cover,
                     webcam = :webcam,
                     is_active = :is_active,
@@ -116,24 +136,26 @@ class PlantRepository
     /**
      * Insert user row.
      *
-     * @param array $user The user
+     * @param array $plant The user
      *
      * @return int The new ID
      */
-    public function updatePlant(array $user): int
+    public function updatePlant(array $plant): int
     {
         $row = [
-            'name' => $user['name'],
-            'location' => $user['location'],
-            'cover' => $user['cover'],
-            'webcam' => $user['webcam'],
-            'is_active' => $user['is_active'],
-            'created_by' => $user['created_by']
+            'name' => $plant['name'],
+            'line' => $plant['line'],
+            'position' => $plant['position'],
+            'cover' => $plant['cover'],
+            'webcam' => $plant['webcam'],
+            'is_active' => ($plant['is_active'] ? 1 : 0),
+            'id' => $plant['id']
         ];
 
         $sql =  "UPDATE plant SET
                     name = :name,
-                    location = :location,
+                    line = :line,
+                    position = :position,
                     cover = :cover,
                     webcam = :webcam,
                     is_active = :is_active
@@ -141,7 +163,7 @@ class PlantRepository
 
         $this->connection->prepare($sql)->execute($row);
 
-        return (int)$this->connection->lastInsertId();
+        return (int)$plant['id'];
     }
 
 

@@ -11,32 +11,44 @@
 
 namespace App\Action;
 
-use App\Domain\User\Service\Plant;
+use App\Domain\Log\Service\Log;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Routing\RouteContext;
+use Slim\Views\PhpRenderer;
 
 final class LogsAction
 {
+    /**
+     * @var SessionInterface
+     */
+    private $session;
+    /**
+     * @var PhpRenderer
+     */
+    private $renderer;
+
     private $logModel;
 
-    public function __construct(Plant $logModel)
+    public function __construct(Log $logModel, PhpRenderer $renderer, SessionInterface $session)
     {
+        $this->renderer = $renderer;
+        $this->session = $session;
         $this->logModel = $logModel;
     }
 
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
-            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-            return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
+        if ($user["role"] == "user") {
+            $list = $this->logModel->getLogByUser($user["id"]);
+        } else {
+            $list = $this->logModel->getLogsList();
         }
 
-        $list = $this->logModel->getUsersList();
 
         $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('list', $list);
-        return $this->renderer->render($response, 'users/list.php');
+        return $this->renderer->render($response, 'logs/list.php');
     }
 
     public function view(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {

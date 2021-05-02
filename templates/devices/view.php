@@ -4,7 +4,6 @@
         <?=$this->fetch('./layout/header.php', ["title" => "Users List"])?>
         <!-- Custom styles for this template -->
         <link href="/assets/css/dashboard.css" rel="stylesheet">
-        <link href="/assets/css/settings.css" rel="stylesheet">
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>

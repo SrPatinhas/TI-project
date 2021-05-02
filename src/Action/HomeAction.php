@@ -11,6 +11,7 @@
 
 namespace App\Action;
 
+use App\Domain\Plant\Service\Plant;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Routing\RouteContext;
@@ -28,10 +29,13 @@ final class HomeAction
      */
     private $session;
 
-    public function __construct(PhpRenderer $renderer, SessionInterface $session)
+    private $plantModel;
+
+    public function __construct(PhpRenderer $renderer, SessionInterface $session, Plant $plantModel)
     {
         $this->renderer = $renderer;
         $this->session = $session;
+        $this->plantModel = $plantModel;
     }
 
     public function home(
@@ -61,8 +65,12 @@ final class HomeAction
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
+
+        $webcams = $this->plantModel->getWebcamsList();
+
         // optional
         $this->renderer->addAttribute('user', $user);
+        $this->renderer->addAttribute('webcams', $webcams);
         return $this->renderer->render($response, 'webcams.php');
     }
 

@@ -24,8 +24,8 @@ return function (App $app) {
     $app->group('/api/v1', function (RouteCollectorProxy $group) {
         $group->get('', \App\Action\ApiAction::class . ":index")->setName('api');
         $group->get('/', \App\Action\ApiAction::class . ":index");
-        $group->get('/log/{device}', \App\Action\ApiAction::class . ":device")->setName('apiDeviceGet');
-        $group->post('/log/{device}', \App\Action\ApiAction::class . ":device")->setName('apiDeviceLog');
+        $group->get('/log/{line}/{position}', \App\Action\ApiAction::class . ":getLog")->setName('apiDeviceGet');
+        $group->post('/log', \App\Action\ApiAction::class . ":addLog")->setName('apiDeviceLog');
     })->add(UserAuthMiddleware::class);
 
 
@@ -33,6 +33,7 @@ return function (App $app) {
     $app->get('/webcams', \App\Action\HomeAction::class . ":webcams")->setName('webcams')->add(UserAuthMiddleware::class);
     $app->get('/device/view/{id}', \App\Action\HomeAction::class . ":device")->setName('deviceView')->add(UserAuthMiddleware::class);
     $app->get('/plant/view/{id}', \App\Action\HomeAction::class . ":plant")->setName('plantView')->add(UserAuthMiddleware::class);
+    $app->get('/logs[/]', \App\Action\LogsAction::class . ":index")->setName('logIndex')->add(UserAuthMiddleware::class);
 
     // Password protected area
     $app->group('/dashboard', function (RouteCollectorProxy $group) {

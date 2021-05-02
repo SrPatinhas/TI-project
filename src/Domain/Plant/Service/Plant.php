@@ -54,6 +54,19 @@ final class Plant
      *
      * @return int The new user ID
      */
+    public function getWebcamsList(): array
+    {
+        // Insert user
+        return $this->repository->getPlantsList();
+    }
+
+    /**
+     * Create a new user.
+     *
+     * @param array $data The form data
+     *
+     * @return int The new user ID
+     */
     public function getPlant(int $plantId = null, string $name = null): array
     {
         if ($plantId == null && $name == null) {
@@ -142,8 +155,11 @@ final class Plant
 
         // Here you can also use your preferred validation library
 
-        if (empty($data['location'])) {
-            $errors['location'] = 'Location required';
+        if (empty($data['line'])) {
+            $errors['line'] = 'Line required';
+        }
+        if (empty($data['position'])) {
+            $errors['position'] = 'Position required';
         }
         if (empty($data['name'])) {
             $errors['name'] = 'Name required';

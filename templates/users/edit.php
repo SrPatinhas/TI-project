@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <?=$this->fetch('./layout/header.php', ["title" => "Users List"])?>
+        <?=$this->fetch('./layout/header.php', ["title" => (isset($detail["id"]) && $detail["id"] != 0 ? "User Edit - " . $detail["name"] : "New User")])?>
         <!-- Custom styles for this template -->
         <link href="/assets/css/dashboard.css" rel="stylesheet">
     </head>
@@ -20,11 +20,11 @@
                                     <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                                 </svg>
                             </a>
-                            User Detail
+                            <?=(isset($detail["id"]) && $detail["id"] != 0 ? "User Detail" : "New User")?>
                         </h1>
                     </div>
                     <div class="row">
-                        <form method="post" action="/users/<?=($detail["id"] != 0 ? "update" : "create")?>">
+                        <form method="post" action="/users/<?=(isset($detail["id"]) && $detail["id"] != 0 ? "update" : "create")?>">
                             <fieldset>
                                 <legend>User Edit</legend>
                                 <input type="hidden" name="id" value="<?=$detail["id"]?>">

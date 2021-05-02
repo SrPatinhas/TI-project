@@ -14,17 +14,24 @@ namespace App\Action;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Routing\RouteContext;
+use App\Domain\Log\Service\Log;
 
 final class ApiAction
 {
-    public function index(
-        ServerRequestInterface $request,
-        ResponseInterface $response
-    ): ResponseInterface {
+    private $logModel;
+
+    public function __construct(Log $logModel)
+    {
+        $this->logModel = $logModel;
+    }
+
+    public function index(ResponseInterface $response): ResponseInterface {
         $response->getBody()->write(json_encode(['version' => '1.0']));
 
         return $response->withHeader('Content-Type', 'application/json'); //->withStatus(422);
     }
+
+
     public function device(
         ServerRequestInterface $request,
         ResponseInterface $response
@@ -37,19 +44,7 @@ final class ApiAction
 
 
 
-
-    public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
-            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-            return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
-        }
-
-        $this->renderer->addAttribute('user', $user);
-        return $this->renderer->render($response, 'users/new.php');
-    }
-
-    public function create(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+    public function addLog(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         $user = $this->session->get('user');
         if ($user["role"] != "admin") {
             // Get RouteParser from request to generate the urls
@@ -61,7 +56,7 @@ final class ApiAction
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();
         // Invoke the Domain with inputs and retain the result
-        $userId = $this->userModel->createUser($data);
+        $userId = $this->logModel->createLog($data);
         // Transform the result into the JSON representation
         $result = [
             'user_id' => $userId
@@ -74,35 +69,13 @@ final class ApiAction
             ->withStatus(201);
     }
 
-
-    public function update(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
-            // Get RouteParser from request to generate the urls
-            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-            return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
-        }
-        // Collect input from the HTTP request
-        $data = (array)$request->getParsedBody();
-        // Invoke the Domain with inputs and retain the result
-        $detail = $this->userModel->updateUser($data);
-        // Transform the result into the JSON representation
-        $result = [
-            'user_id' => $userId
-        ];
-
-        $this->renderer->addAttribute('user', $user);
-        $this->renderer->addAttribute('detail', $detail);
-        return $this->renderer->render($response, 'users/detail.php');
-    }
-
-    public function delete(ServerRequestInterface $request, ResponseInterface $response, $id): ResponseInterface {
+    public function getLog(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
         $user = $this->session->get('user');
         if ($user["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
-        $this->userModel->deleteUser($id);
+        $this->logModel->getLastLog($params);
 
         $this->renderer->addAttribute('user', $user);
         return $this->renderer->render($response, 'users/list.php');

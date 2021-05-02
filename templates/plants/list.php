@@ -24,7 +24,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Name</th>
-                                        <th>Location</th>
+                                        <th>Grid Location</th>
                                         <th>Has Webcam</th>
                                         <th>Is Active</th>
                                         <th class="text-end">Actions</th>
@@ -40,7 +40,7 @@
                                             <img src="<?=$item["cover"]?>" alt="<?=$item["name"]?>">
                                             <?=$item["name"]?>
                                         </td>
-                                        <td><?=$item["location"]?></td>
+                                        <td><?=$item["line"]?>/<?=$item["position"]?></td>
                                         <td>
                                             <a href="<?=$item["webcam"]?>" target="_blank"><?=$item["webcam"]?></a>
                                         </td>
