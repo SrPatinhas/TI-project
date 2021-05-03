@@ -68,7 +68,8 @@
                 xhr_devices.onload = function () {
                     // Process our return data
                     if (xhr_devices.status >= 200 && xhr_devices.status < 300) {
-                        document.getElementById("plants-list").innerHTML = xhr_devices.response
+                        document.getElementById("plants-list").innerHTML = xhr_devices.response;
+                        refreshTooltips();
                     }
                 };
                 // Create and send a GET request
@@ -93,7 +94,14 @@
                     autoReload(); // calling the function for the first time
                 });
                 autoReload(); // calling the function for the first time
+                refreshTooltips();
             });
+            function refreshTooltips() {
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl)
+                });
+            }
         </script>
     </body>
 </html>

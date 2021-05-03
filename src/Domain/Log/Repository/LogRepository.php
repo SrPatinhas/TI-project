@@ -141,10 +141,9 @@ class LogRepository
 							  device.line = :line and device.position = :position
                 LEFT JOIN 
                 (
-                    SELECT log.value as value, log.date as date, device_id
+                    SELECT max(id) as id, log.value as value, date, device_id
                     FROM log
-                    ORDER BY log.date DESC,  log.id DESC
-                    LIMIT 1
+                    GROUP BY device_id
                 ) as log ON log.device_id = device.id;";
 
         $stmt = $this->connection->prepare($sql);
