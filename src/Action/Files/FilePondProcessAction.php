@@ -34,10 +34,7 @@ final class FilePondProcessAction
      *
      * @return ResponseInterface The response
      */
-    public function __invoke(
-        ServerRequestInterface $request,
-        ResponseInterface $response
-    ): ResponseInterface {
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         /** @var UploadedFile[] $uploadedFiles */
         $uploadedFiles = (array)($request->getUploadedFiles()['filepond'] ?? []);
         $errors = [];
@@ -71,12 +68,8 @@ final class FilePondProcessAction
      *
      * @return ResponseInterface
      */
-    private function moveTemporaryUploadedFile(
-        array $uploadedFiles,
-        ResponseInterface $response
-    ): array {
+    private function moveTemporaryUploadedFile(array $uploadedFiles, ResponseInterface $response): array {
         $fileIdentifier = [];
-
         foreach ($uploadedFiles as $uploadedFile) {
             if ($uploadedFile->getError() !== UPLOAD_ERR_OK) {
                 continue;
@@ -98,10 +91,7 @@ final class FilePondProcessAction
      *
      * @return ResponseInterface
      */
-    private function storeUploadedFiles(
-        array $submittedIds,
-        ResponseInterface $response
-    ): array {
+    private function storeUploadedFiles(array $submittedIds, ResponseInterface $response): array {
         $errors = [];
         foreach ($submittedIds as $submittedId) {
             // Save the file into the file storage
@@ -133,14 +123,9 @@ final class FilePondProcessAction
      *
      * @return string The filename of moved file
      */
-    private function moveUploadedFile(
-        string $directory,
-        UploadedFileInterface $uploadedFile
-    ): string {
-        $extension = (string)pathinfo(
-            $uploadedFile->getClientFilename(),
-            PATHINFO_EXTENSION
-        );
+    private function moveUploadedFile(string $directory, UploadedFileInterface $uploadedFile): string {
+
+        $extension = (string)pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
 
         // Create unique id for this file
         $filename = FilenameFilter::createSafeFilename(

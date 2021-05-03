@@ -25,24 +25,17 @@
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
                         <h4>Plants</h4>
                     </div>
-                    <div class="row row-cols-1 row-cols-md-4 g-4 mb-2 pb-4 border-bottom" id="plants-list">
-                        <?php
-                            foreach ($plants as $item) {
-                                echo $this->fetch('./components/plant-card.php', ["item" => $item]);
-                            }
-                        ?>
+                    <div id="plants-list">
+                        <?=$this->fetch('./components/refresh-list-plants.php', ["plants" => $plants])?>
                     </div>
-
+                    <?php if ($user["role"] != "user") { ?>
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
                         <h4>Devices</h4>
                     </div>
-                    <div class="row row-cols-1 row-cols-md-3 g-3 mb-2 pb-4 border-bottom" id="devices-list">
-                        <?php
-                            foreach ($devices as $item) {
-                                echo $this->fetch('./components/device-card.php', ["item" => $item]);
-                            }
-                        ?>
+                    <div id="devices-list">
+                        <?=$this->fetch('./components/refresh-list-devices.php', ["devices" => $devices])?>
                     </div>
+                    <?php } ?>
                 </main>
             </div>
         </div>

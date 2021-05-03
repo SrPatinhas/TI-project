@@ -64,6 +64,7 @@ class LogRepository
                 FROM log 
                 LEFT JOIN device ON device.id = log.device_id
                 LEFT JOIN category ON category.id = device.category_id
+                LEFT JOIN plant ON plant.line = device.line and plant.position = device.position
                 WHERE plant.created_by = :user_id;";
 
         $stmt = $this->connection->prepare($sql);
