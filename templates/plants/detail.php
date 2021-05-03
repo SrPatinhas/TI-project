@@ -25,6 +25,18 @@
                         <form>
                             <fieldset disabled>
                                 <legend>Plant Detail</legend>
+
+                                <?php if(!empty($detail["cover"])) { ?>
+                                    <div class="col-4 mb-3">
+                                        <div class="card bg-dark text-white">
+                                            <img src="<?= $detail["cover"] ?>" class="card-img" alt="<?= $detail["name"] ?>">
+                                            <div class="card-img-overlay">
+                                                <h5 class="card-title"><?= $detail["name"] ?></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
                                 <div class="mb-3">
                                     <label for="disabledTextInput" class="form-label">Name</label>
                                     <input type="text" id="disabledTextInput" class="form-control" placeholder="Plant Name" value="<?=$detail["name"]?>">
@@ -68,7 +80,6 @@
 
                             </fieldset>
                         </form>
-                        <img src="<?= $detail["cover"] ?>" alt="<?=$detail["name"]?>">
 
                         <a href="/plants/edit/<?=$detail["id"]?>" class="btn btn-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">

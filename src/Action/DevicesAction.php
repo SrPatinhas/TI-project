@@ -31,14 +31,34 @@ final class DevicesAction
      */
     private $renderer;
 
+    /**
+     * @var Device
+     */
     private $deviceModel;
 
+    /**
+     * @var Log
+     */
     private $logModel;
 
+    /**
+     * @var mixed
+     */
     private $greenhouse;
 
+    /**
+     * @var mixed|null
+     */
     private $userSession;
 
+    /**
+     * DevicesAction constructor.
+     * @param Device $deviceModel
+     * @param Log $logModel
+     * @param ContainerInterface $container
+     * @param PhpRenderer $renderer
+     * @param SessionInterface $session
+     */
     public function __construct(Device $deviceModel, Log $logModel, ContainerInterface $container, PhpRenderer $renderer, SessionInterface $session)
     {
         $this->renderer = $renderer;
@@ -53,6 +73,12 @@ final class DevicesAction
         $this->renderer->addAttribute('user', $this->userSession);
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         $list = $this->deviceModel->getDevicesList();
 
@@ -61,6 +87,13 @@ final class DevicesAction
     }
 
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param $params
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function view(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
@@ -77,6 +110,13 @@ final class DevicesAction
     }
 
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param $params
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function detail(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
@@ -90,6 +130,13 @@ final class DevicesAction
         return $this->renderer->render($response, 'devices/detail.php');
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param $params
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function edit(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
@@ -104,6 +151,12 @@ final class DevicesAction
         return $this->renderer->render($response, 'devices/edit.php');
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
@@ -115,6 +168,12 @@ final class DevicesAction
         return $this->renderer->render($response, 'devices/edit.php');
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function create(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             // Get RouteParser from request to generate the urls
@@ -145,6 +204,11 @@ final class DevicesAction
     }
 
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function update(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             // Get RouteParser from request to generate the urls
@@ -165,6 +229,12 @@ final class DevicesAction
         return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('devices-detail', ["id" => $detail["id"]]));
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param $id
+     * @return ResponseInterface
+     */
     public function delete(ServerRequestInterface $request, ResponseInterface $response, $id): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();

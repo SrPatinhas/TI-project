@@ -25,6 +25,9 @@ final class LoginAction
      */
     private $renderer;
 
+    /**
+     * @var UserLogin
+     */
     private $userLogin;
 
     /**
@@ -32,6 +35,12 @@ final class LoginAction
      */
     private $session;
 
+    /**
+     * LoginAction constructor.
+     * @param PhpRenderer $renderer
+     * @param UserLogin $userLogin
+     * @param SessionInterface $session
+     */
     public function __construct(PhpRenderer $renderer, UserLogin $userLogin, SessionInterface $session)
     {
         $this->session = $session;
@@ -39,18 +48,23 @@ final class LoginAction
         $this->userLogin = $userLogin;
     }
 
-    //public function __invoke(
-    public function login(
-        ServerRequestInterface $request,
-        ResponseInterface $response
-    ): ResponseInterface {
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
+    public function login(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         return $this->renderer->render($response, 'login.php');
     }
 
-    public function loginCheck(
-        ServerRequestInterface $request,
-        ResponseInterface $response
-    ): ResponseInterface {
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
+    public function loginCheck(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();
         $email = (string)($data['email'] ?? '');
@@ -83,6 +97,11 @@ final class LoginAction
 
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function logout(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         // Logout user
         $this->session->destroy();

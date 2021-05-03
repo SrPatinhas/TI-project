@@ -33,12 +33,10 @@ class UserLoginRepository
         $this->connection = $connection;
     }
 
+
     /**
-     * Insert user row.
-     *
-     * @param array $user The user
-     *
-     * @return bool with the response if it has login or not
+     * @param array $user
+     * @return array
      */
     public function loginUser(array $user): array
     {
@@ -66,12 +64,11 @@ class UserLoginRepository
         }
     }
 
+
     /**
-     * Insert user row.
-     *
-     * @param array $user The user
-     *
-     * @return bool with the response if it has login or not
+     * @param string $email
+     * @param string $password
+     * @return bool
      */
     public function checkUserLogin(string $email, string $password): bool
     {

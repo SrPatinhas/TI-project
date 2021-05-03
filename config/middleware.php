@@ -34,6 +34,7 @@ return function (App $app) {
     $app->add(HttpExceptionMiddleware::class);
     $app->add(ErrorHandlerMiddleware::class);
 
+    // log errors in file
     $loggerFactory = $app->getContainer()->get(\App\Factory\LoggerFactory::class);
     $logger = $loggerFactory->addFileHandler('error.log')->createLogger();
 

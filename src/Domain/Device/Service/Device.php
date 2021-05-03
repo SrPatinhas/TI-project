@@ -35,11 +35,7 @@ final class Device
     }
 
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int The new user ID
+     * @return array
      */
     public function getDevicesList(): array
     {
@@ -48,11 +44,9 @@ final class Device
     }
 
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int The new user ID
+     * @param int|null $deviceId
+     * @param string|null $name
+     * @return array
      */
     public function getDevice(int $deviceId = null, string $name = null): array
     {
@@ -64,23 +58,17 @@ final class Device
     }
 
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int The new user ID
+     * @return array
      */
     public function getCategoriesList(): array
     {
         // Insert user
         return $this->repository->getCategoriesList();
     }
+
     /**
-     * Create a new user.
-     *
-     * @param array $plant The form data
-     *
-     * @return int The new user ID
+     * @param array $plant
+     * @return array
      */
     public function createDevice(array $plant): array
     {
@@ -104,7 +92,7 @@ final class Device
 
     /**
      * @param array $plant
-     * @return int
+     * @return array
      */
     public function updateDevice(array $plant): array
     {
@@ -144,9 +132,7 @@ final class Device
      *
      * @param array $data The form data
      *
-     * @throws ValidationException
-     *
-     * @return void
+     * @return array of errors
      */
     private function validateNewDevice(array $data): array
     {

@@ -87,7 +87,7 @@ class UserRepository
      *
      * @param array $user The user
      *
-     * @return int The new ID
+     * @return array of new user
      */
     public function insertUser(array $user): int
     {
@@ -111,11 +111,11 @@ class UserRepository
     }
 
     /**
-     * Insert user row.
+     * Update user row.
      *
      * @param array $user The user
      *
-     * @return int The new ID
+     * @return array of user
      */
     public function updateUser(array $user): int
     {
@@ -144,6 +144,10 @@ class UserRepository
     }
 
 
+    /**
+     * @param int $userId
+     * @return bool
+     */
     public function deleteUser(int $userId ): bool
     {
         if ($userId) {

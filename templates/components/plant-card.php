@@ -1,8 +1,8 @@
 <div class="col">
     <div class="card">
         <img alt="<?=$item["name"]?>" class="card-img-top" src="<?=$item["cover"]?>">
-        <div class="card-body">
-            <h5 class="card-title"><?=$item["name"]?></h5>
+        <div class="card-img-overlay text-white">
+            <h5 class="card-title"><?= $item["name"] ?></h5>
         </div>
         <ul class="list-group list-group-flush">
             <?php

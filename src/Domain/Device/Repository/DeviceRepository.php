@@ -33,10 +33,7 @@ class DeviceRepository
         $this->connection = $connection;
     }
 
-
     /**
-     *  Get users list
-     *
      * @return array
      */
     public function getDevicesList(): array
@@ -51,11 +48,8 @@ class DeviceRepository
     }
 
     /**
-     *  Get user by fields
-     *
      * @param int|null $deviceId
      * @param string|null $name
-     *
      * @return array
      */
     public function getDevice(int $deviceId = null, string $name = null): array
@@ -81,13 +75,7 @@ class DeviceRepository
         return (array)$device_query;
     }
 
-
     /**
-     *  Get user by fields
-     *
-     * @param int|null $deviceId
-     * @param string|null $name
-     *
      * @return array
      */
     public function getCategoriesList(): array
@@ -102,12 +90,9 @@ class DeviceRepository
     }
 
     /**
-     *  Get user by fields
-     *
-     * @param int|null $deviceId
-     * @param string|null $name
-     *
-     * @return array
+     * @param $id
+     * @param $local_name
+     * @return bool
      */
     public function checkDeviceName($id, $local_name): bool
     {
@@ -132,11 +117,8 @@ class DeviceRepository
 
 
     /**
-     * Insert user row.
-     *
-     * @param array $device The user
-     *
-     * @return int The new ID
+     * @param array $device
+     * @return int
      */
     public function insertDevice(array $device): int
     {
@@ -171,11 +153,8 @@ class DeviceRepository
     }
 
     /**
-     * Insert user row.
-     *
-     * @param array $device The user
-     *
-     * @return int The new ID
+     * @param array $device
+     * @return int
      */
     public function updateDevice(array $device): int
     {
@@ -212,6 +191,10 @@ class DeviceRepository
     }
 
 
+    /**
+     * @param int $deviceId
+     * @return bool
+     */
     public function deleteDevice(int $deviceId ): bool
     {
         if ($deviceId) {

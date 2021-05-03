@@ -2,6 +2,16 @@
 <html lang="en">
     <head>
         <?=$this->fetch('./layout/header.php', ["title" => (isset($detail["id"]) && $detail["id"] != 0 ? "Plant Edit - " . $detail["name"] : "New Plant")])?>
+
+        <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+        <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+        <style>
+		    form.file-upload {
+			    max-width: 50%;
+                min-width: 400px;
+                margin-top: 50px;
+		    }
+        </style>
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>
@@ -26,6 +36,18 @@
                             <fieldset>
                                 <legend>Plant Detail</legend>
                                 <input type="hidden" name="id" value="<?=$detail["id"]?>">
+
+                                <div class="col-4 mb-3">
+                                    <input type="hidden" name="cover" value="<?=$detail["cover"]?>">
+                                    <?php if(!empty($detail["cover"])) { ?>
+                                        <div class="card bg-dark text-white">
+                                            <img src="<?= $detail["cover"] ?>" class="card-img" alt="<?= $detail["name"] ?>">
+                                            <div class="card-img-overlay">
+                                                <h5 class="card-title"><?= $detail["name"] ?></h5>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
                                 <div class="mb-3">
                                     <label for="disabledTextInput" class="form-label">Name</label>
                                     <input type="text" id="disabledTextInput" class="form-control" placeholder="Plant Name" name="name" value="<?=$detail["name"]?>">
@@ -67,8 +89,6 @@
                                     </div>
                                 </div>
 
-                                <img src="<?= $detail["cover"] ?>" alt="<?=$detail["name"]?>">
-
                                 <?php
                                 if(!empty($errors)) {
                                     foreach($errors as $key => $value){
@@ -87,10 +107,19 @@
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </fieldset>
                         </form>
+                        <form action="filepond/process" method="post" class="file-upload" enctype="multipart/form-data">
+                            <input type="file" name="filepond[]" multiple>
+                        </form>
+
                     </div>
                 </main>
             </div>
         </div>
         <?=$this->fetch('./layout/footer.php')?>
+
+        <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+        <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+
+        <script src="/assets/js/filepond.js"></script>
     </body>
 </html>

@@ -35,11 +35,7 @@ final class Log
     }
 
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int The new user ID
+     * @return array
      */
     public function getLogsList(): array
     {
@@ -48,11 +44,8 @@ final class Log
     }
 
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int The new user ID
+     * @param int $userId
+     * @return array
      */
     public function getLogByUser(int $userId): array
     {
@@ -61,11 +54,8 @@ final class Log
     }
 
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int The new user ID
+     * @param int $deviceId
+     * @return array
      */
     public function getLogByDevice(int $deviceId): array
     {
@@ -74,11 +64,9 @@ final class Log
     }
 
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int The new user ID
+     * @param int $line
+     * @param int $position
+     * @return array
      */
     public function getLogByPlant(int $line, int $position): array
     {
@@ -87,11 +75,9 @@ final class Log
     }
 
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int The new user ID
+     * @param int $line
+     * @param int $position
+     * @return array
      */
     public function getLastLog(int $line, int $position): array
     {
@@ -100,11 +86,8 @@ final class Log
     }
 
     /**
-     * Create a new user.
-     *
-     * @param array $log The form data
-     *
-     * @return int The new user ID
+     * @param array $log
+     * @return array
      */
     public function createLog(array $log): array
     {

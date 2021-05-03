@@ -34,12 +34,9 @@ final class Plant
         $this->repository = $repository;
     }
 
+
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int The new user ID
+     * @return array
      */
     public function getPlantsList(): array
     {
@@ -47,12 +44,10 @@ final class Plant
         return $this->repository->getPlantsList();
     }
 
+
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int The new user ID
+     * @param int $userId
+     * @return array
      */
     public function getPlantsListByUser(int $userId): array
     {
@@ -61,11 +56,7 @@ final class Plant
     }
 
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int The new user ID
+     * @return array
      */
     public function getWebcamsList(): array
     {
@@ -73,12 +64,11 @@ final class Plant
         return $this->repository->getPlantsList();
     }
 
+
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int The new user ID
+     * @param int|null $plantId
+     * @param string|null $name
+     * @return array
      */
     public function getPlant(int $plantId = null, string $name = null): array
     {
@@ -89,12 +79,10 @@ final class Plant
         return $this->repository->getPlant($plantId, $name);
     }
 
+
     /**
-     * Create a new user.
-     *
-     * @param array $plant The form data
-     *
-     * @return int The new user ID
+     * @param array $plant
+     * @return array
      */
     public function createPlant(array $plant): array
     {
@@ -118,7 +106,7 @@ final class Plant
 
     /**
      * @param array $plant
-     * @return int
+     * @return array
      */
     public function updatePlant(array $plant): array
     {
@@ -154,13 +142,8 @@ final class Plant
 
 
     /**
-     * Input validation.
-     *
-     * @param array $data The form data
-     *
-     * @throws ValidationException
-     *
-     * @return void
+     * @param array $data
+     * @return array
      */
     private function validateNewPlant(array $data): array
     {

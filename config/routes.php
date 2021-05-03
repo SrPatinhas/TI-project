@@ -14,11 +14,16 @@ use App\Middleware\UserAuthMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
+    /*
+     * Routes for Authentication
+     */
     $app->get('/', \App\Action\HomeAction::class . ":home")->setName('home');
     $app->get('/login', \App\Action\LoginAction::class . ":login")->setName('login');
     $app->post('/login', \App\Action\LoginAction::class . ":loginCheck")->setName('loginPost');
     $app->get('/logout', \App\Action\LoginAction::class . ":logout")->setName('logout');
-
+    /*
+     * API Routes
+     */
     $app->redirect('/api[/]', '/api/v1', 301);
 
     $app->group('/api/v1', function (RouteCollectorProxy $group) {
@@ -27,12 +32,16 @@ return function (App $app) {
         $group->post('/log[/]', \App\Action\ApiAction::class . ":addLog")->setName('apiLogAdd');
     });
 
-
+    /*
+     * Dashboard Routes
+     */
     $app->get('/webcams', \App\Action\HomeAction::class . ":webcams")->setName('webcams')->add(UserAuthMiddleware::class);
     $app->get('/device/view/{id}', \App\Action\DevicesAction::class . ":view")->setName('deviceView')->add(UserAuthMiddleware::class);
     $app->get('/plant/view/{id}', \App\Action\PlantsAction::class . ":view")->setName('plantView')->add(UserAuthMiddleware::class);
     $app->get('/logs[/]', \App\Action\LogsAction::class . ":index")->setName('logIndex')->add(UserAuthMiddleware::class);
-
+    /*
+     * Request for dynamic updated content in dashboard page
+     */
     $app->get('/refresh-list/devices', \App\Action\HomeAction::class . ":refreshDevices")->setName('refreshDevices')->add(UserAuthMiddleware::class);
     $app->get('/refresh-list/plants', \App\Action\HomeAction::class . ":refreshPlants")->setName('refreshPlants')->add(UserAuthMiddleware::class);
 
@@ -41,7 +50,6 @@ return function (App $app) {
     $app->group('/dashboard', function (RouteCollectorProxy $group) {
         $group->get('', \App\Action\HomeAction::class . ":dashboard")->setName('dashboard');
         $group->get('/', \App\Action\HomeAction::class . ":dashboard");
-        $group->get('/logs/{device}', \App\Action\UserAction::class);
     })->add(UserAuthMiddleware::class);
 
 

@@ -28,10 +28,22 @@ final class LogsAction
      */
     private $renderer;
 
+    /**
+     * @var Log
+     */
     private $logModel;
 
+    /**
+     * @var mixed|null
+     */
     private $userSession;
 
+    /**
+     * LogsAction constructor.
+     * @param Log $logModel
+     * @param PhpRenderer $renderer
+     * @param SessionInterface $session
+     */
     public function __construct(Log $logModel, PhpRenderer $renderer, SessionInterface $session)
     {
         $this->renderer = $renderer;
@@ -43,6 +55,12 @@ final class LogsAction
         $this->renderer->addAttribute('user', $this->userSession);
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         if ($this->userSession["role"] == "user") {
             $list = $this->logModel->getLogByUser($this->userSession["id"]);

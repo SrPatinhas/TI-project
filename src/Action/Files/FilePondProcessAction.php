@@ -22,7 +22,7 @@ final class FilePondProcessAction
 {
     private $tempDirectory = __DIR__ . '/../../../tmp/upload';
 
-    private $storageDirectory = __DIR__ . '/../../../storage';
+    private $storageDirectory = __DIR__ . '/../../../public/storage';
 
     /**
      * Process upload.
@@ -40,17 +40,27 @@ final class FilePondProcessAction
     ): ResponseInterface {
         /** @var UploadedFile[] $uploadedFiles */
         $uploadedFiles = (array)($request->getUploadedFiles()['filepond'] ?? []);
-
+        $errors = [];
+        $status = 200;
         if ($uploadedFiles) {
-            return $this->moveTemporaryUploadedFile($uploadedFiles, $response);
+            $submittedIds = $this->moveTemporaryUploadedFile($uploadedFiles, $response);
+        } else {
+            $submittedIds = (array)($request->getParsedBody()['filepond'] ?? []);
         }
 
-        $submittedIds = (array)($request->getParsedBody()['filepond'] ?? []);
+        // Server returns unique location id in text/plain response
+        $response = $response->withHeader('Content-Type', 'text/plain');
+
         if ($submittedIds) {
-            return $this->storeUploadedFiles($submittedIds, $response);
+            $errors = $this->storeUploadedFiles($submittedIds, $response);
         }
-
-        return $response->withStatus(422);
+        if (!empty($errors)) {
+            $response->getBody()->write(json_encode($errors));
+            $status = 422;
+        } else {
+            $response->getBody()->write(implode(",", $submittedIds));
+        }
+        return $response->withStatus($status);
     }
 
     /**
@@ -64,21 +74,17 @@ final class FilePondProcessAction
     private function moveTemporaryUploadedFile(
         array $uploadedFiles,
         ResponseInterface $response
-    ): ResponseInterface {
-        $fileIdentifier = '';
+    ): array {
+        $fileIdentifier = [];
 
         foreach ($uploadedFiles as $uploadedFile) {
             if ($uploadedFile->getError() !== UPLOAD_ERR_OK) {
                 continue;
             }
-            $fileIdentifier = $this->moveUploadedFile($this->tempDirectory, $uploadedFile);
+            $fileIdentifier[] = $this->moveUploadedFile($this->tempDirectory, $uploadedFile);
         }
 
-        // Server returns unique location id in text/plain response
-        $response = $response->withHeader('Content-Type', 'text/plain');
-        $response->getBody()->write($fileIdentifier);
-
-        return $response;
+        return $fileIdentifier;
     }
 
     /**
@@ -95,7 +101,8 @@ final class FilePondProcessAction
     private function storeUploadedFiles(
         array $submittedIds,
         ResponseInterface $response
-    ): ResponseInterface {
+    ): array {
+        $errors = [];
         foreach ($submittedIds as $submittedId) {
             // Save the file into the file storage
             $submittedId = FilenameFilter::createSafeFilename($submittedId);
@@ -103,22 +110,18 @@ final class FilePondProcessAction
             $targetFile = sprintf('%s/%s', $this->storageDirectory, $submittedId);
 
             if (!copy($sourceFile, $targetFile)) {
-                throw new RuntimeException(
-                    sprintf('Error moving uploaded file %s to the storage', $submittedId)
-                );
+                $errors[] = sprintf('Error moving uploaded file %s to the storage', $submittedId);
             }
 
             if (!unlink($sourceFile)) {
-                throw new RuntimeException(
-                    sprintf('Error removing uploaded file %s', $submittedId)
-                );
+                $errors[] = sprintf('Error removing uploaded file %s', $submittedId);
             }
         }
 
         // Server returns unique location id in text/plain response
-        $response = $response->withHeader('Content-Type', 'text/plain');
+        //$response = $response->withHeader('Content-Type', 'text/plain');
 
-        return $response->withStatus(201);
+        return $errors;
     }
 
     /**

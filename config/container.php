@@ -25,6 +25,7 @@ return [
     'settings' => function () {
         return require __DIR__ . '/settings.php';
     },
+
     'greenhouse' => function (ContainerInterface $container) {
         $settings = $container->get('settings');
         return $settings['greenhouse'];

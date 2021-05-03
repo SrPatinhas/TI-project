@@ -35,8 +35,6 @@ class PlantRepository
 
 
     /**
-     *  Get users list
-     *
      * @return array
      */
     public function getPlantsList(): array
@@ -52,8 +50,7 @@ class PlantRepository
 
 
     /**
-     *  Get users list
-     *
+     * @param int $userId
      * @return array
      */
     public function getPlantsListByUser(int $userId): array
@@ -72,11 +69,8 @@ class PlantRepository
 
 
     /**
-     *  Get user by fields
-     *
      * @param int|null $plantId
      * @param string|null $name
-     *
      * @return array
      */
     public function getPlant(int $plantId = null, string $name = null): array
@@ -103,10 +97,7 @@ class PlantRepository
     }
 
 
-
     /**
-     *  Get users list
-     *
      * @return array
      */
     public function getWebcamsList(): array
@@ -120,12 +111,10 @@ class PlantRepository
         return $plant_query;
     }
 
+
     /**
-     * Insert user row.
-     *
-     * @param array $plant The user
-     *
-     * @return int The new ID
+     * @param array $plant
+     * @return int
      */
     public function insertPlant(array $plant): int
     {
@@ -154,11 +143,8 @@ class PlantRepository
     }
 
     /**
-     * Insert user row.
-     *
-     * @param array $plant The user
-     *
-     * @return int The new ID
+     * @param array $plant
+     * @return int
      */
     public function updatePlant(array $plant): int
     {
@@ -187,6 +173,10 @@ class PlantRepository
     }
 
 
+    /**
+     * @param int $plantId
+     * @return bool
+     */
     public function deletePlant(int $plantId ): bool
     {
         if ($plantId) {

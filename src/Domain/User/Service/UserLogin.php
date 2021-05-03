@@ -35,11 +35,8 @@ final class UserLogin
     }
 
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int with the response if it has login or not
+     * @param array $data
+     * @return array
      */
     public function loginUser(array $data): array
     {
@@ -60,11 +57,9 @@ final class UserLogin
     }
 
     /**
-     * Create a new user.
-     *
-     * @param array $data The form data
-     *
-     * @return int with the response if it has login or not
+     * @param string $email
+     * @param string $password
+     * @return bool
      */
     public function checkUserLogin(string $email, string $password): bool
     {
@@ -76,13 +71,8 @@ final class UserLogin
     }
 
     /**
-     * Input validation.
-     *
-     * @param array $data The form data
-     *
-     * @throws ValidationException
-     *
-     * @return array of errors
+     * @param array $data
+     * @return array
      */
     private function validateLoginUser(array $data): array
     {

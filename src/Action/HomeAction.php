@@ -31,14 +31,34 @@ final class HomeAction
      */
     private $session;
 
+    /**
+     * @var Plant
+     */
     private $plantModel;
 
+    /**
+     * @var Device
+     */
     private $deviceModel;
 
+    /**
+     * @var mixed|null
+     */
     private $userSession;
 
+    /**
+     * @var Log
+     */
     private $logModel;
 
+    /**
+     * HomeAction constructor.
+     * @param PhpRenderer $renderer
+     * @param SessionInterface $session
+     * @param Log $logModel
+     * @param Plant $plantModel
+     * @param Device $deviceModel
+     */
     public function __construct(PhpRenderer $renderer, SessionInterface $session, Log $logModel, Plant $plantModel, Device $deviceModel)
     {
         $this->renderer = $renderer;
@@ -52,6 +72,11 @@ final class HomeAction
         $this->renderer->addAttribute('user', $this->userSession);
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function home(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         // Get RouteParser from request to generate the urls
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
@@ -61,6 +86,12 @@ final class HomeAction
         return $response->withStatus(302)->withHeader('Location', $routeParser->urlFor('login'));
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function dashboard(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         if ($this->userSession["role"] == "user") {
             $plants = $this->plantModel->getPlantsListByUser($this->userSession["id"]);
@@ -77,6 +108,12 @@ final class HomeAction
         return $this->renderer->render($response, 'dashboard.php');
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function webcams(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             // Get RouteParser from request to generate the urls
@@ -90,6 +127,12 @@ final class HomeAction
         return $this->renderer->render($response, 'webcams.php');
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function refreshDevices(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         if ($this->userSession["role"] != "user") {
             $devices = $this->deviceModel->getDevicesList();
@@ -99,6 +142,12 @@ final class HomeAction
         return $this->renderer->render($response, 'components/refresh-list-devices.php');
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function refreshPlants(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         if ($this->userSession["role"] == "user") {
             $plants = $this->plantModel->getPlantsListByUser($this->userSession["id"]);

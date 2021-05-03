@@ -35,8 +35,6 @@ class LogRepository
 
 
     /**
-     *  Get users list
-     *
      * @return array
      */
     public function getLogsList(): array
@@ -54,11 +52,7 @@ class LogRepository
 
 
     /**
-     *  Get user by fields
-     *
-     * @param int|null $LogId
-     * @param string|null $name
-     *
+     * @param int|null $userId
      * @return array
      */
     public function getLogByUser(int $userId = null): array
@@ -81,11 +75,7 @@ class LogRepository
 
 
     /**
-     *  Get user by fields
-     *
      * @param int|null $deviceId
-     * @param string|null $name
-     *
      * @return array
      */
     public function getLogByDevice(int $deviceId = null): array
@@ -108,11 +98,8 @@ class LogRepository
 
 
     /**
-     *  Get user by fields
-     *
-     * @param int|null $deviceId
-     * @param string|null $name
-     *
+     * @param int $line
+     * @param int $position
      * @return array
      */
     public function getLogByPlant(int $line, int $position): array
@@ -137,11 +124,8 @@ class LogRepository
 
 
     /**
-     *  Get user by fields
-     *
-     * @param int|null $LogId
-     * @param string|null $name
-     *
+     * @param int $line
+     * @param int $position
      * @return array
      */
     public function getLastLog(int $line, int $position): array
@@ -170,14 +154,9 @@ class LogRepository
     }
 
 
-
     /**
-     *  Get user by fields
-     *
-     * @param int|null $LogId
-     * @param string|null $name
-     *
-     * @return array
+     * @param string $localName
+     * @return int
      */
     public function getDeviceId(string $localName): int
     {
@@ -198,11 +177,8 @@ class LogRepository
 
 
     /**
-     * Insert user row.
-     *
-     * @param array $log The user
-     *
-     * @return int The new ID
+     * @param array $log
+     * @return int
      */
     public function insertLog(array $log): int
     {
@@ -223,7 +199,10 @@ class LogRepository
     }
 
 
-
+    /**
+     * @param int $LogId
+     * @return bool
+     */
     public function deleteLog(int $LogId ): bool
     {
         if ($LogId) {

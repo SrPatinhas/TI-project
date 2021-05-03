@@ -18,8 +18,15 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\Routing\RouteContext;
 use Slim\Views\PhpRenderer;
 
+/**
+ * Class UserAction
+ * @package App\Action
+ */
 final class UserAction
 {
+    /**
+     * @var User
+     */
     private $userModel;
     /**
      * @var SessionInterface
@@ -30,8 +37,17 @@ final class UserAction
      */
     private $renderer;
 
+    /**
+     * @var mixed|null
+     */
     private $userSession;
 
+    /**
+     * UserAction constructor.
+     * @param User $userModel
+     * @param PhpRenderer $renderer
+     * @param SessionInterface $session
+     */
     public function __construct(User $userModel, PhpRenderer $renderer, SessionInterface $session)
     {
         $this->renderer = $renderer;
@@ -43,6 +59,12 @@ final class UserAction
         $this->renderer->addAttribute('user', $this->userSession);
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
@@ -55,6 +77,13 @@ final class UserAction
         return $this->renderer->render($response, 'users/list.php');
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param $params
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function detail(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
@@ -67,6 +96,13 @@ final class UserAction
         return $this->renderer->render($response, 'users/detail.php');
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param $params
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function edit(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
@@ -79,6 +115,12 @@ final class UserAction
         return $this->renderer->render($response, 'users/edit.php');
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
@@ -89,6 +131,12 @@ final class UserAction
         return $this->renderer->render($response, 'users/edit.php');
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function create(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             // Get RouteParser from request to generate the urls
@@ -111,6 +159,12 @@ final class UserAction
     }
 
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
     public function update(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             // Get RouteParser from request to generate the urls
@@ -131,6 +185,12 @@ final class UserAction
         return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('users-detail', ["id" => $detail["id"]]));
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param $id
+     * @return ResponseInterface
+     */
     public function delete(ServerRequestInterface $request, ResponseInterface $response, $id): ResponseInterface {
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
         if ($this->userSession["role"] != "admin") {

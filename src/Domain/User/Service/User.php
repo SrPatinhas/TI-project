@@ -35,11 +35,9 @@ final class User
     }
 
     /**
-     * Create a new user.
+     * Get users list
      *
-     * @param array $data The form data
-     *
-     * @return int The new user ID
+     * @return array of users list
      */
     public function getUsersList(): array
     {
@@ -48,11 +46,11 @@ final class User
     }
 
     /**
-     * Create a new user.
+     * get a user by ID.
      *
      * @param array $data The form data
      *
-     * @return int The new user ID
+     * @return array of user
      */
     public function getUser(int $userId = null, string $email = null): array
     {
@@ -68,7 +66,7 @@ final class User
      *
      * @param array $data The form data
      *
-     * @return int The new user ID
+     * @return array of new user
      */
     public function createUser(array $data): array
     {
@@ -92,7 +90,7 @@ final class User
 
     /**
      * @param array $user
-     * @return int
+     * @return array of user
      */
     public function updateUser(array $user): array
     {

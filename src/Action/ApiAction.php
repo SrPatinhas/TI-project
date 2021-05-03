@@ -19,15 +19,31 @@ use App\Domain\Log\Service\Log;
 final class ApiAction
 {
 
+    /**
+     * @var Log
+     */
     private $logModel;
+    /**
+     * @var UserLogin
+     */
     private $userModel;
 
+    /**
+     * ApiAction constructor.
+     * @param Log $logModel
+     * @param UserLogin $userModel
+     */
     public function __construct(Log $logModel, UserLogin $userModel)
     {
         $this->logModel = $logModel;
         $this->userModel = $userModel;
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         $response->getBody()->write(json_encode(['version' => '1.0']));
 
@@ -35,10 +51,12 @@ final class ApiAction
     }
 
 
-    public function device(
-        ServerRequestInterface $request,
-        ResponseInterface $response
-    ): ResponseInterface {
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
+    public function device(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         // TODO save info in BD
         $response->getBody()->write(json_encode(['msg' => 'Log saved with success']));
 
@@ -46,7 +64,11 @@ final class ApiAction
     }
 
 
-
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function addLog(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         $user = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '';
         $pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
@@ -78,6 +100,12 @@ final class ApiAction
             ->withStatus(201);
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param $params
+     * @return ResponseInterface
+     */
     public function getLog(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
         $user = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '';
         $pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
