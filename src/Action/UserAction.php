@@ -188,15 +188,15 @@ final class UserAction
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param $id
+     * @param $params
      * @return ResponseInterface
      */
-    public function delete(ServerRequestInterface $request, ResponseInterface $response, $id): ResponseInterface {
+    public function delete(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
         if ($this->userSession["role"] != "admin") {
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
-        $this->userModel->deleteUser($id);
+        $this->userModel->deleteUser($params['id']);
 
         return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('users'));
     }

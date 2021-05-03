@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2021 at 11:08 PM
+-- Generation Time: May 03, 2021 at 11:19 PM
 -- Server version: 10.4.18-MariaDB
--- PHP Version: 7.3.27
+-- PHP Version: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -42,17 +42,17 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `name`, `description`, `measure`, `created_at`) VALUES
-(1, 'Temperature', '', ' ºC', 2147483647),
-(2, 'Air Humidity', '', '%', 2147483647),
-(3, 'Wind', '', '%', 2147483647),
-(4, 'Light', '', '%', 2147483647),
-(5, 'Co2', '', '%', 2147483647),
-(6, 'Motion', '', '%', 2147483647),
-(7, 'Water', '', '%', 2147483647),
-(8, 'Sprinkler', '', '%', 2147483647),
-(9, 'Window', '', '%', 2147483647),
-(10, 'Fan', '', '%', 2147483647),
-(11, 'Soil Moisture', '', '%', 2147483647);
+(1, 'Temperature', '', '', 2147483647),
+(2, 'Air Humidity', '', '', 2147483647),
+(3, 'Wind', '', '', 2147483647),
+(4, 'Light', '', '', 2147483647),
+(5, 'Co2', '', '', 2147483647),
+(6, 'Motion', '', '', 2147483647),
+(7, 'Water', '', '', 2147483647),
+(8, 'Sprinkler', '', '', 2147483647),
+(9, 'Window', '', '', 2147483647),
+(10, 'Fan', '', '', 2147483647),
+(11, 'Soil Moisture', '', '', 2147483647);
 
 -- --------------------------------------------------------
 
@@ -80,10 +80,7 @@ CREATE TABLE `device` (
 --
 
 INSERT INTO `device` (`id`, `category_id`, `name_local`, `name`, `description`, `line`, `position`, `type`, `force_on`, `switch_value`, `is_active`, `created_at`) VALUES
-(1, 1, 'temp_1_1', 'Temperatura', '                                                                                                                                                                                                                                    ', 2, 3, 'sensor', 1, 74, 1, '2021-05-03 19:05:52'),
-(2, 10, 'fan_1_2', 'Fan 1-2', '                                                                                                                                                                                                                                                                                                                                                                                            ', 3, 1, 'actuators', 0, 0, 1, '2021-05-02 15:44:33'),
-(3, 11, 'soil_moisture_1_1', 'Soil Moisture', '                                                                            ', 2, 3, 'sensor', 0, 36, 1, '2021-05-03 19:17:12'),
-(4, 2, 'air_humidity_2_3', 'Air Humidity', '                                                                            ', 2, 3, 'sensor', 1, 38, 1, '2021-05-03 21:07:16');
+(1, 1, 'temp_1_1', 'Temperatura', '                                                                                                                                                        ', 2, 3, 'sensor', 0, 74, 1, '2021-05-03 01:46:52');
 
 -- --------------------------------------------------------
 
@@ -128,11 +125,7 @@ INSERT INTO `log` (`id`, `device_id`, `value`, `date`, `created_at`) VALUES
 (24, 1, '23', '2021-05-02 22:15:00', '2021-05-02 23:43:15'),
 (25, 1, '23', '2021-05-02 22:25:00', '2021-05-03 00:10:49'),
 (26, 1, '17', '2021-05-02 22:45:00', '2021-05-03 02:31:09'),
-(27, 1, '12', '2021-05-02 22:55:00', '2021-05-03 02:31:31'),
-(28, 3, '86', '2021-05-03 21:10:00', '2021-05-03 19:18:18'),
-(29, 3, '84', '2021-05-03 21:15:00', '2021-05-03 19:18:18'),
-(30, 4, '98', '2021-05-03 23:07:00', '2021-05-03 21:07:49'),
-(31, 4, '97', '2021-05-03 23:05:00', '2021-05-03 21:07:49');
+(27, 1, '12', '2021-05-02 22:55:00', '2021-05-03 02:31:31');
 
 -- --------------------------------------------------------
 
@@ -157,9 +150,7 @@ CREATE TABLE `plant` (
 --
 
 INSERT INTO `plant` (`id`, `name`, `line`, `position`, `cover`, `webcam`, `is_active`, `created_at`, `created_by`) VALUES
-(1, 'morangos', 2, 3, '/storage/1725fca7-f369-4b13-a6ea-87dbfee88aa9.jpg', 'http://192.168.1.254/', 1, '2021-04-29 02:43:18', 1),
-(2, 'Maças', 3, 3, '/storage/e2e83b21-c3fb-4115-8501-23b7b0c6a99a.jpg', 'http://192.168.1.253/', 1, '2021-04-29 02:43:31', 1),
-(3, 'Watermelon', 2, 3, '/storage/55f918dc-8f2c-4373-8646-aba0e72a59e8.jpg', '', 1, '2021-05-03 18:49:14', 3);
+(1, 'morangos', 2, 3, '/storage/1725fca7-f369-4b13-a6ea-87dbfee88aa9.jpg', 'http://192.168.1.254/', 1, '2021-04-29 02:43:18', 1);
 
 -- --------------------------------------------------------
 
@@ -240,19 +231,19 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `device`
 --
 ALTER TABLE `device`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `plant`
 --
 ALTER TABLE `plant`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -274,7 +265,7 @@ ALTER TABLE `device`
 -- Constraints for table `log`
 --
 ALTER TABLE `log`
-  ADD CONSTRAINT `device_id` FOREIGN KEY (`device_id`) REFERENCES `device` (`id`);
+  ADD CONSTRAINT `device_id` FOREIGN KEY (`device_id`) REFERENCES `device` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

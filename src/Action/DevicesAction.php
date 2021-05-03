@@ -235,12 +235,12 @@ final class DevicesAction
      * @param $id
      * @return ResponseInterface
      */
-    public function delete(ServerRequestInterface $request, ResponseInterface $response, $id): ResponseInterface {
+    public function delete(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
-        $this->deviceModel->deleteDevice($id);
+        $this->deviceModel->deleteDevice($params['id']);
 
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
         return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('devices'));
