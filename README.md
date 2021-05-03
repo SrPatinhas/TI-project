@@ -56,7 +56,7 @@ Need to change the DB config `(user and password)` in the file `/config/settings
 
 
 
-#Structure
+# Structure
 
 `/config` -> Every file with configurations for the project
 
@@ -128,22 +128,24 @@ https://odan.github.io/2021/01/15/slim4-session.html
 
 https://odan.github.io/2020/10/06/slim4-filepond.html
 
-#Users
+# Users
 
-###Admin
+### Admin
 
 The admin will be able to have access to everything
 
     Email: admin@email.com
     Password: Qwerty
 
-###Gardener
+### Gardener
+
 The gardener will only be able to see the plants, logs and devices
 
     Email: gardener@email.com
     Password: Qwerty
 
-###User
+### User
+
 The user will only have access to his plants and logs
 
     Email: user@email.com
