@@ -18,7 +18,7 @@
                 }
             ?>
         </ul>
-        <div class="card-footer text-end">
+        <div class="card-footer text-end" style="z-index: 2">
             <a href="/plant/view/<?=$item["id"]?>" class="card-link">More details</a>
         </div>
     </div>
