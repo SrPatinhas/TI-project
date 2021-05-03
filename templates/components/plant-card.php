@@ -9,9 +9,9 @@
                 foreach ($item["log"] as $log) {
                     if (!empty($log["value"])) {
             ?>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span><b><?=$log["name"]?></b> <small>(<?=$log["date"]?>)</small></span>
-                    <span class="badge bg-primary rounded-pill"><?=$log["value"]?></span>
+                <li class="list-group-item d-flex justify-content-between align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$log["date"]?>">
+                    <b><?=$log["name"]?></b>
+                    <span class="badge bg-primary rounded-pill" ><?=$log["value"]?></span>
                 </li>
             <?php
                     }
