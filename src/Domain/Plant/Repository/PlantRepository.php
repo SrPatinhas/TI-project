@@ -52,6 +52,26 @@ class PlantRepository
 
 
     /**
+     *  Get users list
+     *
+     * @return array
+     */
+    public function getPlantsListByUser(int $userId): array
+    {
+        $row = [
+            'created_by' => $userId
+        ];
+        $sql = "SELECT * FROM plant WHERE created_by = :created_by;";
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($row);
+        $plant_query = $stmt->fetchAll();
+
+        return $plant_query;
+    }
+
+
+    /**
      *  Get user by fields
      *
      * @param int|null $plantId

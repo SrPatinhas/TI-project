@@ -2,8 +2,6 @@
 <html lang="en">
     <head>
         <?=$this->fetch('./layout/header.php', ["title" => "Users List"])?>
-        <!-- Custom styles for this template -->
-        <link href="/assets/css/dashboard.css" rel="stylesheet">
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>
@@ -40,8 +38,8 @@
                                         <td><?=$item["role"]?></td>
                                         <td>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedDisabled" <?=($item["is_active"] ? 'checked' : '')?> disabled>
-                                                <label class="form-check-label" for="flexCheckCheckedDisabled">
+                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedDisabled_<?=$item["id"]?>" <?=($item["is_active"] ? 'checked' : '')?> disabled>
+                                                <label class="form-check-label" for="flexCheckCheckedDisabled_<?=$item["id"]?>">
                                                     Active
                                                 </label>
                                             </div>

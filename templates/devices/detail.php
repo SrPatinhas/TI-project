@@ -2,8 +2,6 @@
 <html lang="en">
     <head>
         <?=$this->fetch('./layout/header.php', ["title" => "Device Detail"])?>
-        <!-- Custom styles for this template -->
-        <link href="/assets/css/dashboard.css" rel="stylesheet">
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>
@@ -38,7 +36,7 @@
 
                                 <div class="mb-3">
                                     <label for="input_description" class="form-label">Description</label>
-                                    <textarea type="text" id="input_description" class="form-control" placeholder="Local Name" name="description" cols="3">
+                                    <textarea id="input_description" class="form-control" placeholder="Local Name" name="description" cols="3">
                                         <?=$detail["description"]?>
                                     </textarea>
                                 </div>
@@ -79,9 +77,9 @@
                                 <div class="row align-items-center">
                                     <div class="col-6 col-md-4">
                                         <div class="range-wrap">
-                                            <label for="range_temperature" class="form-label">Temperature % for the window to open</label>
-                                            <div class="range-value form-label" id="range_temperature_label"></div>
-                                            <input id="range_temperature" class="form-range" type="range" min="-100" max="100" value="<?=($detail["switch_value"])?>" step="1" oninput="showVal('range_temperature', ' ºC')" name="switch_value">
+                                            <label for="range_min" class="form-label">Value % to switch the device status</label>
+                                            <div class="range-value form-label" id="range_min_label"></div>
+                                            <input id="range_min" class="form-range" type="range" min="-100" max="100" value="<?=$detail["switch_value"]?>" step="1" oninput="showVal('range_min', ' <?=$detail["measure"]?>')" name="switch_value">
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-4">
@@ -118,7 +116,7 @@
             document.addEventListener("DOMContentLoaded", startRangeInput());
 
             function startRangeInput() {
-                showVal('range_temperature', ' ºC');
+                showVal('range_min', ' <?=$detail["measure"]?>');
             }
 
             function showVal(name, unit){

@@ -30,70 +30,67 @@ final class UserAction
      */
     private $renderer;
 
+    private $userSession;
+
     public function __construct(User $userModel, PhpRenderer $renderer, SessionInterface $session)
     {
         $this->renderer = $renderer;
         $this->session = $session;
         $this->userModel = $userModel;
+
+        // Get user logged on and share it to the page
+        $this->userSession = $this->session->get('user');
+        $this->renderer->addAttribute('user', $this->userSession);
     }
 
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
 
         $list = $this->userModel->getUsersList();
 
-        $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('list', $list);
         return $this->renderer->render($response, 'users/list.php');
     }
 
-    public function detail(ServerRequestInterface $request, ResponseInterface $response, $id): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+    public function detail(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
 
-        $detail = $this->userModel->getUser( (int) $id);
+        $detail = $this->userModel->getUser( (int) $params["id"]);
 
-        $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', $detail);
         return $this->renderer->render($response, 'users/detail.php');
     }
 
-    public function edit(ServerRequestInterface $request, ResponseInterface $response, $id): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+    public function edit(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
 
-        $detail = $this->userModel->getUser( (int) $id);
+        $detail = $this->userModel->getUser( (int) $params["id"]);
 
-        $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', $detail);
         return $this->renderer->render($response, 'users/edit.php');
     }
 
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
 
-        $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', []);
         return $this->renderer->render($response, 'users/edit.php');
     }
 
     public function create(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             // Get RouteParser from request to generate the urls
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
@@ -102,23 +99,20 @@ final class UserAction
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();
         // Invoke the Domain with inputs and retain the result
-        $userId = $this->userModel->createUser($data);
-        // Transform the result into the JSON representation
-        $result = [
-            'user_id' => $userId
-        ];
-        // Build the HTTP response
-        $response->getBody()->write((string)json_encode($result));
+        $user = $this->userModel->createUser($data);
 
-        return $response
-            ->withHeader('Content-Type', 'application/json')
-            ->withStatus(201);
+        if (!isset($user["id"])) {
+            $this->renderer->addAttribute('detail', $data);
+            return $this->renderer->render($response, 'users/edit.php');
+        }
+
+        $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+        return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('users-detail', ["id" => $user["id"]]));
     }
 
 
     public function update(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             // Get RouteParser from request to generate the urls
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
@@ -128,24 +122,22 @@ final class UserAction
         // Invoke the Domain with inputs and retain the result
         $detail = $this->userModel->updateUser($data);
         // Transform the result into the JSON representation
-        $result = [
-            'user_id' => $userId
-        ];
-
-        $this->renderer->addAttribute('user', $user);
-        $this->renderer->addAttribute('detail', $detail);
-        return $this->renderer->render($response, 'users/detail.php');
+        if (!isset($detail["id"])) {
+            $this->renderer->addAttribute('detail', $data);
+            $this->renderer->addAttribute('errors', $detail);
+            return $this->renderer->render($response, 'users/edit.php');
+        }
+        $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+        return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('users-detail', ["id" => $detail["id"]]));
     }
 
     public function delete(ServerRequestInterface $request, ResponseInterface $response, $id): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
-            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+        $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+        if ($this->userSession["role"] != "admin") {
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
         $this->userModel->deleteUser($id);
 
-        $this->renderer->addAttribute('user', $user);
-        return $this->renderer->render($response, 'users/list.php');
+        return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('users'));
     }
 }

@@ -2,8 +2,6 @@
 <html lang="en">
     <head>
         <?=$this->fetch('./layout/header.php', ["title" => "Device Detail"])?>
-        <!-- Custom styles for this template -->
-        <link href="/assets/css/dashboard.css" rel="stylesheet">
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>
@@ -38,7 +36,7 @@
 
                                 <div class="mb-3">
                                     <label for="input_description" class="form-label">Description</label>
-                                    <textarea type="text" id="input_description" class="form-control" placeholder="Local Name" name="description" cols="3">
+                                    <textarea id="input_description" class="form-control" placeholder="Local Name" name="description" cols="3">
                                         <?=$detail["description"]?>
                                     </textarea>
                                 </div>
@@ -85,8 +83,11 @@
                             </fieldset>
                         </form>
                     </div>
+                    <div class="mt-5 mb-5">
+                        <?=$this->fetch('./components/chart.php', ["title" => "Last week of this device"])?>
+                    </div>
                     <div class="row mt-5 mb-5">
-                        <?=$this->fetch('./components/log-table.php', ["logs" => $logs, "table_type" => "device"])?>
+                        <?=$this->fetch('./components/log-table.php', ["logs" => $logs, "table_type" => "device", "title" => "All entries in logs for this device"])?>
                     </div>
                 </main>
             </div>

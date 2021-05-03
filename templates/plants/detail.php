@@ -2,8 +2,6 @@
 <html lang="en">
     <head>
         <?=$this->fetch('./layout/header.php', ["title" => "Plant Detail - " . $detail["name"]])?>
-        <!-- Custom styles for this template -->
-        <link href="/assets/css/dashboard.css" rel="stylesheet">
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>

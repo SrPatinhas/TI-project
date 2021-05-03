@@ -36,6 +36,7 @@ final class PlantsAction
 
     private $greenhouse;
 
+    private $userSession;
 
     public function __construct(ContainerInterface $container, Plant $plantModel, Log $logModel, PhpRenderer $renderer, SessionInterface $session)
     {
@@ -44,85 +45,75 @@ final class PlantsAction
         $this->session = $session;
         $this->logModel = $logModel;
         $this->greenhouse = $container->get('greenhouse');
+
+        // Get user logged on and share it to the page
+        $this->userSession = $this->session->get('user');
+        $this->renderer->addAttribute('user', $this->userSession);
+        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
     }
 
 
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
-
         $list = $this->plantModel->getPlantsList();
 
-        $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('list', $list);
         return $this->renderer->render($response, 'plants/list.php');
     }
 
     public function view(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
+
         $detail = $this->plantModel->getPlant((int)$params["id"]);
         $logs = $this->logModel->getLogByPlant($detail["line"], $detail["position"]);
 
-        $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', $detail);
         $this->renderer->addAttribute('logs', $logs);
-        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
         return $this->renderer->render($response, 'plants/view.php');
     }
 
     public function detail(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
-        $detail = $this->plantModel->getPlant((int)$params["id"]);
 
-        $this->renderer->addAttribute('user', $user);
+        $detail = $this->plantModel->getPlant((int)$params["id"]);
         $this->renderer->addAttribute('detail', $detail);
-        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
         return $this->renderer->render($response, 'plants/detail.php');
     }
 
 
     public function edit(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
 
         $detail = $this->plantModel->getPlant((int)$params["id"]);
 
-        $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', $detail);
-        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
         return $this->renderer->render($response, 'plants/edit.php');
     }
 
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
 
-        $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', []);
-        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
         return $this->renderer->render($response, 'plants/edit.php');
     }
 
     public function create(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             // Get RouteParser from request to generate the urls
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
@@ -131,7 +122,7 @@ final class PlantsAction
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();
 
-        $data["created_by"] = $user["id"];
+        $data["created_by"] = $this->userSession["id"];
         $grid = explode("-", $data["grid-position"]);
         $data["line"] = $grid[0];
         $data["position"] = $grid[1];
@@ -140,9 +131,7 @@ final class PlantsAction
         $plant = $this->plantModel->createPlant($data);
 
         if (!isset($plant["id"])) {
-            $this->renderer->addAttribute('user', $user);
             $this->renderer->addAttribute('detail', $data);
-            $this->renderer->addAttribute('greenhouse', $this->greenhouse);
             return $this->renderer->render($response, 'plants/edit.php');
         }
 
@@ -152,10 +141,10 @@ final class PlantsAction
 
 
     public function update(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
-            // Get RouteParser from request to generate the urls
-            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+        // Get RouteParser from request to generate the urls
+        $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+
+        if ($this->userSession["role"] != "admin") {
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
         // Collect input from the HTTP request
@@ -169,26 +158,21 @@ final class PlantsAction
         $detail = $this->plantModel->updatePlant($data);
 
         if (!isset($detail["id"])) {
-            $this->renderer->addAttribute('user', $user);
             $this->renderer->addAttribute('detail', $data);
             $this->renderer->addAttribute('errors', $detail);
-            $this->renderer->addAttribute('greenhouse', $this->greenhouse);
             return $this->renderer->render($response, 'plants/edit.php');
         }
 
-        $routeParser = RouteContext::fromRequest($request)->getRouteParser();
         return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('plants-detail', ["id" => $detail["id"]]));
     }
 
     public function delete(ServerRequestInterface $request, ResponseInterface $response, $id): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
-            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+        $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+
+        if ($this->userSession["role"] != "admin") {
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
         $this->plantModel->deletePlant($id);
-
-        $this->renderer->addAttribute('user', $user);
-        return $this->renderer->render($response, 'plants/list.php');
+        return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('plants'));
     }
 }

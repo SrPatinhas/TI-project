@@ -50,7 +50,6 @@ class DeviceRepository
         return $device_query;
     }
 
-
     /**
      *  Get user by fields
      *
@@ -65,12 +64,12 @@ class DeviceRepository
             $row = [
                 'id' => $deviceId
             ];
-            $sql = "SELECT * FROM device WHERE id = :id;";
+            $sql = "SELECT device.*, category.measure FROM device LEFT JOIN category ON category.id = device.category_id WHERE device.id = :id;";
         } else if ($name) {
             $row = [
                 'name' => $name
             ];
-            $sql = "SELECT * FROM device WHERE name = :name;";
+            $sql = "SELECT device.*, category.measure FROM device LEFT JOIN category ON category.id = device.category_id WHERE device.name = :name;";
         } else {
             return  [];
         }
@@ -149,6 +148,8 @@ class DeviceRepository
             'line' => $device['line'],
             'position' => $device['position'],
             'type' => $device['type'],
+            'switch_value' => $device['switch_value'],
+            'force_on' => ($device['force_on'] ? 1 : 0),
             'is_active' => ($device['is_active'] ? 1 : 0)
         ];
 
@@ -160,6 +161,8 @@ class DeviceRepository
                     line = :line,
                     position = :position,
                     type = :type,
+                    switch_value = :switch_value,
+                    force_on = :force_on,
                     is_active = :is_active;";
 
         $this->connection->prepare($sql)->execute($row);
@@ -184,6 +187,8 @@ class DeviceRepository
             'line' => $device['line'],
             'position' => $device['position'],
             'type' => $device['type'],
+            'switch_value' => $device['switch_value'],
+            'force_on' => ($device['force_on'] ? 1 : 0),
             'is_active' => ($device['is_active'] ? 1 : 0),
             'id' => $device['id']
         ];
@@ -196,6 +201,8 @@ class DeviceRepository
                     line = :line,
                     position = :position,
                     type = :type,
+                    switch_value = :switch_value,
+                    force_on = :force_on,
                     is_active = :is_active
                     WHERE id = :id;";
 

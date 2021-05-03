@@ -54,6 +54,19 @@ final class Plant
      *
      * @return int The new user ID
      */
+    public function getPlantsListByUser(int $userId): array
+    {
+        // Insert user
+        return $this->repository->getPlantsListByUser($userId);
+    }
+
+    /**
+     * Create a new user.
+     *
+     * @param array $data The form data
+     *
+     * @return int The new user ID
+     */
     public function getWebcamsList(): array
     {
         // Insert user

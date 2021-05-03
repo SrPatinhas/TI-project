@@ -2,8 +2,6 @@
 <html lang="en">
     <head>
         <?=$this->fetch('./layout/header.php', ["title" => (isset($detail["id"]) && $detail["id"] != 0 ? "Device Detail" : "New Device")])?>
-        <!-- Custom styles for this template -->
-        <link href="/assets/css/dashboard.css" rel="stylesheet">
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>
@@ -15,7 +13,7 @@
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <h1 class="h2">
-                            <a href="/devices/detail/<?=$detail["id"]?>" class="text-dark text-decoration-none">
+                            <a href="/devices<?=(isset($detail["id"]) && $detail["id"] != 0 ? "/detail/" . $detail["id"] : "")?>" class="text-dark text-decoration-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                                 </svg>
@@ -39,7 +37,7 @@
 
                                 <div class="mb-3">
                                     <label for="input_description" class="form-label">Description</label>
-                                    <textarea type="text" id="input_description" class="form-control" placeholder="Local Name" name="description" cols="3">
+                                    <textarea id="input_description" class="form-control" placeholder="Local Name" name="description" cols="3">
                                         <?=$detail["description"]?>
                                     </textarea>
                                 </div>
@@ -49,7 +47,7 @@
                                 <div class="mb-3">
                                     <label for="select_type" class="form-label">Type</label>
                                     <select id="select_type" class="form-select" name="type" required>
-                                        <option value="0" disabled <?=($detail["type"] == 0 ? 'selected': '') ?>>Select an option</option>
+                                        <option value="" >Select an option</option>
                                         <option value="actuators" <?=($detail["type"] == "actuators" ? 'selected': '') ?>>Actuators</option>
                                         <option value="sensor" <?=($detail["type"] == "sensor" ? 'selected': '') ?>>Sensor</option>
                                         <option value="other" <?=($detail["type"] == "other" ? 'selected': '') ?>>Other</option>
@@ -75,6 +73,22 @@
                                             echo "</div>";
                                         }
                                         ?>
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center">
+                                    <div class="col-6 col-md-4">
+                                        <div class="range-wrap">
+                                            <label for="range_min" class="form-label">Value % to switch the device status</label>
+                                            <div class="range-value form-label" id="range_min_label"></div>
+                                            <input id="range_min" class="form-range" type="range" min="-100" max="100" value="<?=$detail["switch_value"]?>" step="1" oninput="showVal('range_min', ' <?=$detail["measure"]?>')" name="switch_value">
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-4">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="checkbox_temperature" name="force_on" <?=($detail["force_on"] ? 'checked' : '')?>>
+                                            <label class="form-check-label" for="checkbox_temperature">Always Open</label>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -110,5 +124,23 @@
             </div>
         </div>
         <?=$this->fetch('./layout/footer.php')?>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", startRangeInput());
+
+            function startRangeInput() {
+                showVal('range_min', ' <?=$detail["measure"]?>');
+            }
+
+            function showVal(name, unit){
+                const range = document.getElementById(name);
+                const range_label = document.getElementById(name + "_label" );
+                const newValue = Number( (range.value - range.min) * 100 / (range.max - range.min) );
+                const newPosition = 10 - (newValue * 0.2);
+
+                range_label.innerHTML = `<span>${range.value} ${unit}</span>`;
+                range_label.style.left = `calc(${newValue}% + (${newPosition}px))`;
+            }
+        </script>
     </body>
 </html>

@@ -2,8 +2,6 @@
 <html lang="en">
     <head>
         <?=$this->fetch('./layout/header.php', ["title" => "Plants List"])?>
-        <!-- Custom styles for this template -->
-        <link href="/assets/css/dashboard.css" rel="stylesheet">
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>
@@ -46,8 +44,8 @@
                                         </td>
                                         <td>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="IsActiveCheckbox" <?=($item["is_active"] ? 'checked' : '')?> disabled>
-                                                <label class="form-check-label" for="IsActiveCheckbox">
+                                                <input class="form-check-input" type="checkbox" value="" id="IsActiveCheckbox_<?=$item["id"]?>" <?=($item["is_active"] ? 'checked' : '')?> disabled>
+                                                <label class="form-check-label" for="IsActiveCheckbox_<?=$item["id"]?>">
                                                     Active
                                                 </label>
                                             </div>

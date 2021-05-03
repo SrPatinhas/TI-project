@@ -2,8 +2,6 @@
 <html lang="en">
     <head>
         <?=$this->fetch('./layout/header.php', ["title" => "Plant Detail - " . $detail["name"]])?>
-        <!-- Custom styles for this template -->
-        <link href="/assets/css/dashboard.css" rel="stylesheet">
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>
@@ -72,8 +70,13 @@
                         </form>
                         <img src="<?= $detail["cover"] ?>" alt="<?=$detail["name"]?>">
                     </div>
+
                     <div class="row mt-5 mb-5">
-                        <?=$this->fetch('./components/log-table.php', ["logs" => $logs, "table_type" => "plant"])?>
+                        <?=$this->fetch('./components/chart.php', ["title" => "Last week of this plant location"])?>
+                    </div>
+
+                    <div class="row mt-5 mb-5">
+                        <?=$this->fetch('./components/log-table.php', ["logs" => $logs, "table_type" => "plant", "title" => "All entries in logs for this plant location"])?>
                     </div>
                 </main>
             </div>

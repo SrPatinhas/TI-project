@@ -83,10 +83,7 @@ final class LoginAction
 
     }
 
-    public function logout(
-        ServerRequestInterface $request,
-        ResponseInterface $response
-    ): ResponseInterface {
+    public function logout(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         // Logout user
         $this->session->destroy();
 

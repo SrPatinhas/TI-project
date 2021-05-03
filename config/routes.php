@@ -28,11 +28,14 @@ return function (App $app) {
     });
 
 
-    $app->get('/settings', \App\Action\HomeAction::class . ":settings")->setName('settings')->add(UserAuthMiddleware::class);
     $app->get('/webcams', \App\Action\HomeAction::class . ":webcams")->setName('webcams')->add(UserAuthMiddleware::class);
     $app->get('/device/view/{id}', \App\Action\DevicesAction::class . ":view")->setName('deviceView')->add(UserAuthMiddleware::class);
     $app->get('/plant/view/{id}', \App\Action\PlantsAction::class . ":view")->setName('plantView')->add(UserAuthMiddleware::class);
     $app->get('/logs[/]', \App\Action\LogsAction::class . ":index")->setName('logIndex')->add(UserAuthMiddleware::class);
+
+    $app->get('/refresh-list/devices', \App\Action\HomeAction::class . ":refreshDevices")->setName('refreshDevices')->add(UserAuthMiddleware::class);
+    $app->get('/refresh-list/plants', \App\Action\HomeAction::class . ":refreshPlants")->setName('refreshPlants')->add(UserAuthMiddleware::class);
+
 
     // Password protected area
     $app->group('/dashboard', function (RouteCollectorProxy $group) {
@@ -54,7 +57,7 @@ return function (App $app) {
     })->add(UserAuthMiddleware::class);
 
     $app->group('/plants', function (RouteCollectorProxy $group) {
-        $group->get('', \App\Action\PlantsAction::class . ":index")->setName('devices');
+        $group->get('', \App\Action\PlantsAction::class . ":index")->setName('plants');
         $group->get('/', \App\Action\PlantsAction::class . ":index");
         $group->get('/detail/{id}', \App\Action\PlantsAction::class . ":detail")->setName('plants-detail');
         $group->get('/edit/{id}', \App\Action\PlantsAction::class . ":edit");
@@ -67,7 +70,7 @@ return function (App $app) {
     $app->group('/users', function (RouteCollectorProxy $group) {
         $group->get('', \App\Action\UserAction::class . ":index")->setName('users');
         $group->get('/', \App\Action\UserAction::class . ":index");
-        $group->get('/detail/{id}', \App\Action\UserAction::class . ":detail");
+        $group->get('/detail/{id}', \App\Action\UserAction::class . ":detail")->setName('users-detail');
         $group->get('/edit/{id}', \App\Action\UserAction::class . ":edit");
         $group->get('/new', \App\Action\UserAction::class . ":new");
         $group->post('/create', \App\Action\UserAction::class . ":create");

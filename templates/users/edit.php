@@ -2,8 +2,6 @@
 <html lang="en">
     <head>
         <?=$this->fetch('./layout/header.php', ["title" => (isset($detail["id"]) && $detail["id"] != 0 ? "User Edit - " . $detail["name"] : "New User")])?>
-        <!-- Custom styles for this template -->
-        <link href="/assets/css/dashboard.css" rel="stylesheet">
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>
@@ -29,31 +27,31 @@
                                 <legend>User Edit</legend>
                                 <input type="hidden" name="id" value="<?=$detail["id"]?>">
                                 <div class="mb-3">
-                                    <label for="disabledTextInput" class="form-label">Name</label>
-                                    <input type="text" id="disabledTextInput" class="form-control" placeholder="User Name" value="<?=$detail["name"]?>">
+                                    <label for="input_name" class="form-label">Name</label>
+                                    <input type="text" id="input_name" class="form-control" placeholder="User Name" value="<?=$detail["name"]?>" name="name">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="disabledTextInput" class="form-label">Email</label>
-                                    <input type="text" id="disabledTextInput" class="form-control" placeholder="User Name" value="<?=$detail["email"]?>">
+                                    <label for="input_email" class="form-label">Email</label>
+                                    <input type="text" id="input_email" class="form-control" placeholder="User Name" value="<?=$detail["email"]?>" name="email">
                                 </div>
 
                                 <h4 class="mb-3">Role</h4>
                                 <div class="my-3">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" <?=($detail["role"] == "admin" ? 'checked' : '')?>>
-                                        <label class="form-check-label" for="flexRadioDefault1">
+                                        <input class="form-check-input" type="radio" name="role" id="radiobutton_admin" value="admin" <?=($detail["role"] == "admin" ? 'checked' : '')?>>
+                                        <label class="form-check-label" for="radiobutton_admin">
                                             Admin
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" <?=($detail["role"] == "gardener" ? 'checked' : '')?>>
-                                        <label class="form-check-label" for="flexRadioDefault2">
+                                        <input class="form-check-input" type="radio" name="role" id="radiobutton_gardener" value="gardener" <?=($detail["role"] == "gardener" ? 'checked' : '')?>>
+                                        <label class="form-check-label" for="radiobutton_gardener">
                                             Gardener
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" <?=($detail["role"] == "user" ? 'checked' : '')?>>
-                                        <label class="form-check-label" for="flexRadioDefault3">
+                                        <input class="form-check-input" type="radio" name="role" id="radiobutton_user" value="user" <?=($detail["role"] == "user" ? 'checked' : '')?>>
+                                        <label class="form-check-label" for="radiobutton_user">
                                             User
                                         </label>
                                     </div>
@@ -61,7 +59,7 @@
 
                                 <div class="mb-3">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" <?=($detail["is_active"] ? 'checked' : '')?> >
+                                        <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" name="is_active" <?=($detail["is_active"] ? 'checked' : '')?> >
                                         <label class="form-check-label" for="disabledFieldsetCheck" >
                                             Is Active
                                         </label>

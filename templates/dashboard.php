@@ -2,9 +2,6 @@
 <html lang="en">
     <head>
         <?=$this->fetch('./layout/header.php', ["title" => "Dashboard"])?>
-        <!-- Custom styles for this template -->
-        <link href="/assets/css/dashboard.css" rel="stylesheet">
-        <link href="/assets/css/chart.css" rel="stylesheet">
     </head>
     <body>
         <?=$this->fetch('./layout/menu.php', ["user" => $user])?>
@@ -14,189 +11,96 @@
                 <?=$this->fetch('./layout/sidebar.php', ["user" => $user, "active" => "dashboard"])?>
 
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    <img src="https://raw.githubusercontent.com/santanu23/IoTDashboard/master/dashboard/images/1.png" alt="img">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <h1 class="h2">Dashboard</h1>
+                        <h1>Dashboard</h1>
+                        <a href="#" class="btn btn-primary" id="refresh-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                                <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                                <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+                            </svg>
+                            Auto Refresh: <span>Off</span>
+                        </a>
                     </div>
 
-                    <div class="row row-cols-1">
-                        <ul class="list-group">
-                            <li class="list-group-item">Sensores</li>
-                            <li class="list-group-item"> - Temperatura</li>
-                            <li class="list-group-item"> - luz</li>
-                            <li class="list-group-item"> - humidade</li>
-                            <li class="list-group-item"> - agua no solo</li>
-                            <li class="list-group-item"> - Temperatura agua</li>
-                            <li class="list-group-item"> - vento</li>
-
-                            <li class="list-group-item">-</li>
-
-                            <li class="list-group-item">Dashboard</li>
-                            <li class="list-group-item"> - Adicionar individualmente varios tipos de plantas</li>
-                            <li class="list-group-item"> - sensores para cada tipo de planta</li>
-                            <li class="list-group-item"> - controlo por web cam para verificar estado de planta</li>
-                            <li class="list-group-item"> - notificacoes em caso de avaria ou anomalia</li>
-                            <li class="list-group-item"> - estimativa de "vida" de cada planta</li>
-                            <li class="list-group-item"> - ligacao a API externa para recolher informacoes conforme a planta escolhida</li>
-                        </ul>
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+                        <h4>Plants</h4>
+                    </div>
+                    <div class="row row-cols-1 row-cols-md-4 g-4 mb-2 pb-4 border-bottom" id="plants-list">
+                        <?php
+                            foreach ($plants as $item) {
+                                echo $this->fetch('./components/plant-card.php', ["item" => $item]);
+                            }
+                        ?>
                     </div>
 
-                    <?=$this->fetch('./components/chart.php', ["user" => $user])?>
-
-                    <div class="row row-cols-1 row-cols-md-4 g-4 mb-4">
-                        <div class="col">
-                            <div class="card">
-                                <img alt="..." class="card-img-top" src="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Tomatoes</h5>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Temperature
-                                        <span class="badge bg-primary rounded-pill">24-28ºC</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Humidity
-                                        <span class="badge bg-primary rounded-pill">80%</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Soil Moisture
-                                        <span class="badge bg-primary rounded-pill">50%</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Light Intensity
-                                        <span class="badge bg-primary rounded-pill">10.000-30.000 lux</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card">
-                                <img alt="..." class="card-img-top" src="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Tomatoes</h5>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Temperature
-                                        <span class="badge bg-primary rounded-pill">24-28ºC</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Humidity
-                                        <span class="badge bg-primary rounded-pill">80%</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Soil Moisture
-                                        <span class="badge bg-primary rounded-pill">50%</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Light Intensity
-                                        <span class="badge bg-primary rounded-pill">10.000-30.000 lux</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card">
-                                <img alt="..." class="card-img-top" src="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Tomatoes</h5>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Temperature
-                                        <span class="badge bg-primary rounded-pill">24-28ºC</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Humidity
-                                        <span class="badge bg-primary rounded-pill">80%</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Soil Moisture
-                                        <span class="badge bg-primary rounded-pill">50%</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Light Intensity
-                                        <span class="badge bg-primary rounded-pill">10.000-30.000 lux</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card">
-                                <img alt="..." class="card-img-top" src="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Tomatoes</h5>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Temperature
-                                        <span class="badge bg-primary rounded-pill">24-28ºC</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Humidity
-                                        <span class="badge bg-primary rounded-pill">80%</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Soil Moisture
-                                        <span class="badge bg-primary rounded-pill">50%</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Light Intensity
-                                        <span class="badge bg-primary rounded-pill">10.000-30.000 lux</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+                        <h4>Devices</h4>
                     </div>
-
-                    <div class="row row-cols-1 row-cols-md-2 g-2">
-                        <div class="col">
-                            <div class="card text-center">
-                                <div class="card-header">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="lights_switch">
-                                        <label class="form-check-label" for="lights_switch">Ligada</label>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Luz</h5>
-                                    <p class="card-text"></p>
-                                    <a href="#" class="btn btn-primary">Ver detalhes</a>
-                                </div>
-                                <div class="card-footer text-muted">
-                                    21kwh gastos nas ultimas 48h
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card text-center">
-                                <div class="card-header">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="water_switch">
-                                        <label class="form-check-label" for="water_switch">Ligada</label>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Bomba de Agua</h5>
-                                    <p class="card-text"></p>
-                                    <a href="#" class="btn btn-primary">Ver detalhes</a>
-                                </div>
-                                <div class="card-footer text-muted">
-                                    21 litros gastos nas ultimas 48h
-                                </div>
-                            </div>
-                        </div>
-
+                    <div class="row row-cols-1 row-cols-md-3 g-3 mb-2 pb-4 border-bottom" id="devices-list">
+                        <?php
+                            foreach ($devices as $item) {
+                                echo $this->fetch('./components/device-card.php', ["item" => $item]);
+                            }
+                        ?>
                     </div>
                 </main>
             </div>
         </div>
 
         <?=$this->fetch('./layout/footer.php')?>
-        <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+        <script>
+            window.auto_refresh = false;
 
-        <script src="/assets/js/dashboard.js"></script>
+            <?php if ($user["role"] != "user") { ?>
+            function refreshDevices() {
+                // Set up our HTTP request
+                var xhr_devices = new XMLHttpRequest();
+                // Setup our listener to process completed requests
+                xhr_devices.onload = function () {
+                    // Process our return data
+                    if (xhr_devices.status >= 200 && xhr_devices.status < 300) {
+                        document.getElementById("devices-list").innerHTML = xhr_devices.response
+                    }
+                };
+                // Create and send a GET request
+                xhr_devices.open('GET', '/refresh-list/devices');
+                xhr_devices.send();
+            }
+            <?php } ?>
+
+            function refreshPlants() {
+                // Set up our HTTP request
+                var xhr_devices = new XMLHttpRequest();
+                // Setup our listener to process completed requests
+                xhr_devices.onload = function () {
+                    // Process our return data
+                    if (xhr_devices.status >= 200 && xhr_devices.status < 300) {
+                        document.getElementById("plants-list").innerHTML = xhr_devices.response
+                    }
+                };
+                // Create and send a GET request
+                xhr_devices.open('GET', '/refresh-list/plants');
+                xhr_devices.send();
+            }
+
+
+            function autoReload() {
+                if (window.auto_refresh) {
+                    setTimeout(function () {
+                        <?=($user["role"] != "user" ? 'refreshDevices();' : '')?>
+                        refreshPlants();
+                        autoReload();  // calling again after 5 seconds
+                    }, 5000);
+                }
+            }
+            document.addEventListener("DOMContentLoaded", function(event) {
+                document.getElementById("refresh-button").addEventListener("click", function() {
+                    window.auto_refresh = !window.auto_refresh;
+                    document.getElementById("refresh-button").children[1].innerHTML = (window.auto_refresh ? "On" : "Off");
+                    autoReload(); // calling the function for the first time
+                });
+                autoReload(); // calling the function for the first time
+            });
+        </script>
     </body>
 </html>

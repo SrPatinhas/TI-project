@@ -150,7 +150,7 @@ class LogRepository
             "line" => $line,
             "position" => $position
         ];
-        $sql = "SELECT category.name, log.value, log.date
+        $sql = "SELECT category.name, CONCAT(log.value, ' ', category.measure) as 'value', log.date
                 FROM category
                 LEFT JOIN device as device ON device.category_id = category.id and
 							  device.line = :line and device.position = :position
@@ -158,8 +158,8 @@ class LogRepository
                 (
                     SELECT log.value as value, log.date as date, device_id
                     FROM log
-                    ORDER BY log.date DESC
-                    LIMIT  1
+                    ORDER BY log.date DESC,  log.id DESC
+                    LIMIT 1
                 ) as log ON log.device_id = device.id;";
 
         $stmt = $this->connection->prepare($sql);

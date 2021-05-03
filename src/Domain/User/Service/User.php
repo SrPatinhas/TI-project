@@ -70,32 +70,47 @@ final class User
      *
      * @return int The new user ID
      */
-    public function createUser(array $data): int
+    public function createUser(array $data): array
     {
         // Input validation
-        $this->validateNewUser($data);
+        $checkData = $this->validateNewUser($data);
+
+        if ($checkData) {
+            return $checkData;
+        }
 
         // Insert user
         $userId = $this->repository->insertUser($data);
-        // Logging here: User created successfully
-        //$this->logger->info(sprintf('User created successfully: %s', $userId));
-        return $userId;
+
+        $result = [
+            'id' => $userId
+        ];
+        // Logging here: Plant created successfully
+        //$this->logger->info(sprintf('Plant created successfully: %s', $plantId));
+        return $result;
     }
 
     /**
      * @param array $user
      * @return int
      */
-    public function updateUser(array $user): int
+    public function updateUser(array $user): array
     {
         // Input validation
-        $this->validateNewUser($user);
+        $checkData = $this->validateNewUser($user);
 
+        if ($checkData) {
+            return $checkData;
+        }
         // Insert user
         $userId = $this->repository->updateUser($user);
+
+        $result = [
+            'id' => $userId
+        ];
         // Logging here: User created successfully
         //$this->logger->info(sprintf('User created successfully: %s', $userId));
-        return $userId;
+        return $result;
     }
 
     /**
@@ -120,14 +135,15 @@ final class User
      *
      * @return void
      */
-    private function validateNewUser(array $data): void
+    private function validateNewUser(array $data): array
     {
         $errors = [];
 
         // Here you can also use your preferred validation library
-
-        if (empty($data['password'])) {
-            $errors['password'] = 'Password required';
+        if (empty($data["id"])) {
+            if (empty($data['password'])) {
+                $errors['password'] = 'Password required';
+            }
         }
         if (empty($data['role'])) {
             $errors['role'] = 'Role required';
@@ -138,8 +154,9 @@ final class User
             $errors['email'] = 'Invalid email address';
         }
 
-        if ($errors) {
-            throw new ValidationException('Please check your input', $errors);
-        }
+        /*if ($errors) {
+            //throw new ValidationException('Please check your input', $errors);
+        }*/
+        return $errors;
     }
 }

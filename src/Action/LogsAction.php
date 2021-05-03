@@ -30,35 +30,27 @@ final class LogsAction
 
     private $logModel;
 
+    private $userSession;
+
     public function __construct(Log $logModel, PhpRenderer $renderer, SessionInterface $session)
     {
         $this->renderer = $renderer;
         $this->session = $session;
         $this->logModel = $logModel;
+
+        // Get user logged on and share it to the page
+        $this->userSession = $this->session->get('user');
+        $this->renderer->addAttribute('user', $this->userSession);
     }
 
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] == "user") {
-            $list = $this->logModel->getLogByUser($user["id"]);
+        if ($this->userSession["role"] == "user") {
+            $list = $this->logModel->getLogByUser($this->userSession["id"]);
         } else {
             $list = $this->logModel->getLogsList();
         }
 
-
-        $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('list', $list);
         return $this->renderer->render($response, 'logs/list.php');
     }
-
-    public function view(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-
-        $detail = $this->logModel->getUser($data["userid"], $data["email"]);
-
-        $this->renderer->addAttribute('user', $user);
-        $this->renderer->addAttribute('detail', $detail);
-        return $this->renderer->render($response, 'users/detail.php');
-    }
-
 }

@@ -7,9 +7,6 @@
                 <?= $user["name"] ?>
             </a>
             <ul class="dropdown-menu text-small dropdown-menu-dark dropdown-menu-end" aria-labelledby="dropdownUser1" style="">
-                <li><a class="dropdown-item" href="#">Settings</a></li>
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="/logout">Logout</a></li>
             </ul>
         </div>

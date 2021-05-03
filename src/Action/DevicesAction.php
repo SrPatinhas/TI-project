@@ -37,6 +37,8 @@ final class DevicesAction
 
     private $greenhouse;
 
+    private $userSession;
+
     public function __construct(Device $deviceModel, Log $logModel, ContainerInterface $container, PhpRenderer $renderer, SessionInterface $session)
     {
         $this->renderer = $renderer;
@@ -44,22 +46,23 @@ final class DevicesAction
         $this->deviceModel = $deviceModel;
         $this->logModel = $logModel;
         $this->greenhouse = $container->get('greenhouse');
+        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
+
+        // Get user logged on and share it to the page
+        $this->userSession = $this->session->get('user');
+        $this->renderer->addAttribute('user', $this->userSession);
     }
 
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-
         $list = $this->deviceModel->getDevicesList();
-        // optional
-        $this->renderer->addAttribute('user', $user);
+
         $this->renderer->addAttribute('list', $list);
         return $this->renderer->render($response, 'devices/list.php');
     }
 
 
     public function view(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
@@ -67,34 +70,28 @@ final class DevicesAction
         $logs = $this->logModel->getLogByDevice((int)$params["id"]);
         $categories = $this->deviceModel->getCategoriesList();
 
-        $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', $detail);
         $this->renderer->addAttribute('logs', $logs);
         $this->renderer->addAttribute('categories', $categories);
-        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
         return $this->renderer->render($response, 'devices/view.php');
     }
 
 
     public function detail(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
         $detail = $this->deviceModel->getDevice((int)$params["id"]);
         $categories = $this->deviceModel->getCategoriesList();
 
-        $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', $detail);
         $this->renderer->addAttribute('categories', $categories);
-        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
         return $this->renderer->render($response, 'devices/detail.php');
     }
 
     public function edit(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
@@ -102,31 +99,24 @@ final class DevicesAction
         $detail = $this->deviceModel->getDevice((int)$params["id"]);
         $categories = $this->deviceModel->getCategoriesList();
 
-        $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', $detail);
         $this->renderer->addAttribute('categories', $categories);
-        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
         return $this->renderer->render($response, 'devices/edit.php');
     }
 
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
-
         $categories = $this->deviceModel->getCategoriesList();
-        $this->renderer->addAttribute('user', $user);
         $this->renderer->addAttribute('detail', []);
         $this->renderer->addAttribute('categories', $categories);
-        $this->renderer->addAttribute('greenhouse', $this->greenhouse);
         return $this->renderer->render($response, 'devices/edit.php');
     }
 
     public function create(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             // Get RouteParser from request to generate the urls
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
@@ -144,11 +134,9 @@ final class DevicesAction
 
         if (!isset($device["id"])) {
             $categories = $this->deviceModel->getCategoriesList();
-            $this->renderer->addAttribute('user', $user);
             $this->renderer->addAttribute('detail', $data);
             $this->renderer->addAttribute('errors', $device);
             $this->renderer->addAttribute('categories', $categories);
-            $this->renderer->addAttribute('greenhouse', $this->greenhouse);
             return $this->renderer->render($response, 'devices/edit.php');
         }
 
@@ -158,8 +146,7 @@ final class DevicesAction
 
 
     public function update(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             // Get RouteParser from request to generate the urls
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
@@ -179,14 +166,13 @@ final class DevicesAction
     }
 
     public function delete(ServerRequestInterface $request, ResponseInterface $response, $id): ResponseInterface {
-        $user = $this->session->get('user');
-        if ($user["role"] != "admin") {
+        if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
         $this->deviceModel->deleteDevice($id);
 
-        $this->renderer->addAttribute('user', $user);
-        return $this->renderer->render($response, 'devices/list.php');
+        $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+        return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('devices'));
     }
 }

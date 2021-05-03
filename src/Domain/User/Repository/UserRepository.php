@@ -95,7 +95,8 @@ class UserRepository
             'email' => $user['email'],
             'password' => password_hash($user['password'], PASSWORD_DEFAULT),
             'name' => $user['name'],
-            'role' => $user['role']
+            'role' => $user['role'],
+            'is_active' => ($user['is_active'] ? 1 : 0),
         ];
 
         $sql =  "INSERT INTO user SET " .
@@ -121,16 +122,20 @@ class UserRepository
         $row = [
             'id' => $user['id'],
             'email' => $user['email'],
-            'password' => password_hash($user['password'], PASSWORD_DEFAULT),
             'name' => $user['name'],
-            'role' => $user['role']
+            'role' => $user['role'],
+            'is_active' => ($user['is_active'] ? 1 : 0),
         ];
+        if (isset($user['password'])){
+            $row['password'] = password_hash($user['password'], PASSWORD_DEFAULT);
+        }
 
         $sql =  "UPDATE user SET
                 email = :email, 
                 name = :name, 
                 role = :role, 
-                password = :password
+                " . (isset($user['password']) ?  'password = :password,' : '') . "
+                is_active = :is_active
                 WHERE id = :id;";
 
         $this->connection->prepare($sql)->execute($row);
