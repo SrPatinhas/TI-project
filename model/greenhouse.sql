@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2021 at 01:48 AM
+-- Generation Time: May 03, 2021 at 06:43 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -40,17 +40,17 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `name`, `description`, `measure`, `created_at`) VALUES
-(1, 'Temperature', '', '', 2147483647),
-(2, 'Air Humidity', '', '', 2147483647),
-(3, 'Wind', '', '', 2147483647),
-(4, 'Light', '', '', 2147483647),
-(5, 'Co2', '', '', 2147483647),
-(6, 'Motion', '', '', 2147483647),
-(7, 'Water', '', '', 2147483647),
-(8, 'Sprinkler', '', '', 2147483647),
-(9, 'Window', '', '', 2147483647),
-(10, 'Fan', '', '', 2147483647),
-(11, 'Soil Moisture', '', '', 2147483647);
+(1, 'Temperature', '', ' ºC', 2147483647),
+(2, 'Air Humidity', '', '%', 2147483647),
+(3, 'Wind', '', '%', 2147483647),
+(4, 'Light', '', '%', 2147483647),
+(5, 'Co2', '', '%', 2147483647),
+(6, 'Motion', '', '%', 2147483647),
+(7, 'Water', '', '%', 2147483647),
+(8, 'Sprinkler', '', '%', 2147483647),
+(9, 'Window', '', '%', 2147483647),
+(10, 'Fan', '', '%', 2147483647),
+(11, 'Soil Moisture', '', '%', 2147483647);
 
 -- --------------------------------------------------------
 
@@ -67,7 +67,7 @@ CREATE TABLE `device` (
   `line` int(11) NOT NULL,
   `position` int(11) NOT NULL,
   `type` enum('sensor','actuators','other','') NOT NULL,
-  `force_on` int(11) NOT NULL,
+  `force_on` tinyint(1) NOT NULL,
   `switch_value` int(11) NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -78,7 +78,7 @@ CREATE TABLE `device` (
 --
 
 INSERT INTO `device` (`id`, `category_id`, `name_local`, `name`, `description`, `line`, `position`, `type`, `force_on`, `switch_value`, `is_active`, `created_at`) VALUES
-(1, 1, 'temp_1_1', 'Temperatura', '', 2, 3, 'sensor', 0, 0, 1, '2021-05-02 14:37:14'),
+(1, 1, 'temp_1_1', 'Temperatura', '                                                                                                                                                        ', 2, 3, 'sensor', 0, 74, 1, '2021-05-03 01:46:52'),
 (2, 10, 'fan_1_2', 'Fan 1-2', '                                                                                                                                                                                                                                                                                                                                                                                            ', 3, 1, 'actuators', 0, 0, 1, '2021-05-02 15:44:33');
 
 -- --------------------------------------------------------
@@ -121,7 +121,10 @@ INSERT INTO `log` (`id`, `device_id`, `value`, `date`, `created_at`) VALUES
 (19, 1, '13', '2021-05-02 21:28:00', '2021-05-02 19:18:44'),
 (20, 1, '10', '2021-05-02 21:29:00', '2021-05-02 19:18:44'),
 (23, 1, '23', '2021-05-02 22:05:00', '2021-05-02 20:58:01'),
-(24, 1, '23', '2021-05-02 22:15:00', '2021-05-02 23:43:15');
+(24, 1, '23', '2021-05-02 22:15:00', '2021-05-02 23:43:15'),
+(25, 1, '23', '2021-05-02 22:25:00', '2021-05-03 00:10:49'),
+(26, 1, '17', '2021-05-02 22:45:00', '2021-05-03 02:31:09'),
+(27, 1, '12', '2021-05-02 22:55:00', '2021-05-03 02:31:31');
 
 -- --------------------------------------------------------
 
@@ -146,8 +149,8 @@ CREATE TABLE `plant` (
 --
 
 INSERT INTO `plant` (`id`, `name`, `line`, `position`, `cover`, `webcam`, `is_active`, `created_at`, `created_by`) VALUES
-(1, 'morangos', 2, 3, '', 'http://192.168.1.254/', 1, '2021-04-29 02:43:18', 1),
-(2, 'Maças', 3, 3, '', 'http://192.168.1.253/', 1, '2021-04-29 02:43:31', 1);
+(1, 'morangos', 2, 3, '/storage/1725fca7-f369-4b13-a6ea-87dbfee88aa9.jpg', 'http://192.168.1.254/', 1, '2021-04-29 02:43:18', 1),
+(2, 'Maças', 3, 3, '/storage/e2e83b21-c3fb-4115-8501-23b7b0c6a99a.jpg', 'http://192.168.1.253/', 1, '2021-04-29 02:43:31', 1);
 
 -- --------------------------------------------------------
 
@@ -170,7 +173,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `email`, `name`, `password`, `role`, `is_active`, `created_at`) VALUES
-(1, 'admin@email.com', 'Admin', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'admin', 1, '2021-04-27 12:50:37'),
+(1, 'admin@email.com', 'Admin', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'admin', 1, '2021-05-03 01:44:46'),
 (2, 'gardener@email.com', 'Gardener', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'gardener', 1, '2021-04-27 12:50:37'),
 (3, 'user@email.com', 'User', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'user', 1, '2021-04-27 12:50:37'),
 (4, 'greenhouse@email.com', 'Greenhouse', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'gardener', 1, '2021-04-27 12:50:37');
@@ -234,7 +237,7 @@ ALTER TABLE `device`
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `plant`

@@ -35,7 +35,7 @@
                                     <tr>
                                         <td><?=$item["id"]?></td>
                                         <td>
-                                            <img src="<?=$item["cover"]?>" alt="<?=$item["name"]?>">
+                                            <img class="img-thumbnail" style="max-width: 200px" src="<?=$item["cover"]?>" alt="<?=$item["name"]?>">
                                             <?=$item["name"]?>
                                         </td>
                                         <td><?=$item["line"]?>/<?=$item["position"]?></td>
