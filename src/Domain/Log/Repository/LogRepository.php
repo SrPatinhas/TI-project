@@ -176,6 +176,33 @@ class LogRepository
     }
 
 
+
+    /**
+     * @param int $line
+     * @param int $position
+     * @return array
+     */
+    public function getLastLogByCategory(int $line, int $position, int $category): array
+    {
+        $row = [
+            "line" => $line,
+            "position" => $position,
+            "category" => $category,
+        ];
+        $sql = "SELECT max(log.id) as id, log.value as value
+                FROM log
+                LEFT JOIN device as device ON device.category_id = :category and
+                device.line = :line and device.position = :position;";
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($row);
+        $Log_query = $stmt->fetchAll();
+
+        return (array)$Log_query;
+    }
+
+
+
     /**
      * @param array $log
      * @return int

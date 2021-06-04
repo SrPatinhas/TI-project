@@ -103,6 +103,7 @@ class UserRepository
                 " email=:email, " .
                 " name=:name, " .
                 " role=:role, " .
+                " is_active=:is_active, " .
                 " password=:password;";
 
         $this->connection->prepare($sql)->execute($row);

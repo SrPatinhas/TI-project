@@ -26,6 +26,9 @@
                             <fieldset>
                                 <legend>User Edit</legend>
                                 <input type="hidden" name="id" value="<?=$detail["id"]?>">
+                                <?php if(!isset($detail["id"])){ ?>
+                                <input type="hidden" name="type" value="create_admin">
+                                <?php } ?>
                                 <div class="mb-3">
                                     <label for="input_name" class="form-label">Name</label>
                                     <input type="text" id="input_name" class="form-control" placeholder="User Name" value="<?=$detail["name"]?>" name="name">
@@ -53,6 +56,12 @@
                                         <input class="form-check-input" type="radio" name="role" id="radiobutton_user" value="user" <?=($detail["role"] == "user" ? 'checked' : '')?>>
                                         <label class="form-check-label" for="radiobutton_user">
                                             User
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="role" id="radiobutton_device" value="device" <?=($detail["role"] == "device" ? 'checked' : '')?>>
+                                        <label class="form-check-label" for="radiobutton_device">
+                                            Device
                                         </label>
                                     </div>
                                 </div>

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2021 at 11:21 PM
--- Server version: 10.4.18-MariaDB
--- PHP Version: 7.3.27
+-- Tempo de geração: 04-Jun-2021 às 17:42
+-- Versão do servidor: 10.4.18-MariaDB
+-- versão do PHP: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `greenhouse`
+-- Banco de dados: `greenhouse`
 --
 CREATE DATABASE IF NOT EXISTS `greenhouse` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `greenhouse`;
@@ -26,9 +26,10 @@ USE `greenhouse`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `category`
+-- Estrutura da tabela `category`
 --
 
+DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -38,7 +39,12 @@ CREATE TABLE `category` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `category`
+-- Truncar tabela antes do insert `category`
+--
+
+TRUNCATE TABLE `category`;
+--
+-- Extraindo dados da tabela `category`
 --
 
 INSERT INTO `category` (`id`, `name`, `description`, `measure`, `created_at`) VALUES
@@ -57,9 +63,10 @@ INSERT INTO `category` (`id`, `name`, `description`, `measure`, `created_at`) VA
 -- --------------------------------------------------------
 
 --
--- Table structure for table `device`
+-- Estrutura da tabela `device`
 --
 
+DROP TABLE IF EXISTS `device`;
 CREATE TABLE `device` (
   `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
@@ -76,7 +83,12 @@ CREATE TABLE `device` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `device`
+-- Truncar tabela antes do insert `device`
+--
+
+TRUNCATE TABLE `device`;
+--
+-- Extraindo dados da tabela `device`
 --
 
 INSERT INTO `device` (`id`, `category_id`, `name_local`, `name`, `description`, `line`, `position`, `type`, `force_on`, `switch_value`, `is_active`, `created_at`) VALUES
@@ -88,9 +100,27 @@ INSERT INTO `device` (`id`, `category_id`, `name_local`, `name`, `description`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `log`
+-- Estrutura da tabela `device_brigde`
 --
 
+DROP TABLE IF EXISTS `device_brigde`;
+CREATE TABLE `device_brigde` (
+  `sensor_id` int(11) NOT NULL,
+  `atuator_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Truncar tabela antes do insert `device_brigde`
+--
+
+TRUNCATE TABLE `device_brigde`;
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `log`
+--
+
+DROP TABLE IF EXISTS `log`;
 CREATE TABLE `log` (
   `id` int(11) NOT NULL,
   `device_id` int(11) NOT NULL,
@@ -100,7 +130,12 @@ CREATE TABLE `log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `log`
+-- Truncar tabela antes do insert `log`
+--
+
+TRUNCATE TABLE `log`;
+--
+-- Extraindo dados da tabela `log`
 --
 
 INSERT INTO `log` (`id`, `device_id`, `value`, `date`, `created_at`) VALUES
@@ -137,9 +172,10 @@ INSERT INTO `log` (`id`, `device_id`, `value`, `date`, `created_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `plant`
+-- Estrutura da tabela `plant`
 --
 
+DROP TABLE IF EXISTS `plant`;
 CREATE TABLE `plant` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -153,7 +189,12 @@ CREATE TABLE `plant` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `plant`
+-- Truncar tabela antes do insert `plant`
+--
+
+TRUNCATE TABLE `plant`;
+--
+-- Extraindo dados da tabela `plant`
 --
 
 INSERT INTO `plant` (`id`, `name`, `line`, `position`, `cover`, `webcam`, `is_active`, `created_at`, `created_by`) VALUES
@@ -164,41 +205,51 @@ INSERT INTO `plant` (`id`, `name`, `line`, `position`, `cover`, `webcam`, `is_ac
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Estrutura da tabela `user`
 --
 
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('admin','gardener','user') NOT NULL,
+  `role` enum('admin','gardener','user','device') NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `user`
+-- Truncar tabela antes do insert `user`
+--
+
+TRUNCATE TABLE `user`;
+--
+-- Extraindo dados da tabela `user`
 --
 
 INSERT INTO `user` (`id`, `email`, `name`, `password`, `role`, `is_active`, `created_at`) VALUES
 (1, 'admin@email.com', 'Admin', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'admin', 1, '2021-05-03 01:44:46'),
 (2, 'gardener@email.com', 'Gardener', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'gardener', 1, '2021-04-27 12:50:37'),
 (3, 'user@email.com', 'User', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'user', 1, '2021-04-27 12:50:37'),
-(4, 'greenhouse@email.com', 'Greenhouse', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'gardener', 1, '2021-04-27 12:50:37');
+(4, 'greenhouse@email.com', 'Greenhouse', '$2y$10$y3AgQfOUwljeM2jgUI6WBe80apLSnI3bgjMSLoLiSeLnc7GpmD.lm', 'gardener', 1, '2021-04-27 12:50:37'),
+(5, 'mcu_line1@email.com', 'MCU Linha 1', '$2y$10$7htXxHNDo0d0EiqpNjL3uulymx7IbQTevknl/d2XPcfzNE/VdB5q.', 'device', 1, '2021-05-29 16:37:49'),
+(6, 'mcu_line2@email.com', 'MCU Linha 2', '$2y$10$1.j2EWf/kXCmyerFZmhEUu3Vpqzu1Ix49NfR3fVYjMr1LEavGh85q', 'device', 1, '2021-05-29 16:38:04'),
+(7, 'mcu_line3@email.com', 'MCU Linha 3', '$2y$10$7/UI.IaBp4lNOHDSwHxoHe/St7AoYiM/SAPc4zevstjoxbePSMExu', 'device', 1, '2021-05-29 16:38:14'),
+(7, 'mcu_generic@email.com', 'MCU Generic', '$2y$10$7/UI.IaBp4lNOHDSwHxoHe/St7AoYiM/SAPc4zevstjoxbePSMExu', 'device', 1, '2021-05-29 16:38:24');
 
 --
--- Indexes for dumped tables
+-- Índices para tabelas despejadas
 --
 
 --
--- Indexes for table `category`
+-- Índices para tabela `category`
 --
 ALTER TABLE `category`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `device`
+-- Índices para tabela `device`
 --
 ALTER TABLE `device`
   ADD PRIMARY KEY (`id`),
@@ -206,72 +257,86 @@ ALTER TABLE `device`
   ADD KEY `category_id` (`category_id`);
 
 --
--- Indexes for table `log`
+-- Índices para tabela `device_brigde`
+--
+ALTER TABLE `device_brigde`
+  ADD KEY `atuator_id_relation` (`atuator_id`),
+  ADD KEY `sensor_id_relation` (`sensor_id`);
+
+--
+-- Índices para tabela `log`
 --
 ALTER TABLE `log`
   ADD PRIMARY KEY (`id`),
   ADD KEY `device_id` (`device_id`);
 
 --
--- Indexes for table `plant`
+-- Índices para tabela `plant`
 --
 ALTER TABLE `plant`
   ADD PRIMARY KEY (`id`),
   ADD KEY `created_by` (`created_by`);
 
 --
--- Indexes for table `user`
+-- Índices para tabela `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de tabelas despejadas
 --
 
 --
--- AUTO_INCREMENT for table `category`
+-- AUTO_INCREMENT de tabela `category`
 --
 ALTER TABLE `category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `device`
+-- AUTO_INCREMENT de tabela `device`
 --
 ALTER TABLE `device`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `log`
+-- AUTO_INCREMENT de tabela `log`
 --
 ALTER TABLE `log`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
--- AUTO_INCREMENT for table `plant`
+-- AUTO_INCREMENT de tabela `plant`
 --
 ALTER TABLE `plant`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT de tabela `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- Constraints for dumped tables
+-- Restrições para despejos de tabelas
 --
 
 --
--- Constraints for table `device`
+-- Limitadores para a tabela `device`
 --
 ALTER TABLE `device`
   ADD CONSTRAINT `category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
 
 --
--- Constraints for table `log`
+-- Limitadores para a tabela `device_brigde`
+--
+ALTER TABLE `device_brigde`
+  ADD CONSTRAINT `atuator_id_relation` FOREIGN KEY (`atuator_id`) REFERENCES `device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `sensor_id_relation` FOREIGN KEY (`sensor_id`) REFERENCES `device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limitadores para a tabela `log`
 --
 ALTER TABLE `log`
   ADD CONSTRAINT `device_id` FOREIGN KEY (`device_id`) REFERENCES `device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

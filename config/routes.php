@@ -28,7 +28,7 @@ return function (App $app) {
 
     $app->group('/api/v1', function (RouteCollectorProxy $group) {
         $group->get('[/]', \App\Action\ApiAction::class . ":index")->setName('api');
-        $group->get('/log/{line}/{position}', \App\Action\ApiAction::class . ":getLog")->setName('apiLogGet');
+        $group->get('/log/{line}/{position}/{name}', \App\Action\ApiAction::class . ":getLog")->setName('apiLogGet');
         $group->post('/log[/]', \App\Action\ApiAction::class . ":addLog")->setName('apiLogAdd');
     });
 

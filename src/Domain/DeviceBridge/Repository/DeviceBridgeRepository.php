@@ -9,14 +9,14 @@
  * File: DeviceCreatorRepository.php
  */
 
-namespace App\Domain\Device\Repository;
+namespace App\Domain\DeviceBridge\Repository;
 
 use PDO;
 
 /**
  * Repository.
  */
-class DeviceRepository
+class DeviceBridgeRepository
 {
     /**
      * @var PDO The database connection
@@ -52,7 +52,7 @@ class DeviceRepository
      * @param string|null $name
      * @return array
      */
-    public function getDevice(int $deviceId = null, string $name = null): array
+    public function getDeviceSensor(int $deviceId = null, string $name = null): array
     {
         if ($deviceId) {
             $row = [
@@ -80,7 +80,7 @@ class DeviceRepository
      * @param string|null $name
      * @return array
      */
-    public function getDeviceInfo(int $deviceId = null, string $name = null, string $local_name = null): array
+    public function getDeviceActuator(int $deviceId = null, string $name = null): array
     {
         if ($deviceId) {
             $row = [
@@ -92,11 +92,6 @@ class DeviceRepository
                 'name' => $name
             ];
             $sql = "SELECT device.*, category.measure FROM device LEFT JOIN category ON category.id = device.category_id WHERE device.name = :name;";
-        } else if ($local_name) {
-            $row = [
-                'name' => $local_name
-            ];
-            $sql = "SELECT device.*, category.measure FROM device LEFT JOIN category ON category.id = device.category_id WHERE device.name_local = :name;";
         } else {
             return  [];
         }
@@ -108,52 +103,13 @@ class DeviceRepository
         return (array)$device_query;
     }
 
-    /**
-     * @return array
-     */
-    public function getCategoriesList(): array
-    {
-        $sql = "SELECT id, name FROM category ORDER BY name ASC;";
-
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute();
-        $device_query = $stmt->fetchAll();
-
-        return $device_query;
-    }
-
-    /**
-     * @param $id
-     * @param $local_name
-     * @return bool
-     */
-    public function checkDeviceName($id, $local_name): bool
-    {
-        if ($id) {
-            $row = [
-                'id' => $id,
-                'local_name' => $local_name
-            ];
-            $sql = "SELECT * FROM device WHERE id <> :id and name_local = :local_name;";
-        } else {
-            $row = [
-                'local_name' => $local_name
-            ];
-            $sql = "SELECT * FROM device WHERE name_local = :local_name;";
-        }
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute($row);
-        $device_query = $stmt->fetchAll();
-
-        return count($device_query) > 0;
-    }
 
 
     /**
      * @param array $device
      * @return int
      */
-    public function insertDevice(array $device): int
+    public function insertDeviceBridge(array $device): int
     {
         $row = [
             'category_id' => $device['category_id'],
@@ -189,7 +145,7 @@ class DeviceRepository
      * @param array $device
      * @return int
      */
-    public function updateDevice(array $device): int
+    public function updateDeviceBridge(array $device): int
     {
         $row = [
             'category_id' => $device['category_id'],
@@ -228,7 +184,7 @@ class DeviceRepository
      * @param int $deviceId
      * @return bool
      */
-    public function deleteDevice(int $deviceId ): bool
+    public function deleteDeviceBridge(int $deviceId ): bool
     {
         if ($deviceId) {
             $row = [

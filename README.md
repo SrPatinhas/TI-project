@@ -1,5 +1,10 @@
 # TI-project
 
+js chart -> https://www.chartjs.org/docs/latest/
+
+PHP Framework -> http://slimframework.com/docs/v4/
+
+
 ## Project Config
 ### Requirements
 - composer (v2 would be better)
@@ -150,3 +155,20 @@ The user will only have access to his plants and logs
 
     Email: user@email.com
     Password: Qwerty
+
+
+# V2
+
+## Changes
+
+### BD
+
+``ALTER TABLE `user` CHANGE `role` `role` ENUM('admin','gardener','user','device') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;``
+
+``
+INSERT INTO 'user' ('id', 'email', 'name', 'password', 'role', 'is_active', 'created_at') VALUES
+(5, 'mcu_line1@email.com', 'MCU Linha 1', '$2y$10$7htXxHNDo0d0EiqpNjL3uulymx7IbQTevknl/d2XPcfzNE/VdB5q.', 'device', 1, '2021-05-29 16:37:49'),
+(6, 'mcu_line2@email.com', 'MCU Linha 2', '$2y$10$1.j2EWf/kXCmyerFZmhEUu3Vpqzu1Ix49NfR3fVYjMr1LEavGh85q', 'device', 1, '2021-05-29 16:38:04'),
+(7, 'mcu_line3@email.com', 'MCU Linha 3', '$2y$10$7/UI.IaBp4lNOHDSwHxoHe/St7AoYiM/SAPc4zevstjoxbePSMExu', 'device', 1, '2021-05-29 16:38:14');
+COMMIT;
+``

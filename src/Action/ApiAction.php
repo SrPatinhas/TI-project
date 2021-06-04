@@ -11,6 +11,7 @@
 
 namespace App\Action;
 
+use App\Domain\Device\Service\Device;
 use App\Domain\User\Service\UserLogin;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -24,19 +25,29 @@ final class ApiAction
      */
     private $logModel;
     /**
+     * @var Device
+     */
+    private $deviceModel;
+    /**
      * @var UserLogin
      */
     private $userModel;
+    /**
+     * @var deviceBridge
+     */
+    private $deviceBridgeModel;
 
     /**
      * ApiAction constructor.
      * @param Log $logModel
      * @param UserLogin $userModel
      */
-    public function __construct(Log $logModel, UserLogin $userModel)
+    public function __construct(Log $logModel, Device $deviceModel, DeviceBridge $deviceBridgeModel, UserLogin $userModel)
     {
         $this->logModel = $logModel;
         $this->userModel = $userModel;
+        $this->deviceModel = $deviceModel;
+        $this->deviceBridgeModel = $deviceBridgeModel;
     }
 
     /**
@@ -120,10 +131,21 @@ final class ApiAction
                 ->withStatus(401);
         }
 
-        $result = $this->logModel->getLastLog($params['line'], $params['position']);
+        $device = $this->deviceModel->getDeviceInfo($params['name']);
+        // will get the value, after will be validated if the device needs to be on or off
+        $result = $this->logModel->getLastLogByCategory($params['line'], $params['position'], $device["category_id"]);
+
+        $deviceBridge = $this->deviceBridgeModel->getDeviceInfo($params['name']);
+
+        $info = [];
+        if($device["force_on"]) {
+            $info["state"] = true;
+        } else {
+            $info["state"] = ($result["value"] >= $device["switch_value"] ? true : false);
+        }
 
         // Build the HTTP response
-        $response->getBody()->write((string)json_encode($result));
+        $response->getBody()->write((string)json_encode($info));
 
         return $response
             ->withHeader('Content-Type', 'application/json')

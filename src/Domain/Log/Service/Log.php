@@ -86,6 +86,17 @@ final class Log
     }
 
     /**
+     * @param int $line
+     * @param int $position
+     * @return array
+     */
+    public function getLastLogByCategory(int $line, int $position, int $category): array
+    {
+        // Insert user
+        return $this->repository->getLastLogByCategory($line, $position, $category);
+    }
+
+    /**
      * @param array $log
      * @return array
      */

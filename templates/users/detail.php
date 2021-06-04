@@ -37,21 +37,27 @@
                                 <h4 class="mb-3">Role</h4>
                                 <div class="my-3">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="radiobutton_admin" <?=($detail["role"] == "admin" ? 'checked' : '')?>>
+                                        <input class="form-check-input" type="radio" name="role" id="radiobutton_admin" <?=($detail["role"] == "admin" ? 'checked' : '')?>>
                                         <label class="form-check-label" for="radiobutton_admin">
                                             Admin
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="radiobutton_gardener" <?=($detail["role"] == "gardener" ? 'checked' : '')?>>
+                                        <input class="form-check-input" type="radio" name="role" id="radiobutton_gardener" <?=($detail["role"] == "gardener" ? 'checked' : '')?>>
                                         <label class="form-check-label" for="radiobutton_gardener">
                                             Gardener
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="radiobutton_user" <?=($detail["role"] == "user" ? 'checked' : '')?>>
+                                        <input class="form-check-input" type="radio" name="role" id="radiobutton_user" <?=($detail["role"] == "user" ? 'checked' : '')?>>
                                         <label class="form-check-label" for="radiobutton_user">
                                             User
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="role" id="radiobutton_device" <?=($detail["role"] == "device" ? 'checked' : '')?>>
+                                        <label class="form-check-label" for="radiobutton_device">
+                                            Device
                                         </label>
                                     </div>
                                 </div>

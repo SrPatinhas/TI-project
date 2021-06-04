@@ -9,27 +9,27 @@
  * File: DeviceCreator.php
  */
 
-namespace App\Domain\Device\Service;
+namespace App\Domain\DeviceBridge\Service;
 
-use App\Domain\Device\Repository\DeviceRepository;
+use App\Domain\DeviceBridge\Repository\DeviceBridgeRepository;
 use App\Exception\ValidationException;
 
 /**
  * Service.
  */
-final class Device
+final class DeviceBridge
 {
     /**
-     * @var DeviceRepository
+     * @var DeviceBridgeRepository
      */
     private $repository;
 
     /**
      * The constructor.
      *
-     * @param DeviceRepository $repository The repository
+     * @param DeviceBridgeRepository $repository The repository
      */
-    public function __construct(DeviceRepository $repository)
+    public function __construct(DeviceBridgeRepository $repository)
     {
         $this->repository = $repository;
     }
