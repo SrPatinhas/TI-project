@@ -39,7 +39,7 @@ class LogRepository
      */
     public function getLogsList(): array
     {
-        $sql = "SELECT log.*, device.name as 'device'
+        $sql = "SELECT log.*, device.*
                 FROM log 
                 LEFT JOIN device ON device.id = log.device_id;";
 

@@ -16,11 +16,11 @@
                     </div>
                     <div class="row">
                         <div class="table-responsive">
-                            <table class="table table-striped table-hover">
+                            <table class="table table-striped table-hover" id="datatable">
                                 <thead>
                                     <tr>
                                         <th scope="col">Device</th>
-                                        <th scope="col">Category</th>
+                                        <th scope="col">Position</th>
                                         <th scope="col">Value</th>
                                         <th scope="col">Date</th>
                                     </tr>
@@ -30,8 +30,8 @@
                                     foreach ($list as $item) {
                                 ?>
                                     <tr>
-                                        <td><?=$item["device"]?></td>
-                                        <td><?=$item["category"]?></td>
+                                        <td><?=$item["name"]?></td>
+                                        <td><?=$item["line"]?> - <?=$item["position"]?></td>
                                         <td><?=$item["value"]?><?=$item["category_unit"]?></td>
                                         <td><?=$item["date"]?></td>
                                     </tr>
@@ -44,5 +44,11 @@
             </div>
         </div>
         <?=$this->fetch('./layout/footer.php')?>
+
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
+        <script>
+            const dataTable = new simpleDatatables.DataTable("#datatable");
+        </script>
     </body>
 </html>
