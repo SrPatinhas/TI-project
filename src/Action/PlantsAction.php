@@ -105,8 +105,6 @@ final class PlantsAction
         $detail = $this->plantModel->getPlant((int)$params["id"]);
         $logs = $this->logModel->getLogByPlant($detail["line"], $detail["position"]);
 
-        var_dump($logs);
-        die();
         $chart = "";
 
         $this->renderer->addAttribute('detail', $detail);

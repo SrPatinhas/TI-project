@@ -44,6 +44,15 @@ final class Device
     }
 
     /**
+     * @return array
+     */
+    public function getDevicesListByType(string $type): array
+    {
+        // Insert user
+        return $this->repository->getDevicesListByType($type);
+    }
+
+    /**
      * @param int|null $deviceId
      * @param string|null $name
      * @return array
@@ -82,20 +91,20 @@ final class Device
     }
 
     /**
-     * @param array $plant
+     * @param array $device
      * @return array
      */
-    public function createDevice(array $plant): array
+    public function createDevice(array $device): array
     {
         // Input validation
-        $checkData = $this->validateNewDevice($plant);
+        $checkData = $this->validateNewDevice($device);
 
         if ($checkData) {
             return $checkData;
         }
 
         // Insert user
-        $deviceId = $this->repository->insertDevice($plant);
+        $deviceId = $this->repository->insertDevice($device);
 
         $result = [
             'id' => $deviceId
@@ -106,20 +115,20 @@ final class Device
     }
 
     /**
-     * @param array $plant
+     * @param array $device
      * @return array
      */
-    public function updateDevice(array $plant): array
+    public function updateDevice(array $device): array
     {
         // Input validation
-        $checkData = $this->validateNewDevice($plant);
+        $checkData = $this->validateNewDevice($device);
 
         if ($checkData) {
             return $checkData;
         }
 
         // Insert user
-        $deviceId = $this->repository->updateDevice($plant);
+        $deviceId = $this->repository->updateDevice($device);
 
         $result = [
             'id' => $deviceId
@@ -128,6 +137,25 @@ final class Device
         //$this->logger->info(sprintf('Device created successfully: %s', $deviceId));
         return $result;
     }
+
+    /**
+     * @param array $device
+     * @return array
+     */
+    public function updateDeviceField(array $device): array
+    {
+        // Insert user
+        $deviceId = $this->repository->updateDeviceField($device);
+
+        $result = [
+            'id' => $deviceId
+        ];
+        // Logging here: Device created successfully
+        //$this->logger->info(sprintf('Device created successfully: %s', $deviceId));
+        return $result;
+    }
+
+
 
     /**
      * @param int $deviceId

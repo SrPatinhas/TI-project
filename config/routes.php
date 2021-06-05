@@ -62,6 +62,9 @@ return function (App $app) {
         $group->post('/create', \App\Action\DevicesAction::class . ":create");
         $group->post('/update', \App\Action\DevicesAction::class . ":update");
         $group->get('/delete/{id}', \App\Action\DevicesAction::class . ":delete");
+
+
+        $group->get('/update/{id}/{field}', \App\Action\DevicesAction::class . ":updateField");
     })->add(UserAuthMiddleware::class);
 
     $app->group('/plants', function (RouteCollectorProxy $group) {

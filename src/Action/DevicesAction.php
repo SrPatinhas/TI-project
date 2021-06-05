@@ -238,6 +238,74 @@ final class DevicesAction
         return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('devices-detail', ["id" => $detail["id"]]));
     }
 
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
+    public function updateField(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
+        if ($this->userSession["role"] == "user") {
+            // Build the HTTP response
+            $response->getBody()->write((string)json_encode(["no permissions"]));
+
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(403);
+        }
+
+        if ($params["field"] != "status" && $params["field"] != "state") {
+            // Build the HTTP response
+            $response->getBody()->write((string)json_encode(["incorrect params"]));
+
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(400);
+        }
+
+        $detail = $this->deviceModel->getDevice((int)$params["id"]);
+
+        $update = [
+            "field" => ($params["field"] == "status" ? 'is_active' : 'force_on'),
+            "value" => !($params["field"] == "status" ? $detail["is_active"] : $detail['force_on']),
+            "id" => (int)$params["id"]
+        ];
+        // Invoke the Domain with inputs and retain the result
+        $detail = $this->deviceModel->updateDeviceField($update);
+        // Build the HTTP response
+        $response->getBody()->write((string)json_encode(["status" => !($params["field"] == "status" ? $detail["is_active"] : $detail['force_on']) ]));
+
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(201);
+    }
+
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
+    public function updateState(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        if ($this->userSession["role"] == "user") {
+            // Get RouteParser from request to generate the urls
+            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+            return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
+        }
+        // Collect input from the HTTP request
+        $data = (array)$request->getParsedBody();
+
+        // Invoke the Domain with inputs and retain the result
+        $detail = $this->deviceModel->updateDeviceState($data["id"]);
+
+        // Build the HTTP response
+        $response->getBody()->write((string)json_encode($detail));
+
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(201);
+    }
+
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response

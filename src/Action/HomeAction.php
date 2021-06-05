@@ -97,8 +97,10 @@ final class HomeAction
             $plants = $this->plantModel->getPlantsListByUser($this->userSession["id"]);
         } else {
             $plants = $this->plantModel->getPlantsList();
-            $devices = $this->deviceModel->getDevicesList();
-            $this->renderer->addAttribute('devices', $devices);
+
+            $this->renderer->addAttribute('devices_sensors', $this->deviceModel->getDevicesListByType("sensor"));
+            $this->renderer->addAttribute('devices_actuators', $this->deviceModel->getDevicesListByType("actuators"));
+            $this->renderer->addAttribute('devices_others', $this->deviceModel->getDevicesListByType("other"));
         }
         foreach ($plants as $key => $item) {
             $plants[$key]["log"] = $this->logModel->getLastLog($item["line"], $item["position"]);
@@ -135,11 +137,12 @@ final class HomeAction
      */
     public function refreshDevices(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         if ($this->userSession["role"] != "user") {
-            $devices = $this->deviceModel->getDevicesList();
-            $this->renderer->addAttribute('devices', $devices);
+            $this->renderer->addAttribute('devices_sensors', $this->deviceModel->getDevicesListByType("sensor"));
+            $this->renderer->addAttribute('devices_actuators', $this->deviceModel->getDevicesListByType("actuators"));
+            $this->renderer->addAttribute('devices_others', $this->deviceModel->getDevicesListByType("other"));
         }
 
-        return $this->renderer->render($response, 'components/refresh-list-devices.php');
+        return $this->renderer->render($response, 'components/accordion-list-devices.php');
     }
 
     /**

@@ -48,6 +48,23 @@ class DeviceRepository
     }
 
     /**
+     * @return array
+     */
+    public function getDevicesListByType(string $type = null): array
+    {
+        $row = [
+            'type' => $type
+        ];
+        $sql = "SELECT device.*, category.name as 'category' FROM device LEFT JOIN category ON category.id = device.category_id WHERE device.type = :type;";
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($row);
+        $device_query = $stmt->fetchAll();
+
+        return $device_query;
+    }
+
+    /**
      * @param int|null $deviceId
      * @param string|null $name
      * @return array
@@ -225,6 +242,23 @@ class DeviceRepository
 
         $this->connection->prepare($sql)->execute($row);
 
+        return (int)$device['id'];
+    }
+
+    /**
+     * @param array $device
+     * @return int
+     */
+    public function updateDeviceField(array $device): int
+    {
+        $row = [
+            'value' => ($device['value'] ? 1 : 0),
+            'id' => $device['id']
+        ];
+
+        $sql =  "UPDATE device SET " . $device['field'] . " = :value WHERE id = :id;";
+
+        $this->connection->prepare($sql)->execute($row);
         return (int)$device['id'];
     }
 

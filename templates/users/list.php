@@ -17,7 +17,7 @@
                     </div>
                     <div class="row">
                         <div class="table-responsive">
-                            <table class="table table-striped table-hover">
+                            <table class="table table-striped table-hover" id="datatable">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -76,5 +76,10 @@
             </div>
         </div>
         <?=$this->fetch('./layout/footer.php')?>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
+        <script>
+            const dataTable = new simpleDatatables.DataTable("#datatable");
+        </script>
     </body>
 </html>

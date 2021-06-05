@@ -20,7 +20,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">Device</th>
-                                        <th scope="col">Position</th>
+                                        <th scope="col">Line/Position</th>
                                         <th scope="col">Value</th>
                                         <th scope="col">Date</th>
                                     </tr>
@@ -31,7 +31,7 @@
                                 ?>
                                     <tr>
                                         <td><?=$item["name"]?></td>
-                                        <td><?=$item["line"]?> - <?=$item["position"]?></td>
+                                        <td><?=$item["line"]?>/<?=$item["position"]?></td>
                                         <td><?=$item["value"]?><?=$item["category_unit"]?></td>
                                         <td><?=$item["date"]?></td>
                                     </tr>

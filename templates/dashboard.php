@@ -29,18 +29,17 @@
                         <?=$this->fetch('./components/refresh-list-plants.php', ["plants" => $plants])?>
                     </div>
                     <?php if ($user["role"] != "user") { ?>
-                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-                        <h4>Devices</h4>
-                    </div>
-                    <div id="devices-list">
-                        <?=$this->fetch('./components/refresh-list-devices.php', ["devices" => $devices])?>
-                    </div>
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+                            <h4>Devices</h4>
+                        </div>
+                        <?=$this->fetch('./components/accordion-list-devices.php', ["devices_sensors" => $devices_sensors, "devices_actuators" => $devices_actuators, "devices_others" => $devices_others])?>
                     <?php } ?>
                 </main>
             </div>
         </div>
 
         <?=$this->fetch('./layout/footer.php')?>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script>
             window.auto_refresh = false;
 
@@ -59,6 +58,25 @@
                 xhr_devices.open('GET', '/refresh-list/devices');
                 xhr_devices.send();
             }
+            $(".force_state").on("change", function (e) {
+                let id = $(this).data("id");
+                let label = ($(this).is(':checked') ? 'On' : 'Off');
+                // Without jQuery
+                fetch("/devices/update/" + id + "/state")
+                    .then(data => {
+                        $("#force_state_label_" + id).text(label);
+                    });
+            });
+            $(".change_active").on("change", function (e) {
+                let id = $(this).data("id");
+                let label = ($(this).is(':checked') ? 'Active' : 'Disabled');
+                // Without jQuery
+                fetch("/devices/update/" + id + "/status")
+                    .then(data => {
+                        $("#change_active_label_" + id).text(label);
+                    });
+            });
+
             <?php } ?>
 
             function refreshPlants() {
