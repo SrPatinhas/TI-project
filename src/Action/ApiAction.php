@@ -32,22 +32,17 @@ final class ApiAction
      * @var UserLogin
      */
     private $userModel;
-    /**
-     * @var deviceBridge
-     */
-    private $deviceBridgeModel;
 
     /**
      * ApiAction constructor.
      * @param Log $logModel
      * @param UserLogin $userModel
      */
-    public function __construct(Log $logModel, Device $deviceModel, DeviceBridge $deviceBridgeModel, UserLogin $userModel)
+    public function __construct(Log $logModel, Device $deviceModel, UserLogin $userModel)
     {
         $this->logModel = $logModel;
         $this->userModel = $userModel;
         $this->deviceModel = $deviceModel;
-        $this->deviceBridgeModel = $deviceBridgeModel;
     }
 
     /**
@@ -130,18 +125,21 @@ final class ApiAction
                 ->withHeader('Content-Type', 'application/json')
                 ->withStatus(401);
         }
-
-        $device = $this->deviceModel->getDeviceInfo($params['name']);
+        // get information from device that is requesting information
+        $device = $this->deviceModel->getDeviceInfo(null, null, $params['name']);
         // will get the value, after will be validated if the device needs to be on or off
-        $result = $this->logModel->getLastLogByCategory($params['line'], $params['position'], $device["category_id"]);
-
-        $deviceBridge = $this->deviceBridgeModel->getDeviceInfo($params['name']);
+        // check the device that wants information from
+        $result = $this->logModel->getLastLogByDeviceId($device['device_bridge_id']);
 
         $info = [];
         if($device["force_on"]) {
             $info["state"] = true;
+            $info["value"] = null;
+            $info["min_value"] = null;
         } else {
             $info["state"] = ($result["value"] >= $device["switch_value"] ? true : false);
+            $info["value"] = $result["value"];
+            $info["min_value"] = $device["switch_value"];
         }
 
         // Build the HTTP response

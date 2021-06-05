@@ -90,6 +90,17 @@ final class Log
      * @param int $position
      * @return array
      */
+    public function getLastLogByDeviceId(int $deviceId): array
+    {
+        // Insert user
+        return $this->repository->getLastLogByDeviceId($deviceId);
+    }
+
+    /**
+     * @param int $line
+     * @param int $position
+     * @return array
+     */
     public function getLastLogByCategory(int $line, int $position, int $category): array
     {
         // Insert user

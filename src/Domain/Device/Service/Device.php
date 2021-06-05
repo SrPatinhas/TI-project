@@ -71,6 +71,7 @@ final class Device
         return $this->repository->getDeviceInfo($deviceId, $name, $local_name);
     }
 
+
     /**
      * @return array
      */

@@ -44,6 +44,8 @@
 
                                 <?=$this->fetch('./components/category.php', ["categories" => $categories, "selected" => $detail["category_id"]])?>
 
+                                <?=$this->fetch('./components/device_bridge.php', ["devices" => $devices, "selected" => $detail["device_bridge_id"]])?>
+
                                 <div class="mb-3">
                                     <label for="select_type" class="form-label">Type</label>
                                     <select id="select_type" class="form-select" name="type" required>

@@ -102,10 +102,12 @@ final class DevicesAction
         $detail = $this->deviceModel->getDevice((int)$params["id"]);
         $logs = $this->logModel->getLogByDevice((int)$params["id"]);
         $categories = $this->deviceModel->getCategoriesList();
+        $devices = $this->deviceModel->getDevicesList();
 
         $this->renderer->addAttribute('detail', $detail);
         $this->renderer->addAttribute('logs', $logs);
         $this->renderer->addAttribute('categories', $categories);
+        $this->renderer->addAttribute('devices', $devices);
         return $this->renderer->render($response, 'devices/view.php');
     }
 
@@ -124,9 +126,11 @@ final class DevicesAction
         }
         $detail = $this->deviceModel->getDevice((int)$params["id"]);
         $categories = $this->deviceModel->getCategoriesList();
+        $devices = $this->deviceModel->getDevicesList();
 
         $this->renderer->addAttribute('detail', $detail);
         $this->renderer->addAttribute('categories', $categories);
+        $this->renderer->addAttribute('devices', $devices);
         return $this->renderer->render($response, 'devices/detail.php');
     }
 
@@ -145,9 +149,11 @@ final class DevicesAction
 
         $detail = $this->deviceModel->getDevice((int)$params["id"]);
         $categories = $this->deviceModel->getCategoriesList();
+        $devices = $this->deviceModel->getDevicesList();
 
         $this->renderer->addAttribute('detail', $detail);
         $this->renderer->addAttribute('categories', $categories);
+        $this->renderer->addAttribute('devices', $devices);
         return $this->renderer->render($response, 'devices/edit.php');
     }
 
@@ -163,8 +169,11 @@ final class DevicesAction
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
         $categories = $this->deviceModel->getCategoriesList();
+        $devices = $this->deviceModel->getDevicesList();
         $this->renderer->addAttribute('detail', []);
         $this->renderer->addAttribute('categories', $categories);
+        $this->renderer->addAttribute('devices', $devices);
+
         return $this->renderer->render($response, 'devices/edit.php');
     }
 

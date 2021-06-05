@@ -75,6 +75,7 @@ class DeviceRepository
         return (array)$device_query;
     }
 
+
     /**
      * @param int|null $deviceId
      * @param string|null $name
@@ -164,6 +165,7 @@ class DeviceRepository
             'position' => $device['position'],
             'type' => $device['type'],
             'switch_value' => $device['switch_value'],
+            'device_bridge_id' => $device['device_bridge_id'],
             'force_on' => ($device['force_on'] ? 1 : 0),
             'is_active' => ($device['is_active'] ? 1 : 0)
         ];
@@ -178,6 +180,7 @@ class DeviceRepository
                     type = :type,
                     switch_value = :switch_value,
                     force_on = :force_on,
+                    device_bridge_id = :device_bridge_id,
                     is_active = :is_active;";
 
         $this->connection->prepare($sql)->execute($row);
@@ -200,6 +203,7 @@ class DeviceRepository
             'position' => $device['position'],
             'type' => $device['type'],
             'switch_value' => $device['switch_value'],
+            'device_bridge_id' => $device['device_bridge_id'],
             'force_on' => ($device['force_on'] ? 1 : 0),
             'is_active' => ($device['is_active'] ? 1 : 0),
             'id' => $device['id']
@@ -215,6 +219,7 @@ class DeviceRepository
                     type = :type,
                     switch_value = :switch_value,
                     force_on = :force_on,
+                    device_bridge_id = :device_bridge_id,
                     is_active = :is_active
                     WHERE id = :id;";
 

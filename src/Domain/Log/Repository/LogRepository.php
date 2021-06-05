@@ -175,8 +175,6 @@ class LogRepository
         return (int)$Log_query['id'];
     }
 
-
-
     /**
      * @param int $line
      * @param int $position
@@ -191,12 +189,36 @@ class LogRepository
         ];
         $sql = "SELECT max(log.id) as id, log.value as value
                 FROM log
-                LEFT JOIN device as device ON device.category_id = :category and
+                LEFT JOIN device ON device.category_id = :category and
                 device.line = :line and device.position = :position;";
 
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($row);
         $Log_query = $stmt->fetchAll();
+
+        return (array)$Log_query;
+    }
+
+
+    /**
+     * @param int $line
+     * @param int $position
+     * @return array
+     */
+    public function getLastLogByDeviceId(int $deviceId = null): array
+    {
+        $row = [
+            "device_id" => $deviceId
+        ];
+        $sql = "SELECT id, value
+                FROM log
+                WHERE  device_id = :device_id
+                ORDER BY date DESC
+                LIMIT 1;";
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($row);
+        $Log_query = $stmt->fetch();
 
         return (array)$Log_query;
     }

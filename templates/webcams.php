@@ -20,7 +20,11 @@
                             <?php foreach($webcams as $item){ ?>
                             <div class="col mb-5">
                                 <div class="card h-100">
-                                    <img src="/assets/img/no_image.png" class="card-img-top" alt="<?=$item["name"]?>">
+                                    <?php if(str_ends_with($item["webcam"], 'mjpg')){ ?>
+                                        <img src="<?=$item["webcam"]?>" class="card-img-top" alt="<?=$item["name"]?>">
+                                    <?php } else { ?>
+                                        <video src="<?=$item["webcam"]?>" class="card-img-top" poster="/assets/img/no_image.png" autoplay muted></video>
+                                    <?php } ?>
                                     <div class="card-footer">
                                         <small class="text-muted">Plant: <b><?=$item["name"]?></b> - Grid: <?=$item["line"]?>/<?=$item["position"]?></small>
                                     </div>
