@@ -58,25 +58,24 @@
                 xhr_devices.open('GET', '/refresh-list/devices');
                 xhr_devices.send();
             }
-            $(".force_state").on("change", function (e) {
+            $(document).on("change", ".force_state", function (e) {
                 let id = $(this).data("id");
                 let label = ($(this).is(':checked') ? 'On' : 'Off');
                 // Without jQuery
                 fetch("/devices/update/" + id + "/state")
                     .then(data => {
-                        $("#force_state_label_" + id).text(label);
+                        $("#force_state_label_" + id).text(" " + label);
                     });
             });
-            $(".change_active").on("change", function (e) {
+            $(document).on("change", ".change_active", function (e) {
                 let id = $(this).data("id");
                 let label = ($(this).is(':checked') ? 'Active' : 'Disabled');
                 // Without jQuery
                 fetch("/devices/update/" + id + "/status")
                     .then(data => {
-                        $("#change_active_label_" + id).text(label);
+                        $("#change_active_label_" + id).text(" " + label);
                     });
             });
-
             <?php } ?>
 
             function refreshPlants() {
