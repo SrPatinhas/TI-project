@@ -85,8 +85,9 @@
                             </fieldset>
                         </form>
                     </div>
+
                     <div class="mt-5 mb-5">
-                        <?=$this->fetch('./components/chart.php', ["title" => "Last week of this device"])?>
+                        <?=$this->fetch('./components/chart.php', ["title" => "Last 15 records of this device", "dataset" => $datasets, "labels" => $labels])?>
                     </div>
                     <div class="row mt-5 mb-5">
                         <?=$this->fetch('./components/log-table.php', ["logs" => $logs, "table_type" => "device", "title" => "All entries in logs for this device"])?>

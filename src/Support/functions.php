@@ -21,7 +21,36 @@ function html(string $text = null): string
     return htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
-function dd(string $text) {
+function dump($text) {
+
+    echo "<pre>";
     print_r($text);
+    echo "</pre>";
     die();
+    return false;
+}
+
+function chart_format($list) {
+    $datasets = [];
+    $labels = [];
+
+    foreach ($list as $item) {
+        $labels[] = $item["date"];
+        $datasets[] = $item["value"];
+    }
+
+    $info = [
+        "label" => "Device values",
+        "data" => $datasets,
+        "borderWidth" => 3,
+        "fill" => false,
+        "pointRadius" => 0,
+        "pointHoverRadius" => 0,
+        "lineTension" => 0.5,
+        "backgroundColor" => 'transparent',
+        "borderColor" => '#007bff',
+        "pointBackgroundColor" => '#007bff'
+    ];
+
+    return ["list" => $info, "label" => $labels];
 }

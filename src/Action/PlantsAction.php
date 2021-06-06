@@ -105,11 +105,16 @@ final class PlantsAction
         $detail = $this->plantModel->getPlant((int)$params["id"]);
         $logs = $this->logModel->getLogByPlant($detail["line"], $detail["position"]);
 
-        $chart = "";
-
         $this->renderer->addAttribute('detail', $detail);
         $this->renderer->addAttribute('logs', $logs);
-        $this->renderer->addAttribute('chart', $chart);
+
+        // Get last logs for this device
+        $chart_logs = $this->logModel->getLogByPlant($detail["line"], $detail["position"], true);
+        // create Chart object with correct data and split with labels
+        $info = chart_format($chart_logs);
+        $this->renderer->addAttribute('datasets', $info["list"]);
+        $this->renderer->addAttribute('labels', $info["label"]);
+
         return $this->renderer->render($response, 'plants/view.php');
     }
 

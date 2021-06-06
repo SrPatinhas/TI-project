@@ -57,10 +57,10 @@ final class Log
      * @param int $deviceId
      * @return array
      */
-    public function getLogByDevice(int $deviceId): array
+    public function getLogByDevice(int $deviceId, bool $onlyValues = false): array
     {
         // Insert user
-        return $this->repository->getLogByDevice($deviceId);
+        return $this->repository->getLogByDevice($deviceId, $onlyValues);
     }
 
     /**
@@ -68,10 +68,10 @@ final class Log
      * @param int $position
      * @return array
      */
-    public function getLogByPlant(int $line, int $position): array
+    public function getLogByPlant(int $line, int $position, bool $onlyValues = false): array
     {
         // Insert user
-        return $this->repository->getLogByPlant($line, $position);
+        return $this->repository->getLogByPlant($line, $position, $onlyValues);
     }
 
     /**

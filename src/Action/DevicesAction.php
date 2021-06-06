@@ -108,6 +108,14 @@ final class DevicesAction
         $this->renderer->addAttribute('logs', $logs);
         $this->renderer->addAttribute('categories', $categories);
         $this->renderer->addAttribute('devices', $devices);
+
+        // Get last logs for this device
+        $chart_logs = $this->logModel->getLogByDevice($params["id"], true);
+        // create Chart object with correct data and split with labels
+        $info = chart_format($chart_logs);
+        $this->renderer->addAttribute('datasets', $info["list"]);
+        $this->renderer->addAttribute('labels', $info["label"]);
+
         return $this->renderer->render($response, 'devices/view.php');
     }
 

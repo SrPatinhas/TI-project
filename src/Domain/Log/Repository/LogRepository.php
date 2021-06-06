@@ -80,16 +80,24 @@ class LogRepository
      * @param int|null $deviceId
      * @return array
      */
-    public function getLogByDevice(int $deviceId = null): array
+    public function getLogByDevice(int $deviceId = null, bool $onlyValues = false, int $limit = 15): array
     {
         $row = [
             "device_id" => $deviceId
         ];
-        $sql = "SELECT category.name as 'category', CONCAT(log.value, ' ', category.measure) as 'value', log.date 
-                FROM log 
-                LEFT JOIN device ON device.id = log.device_id
-                LEFT JOIN category ON category.id = device.category_id
-                WHERE log.device_id = :device_id;";
+        if ( $onlyValues ) {
+            $sql = "SELECT log.value as 'value', log.date, category.measure"; //CONCAT(log.value, ' ', category.measure)
+        } else {
+            $sql = "SELECT category.name as 'category', CONCAT(log.value, ' ', category.measure) as 'value', log.date";
+        }
+        $sql = $sql . " FROM log 
+                        LEFT JOIN device ON device.id = log.device_id
+                        LEFT JOIN category ON category.id = device.category_id
+                        WHERE log.device_id = :device_id";
+
+        if ($onlyValues) {
+            $sql = $sql . " ORDER BY log.date DESC LIMIT " . $limit;
+        }
 
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($row);
@@ -104,18 +112,26 @@ class LogRepository
      * @param int $position
      * @return array
      */
-    public function getLogByPlant(int $line, int $position): array
+    public function getLogByPlant(int $line, int $position, bool $onlyValues = false, int $limit = 15): array
     {
         $row = [
             "line" => $line,
             "position" => $position
         ];
 
-        $sql = "SELECT  device.name as 'device', category.name as 'category', CONCAT(log.value, ' ', category.measure) as 'value', log.date 
-                FROM log 
+        if ( $onlyValues ) {
+            $sql = "SELECT category.name as 'category', log.value as 'value', log.date, category.measure"; //CONCAT(log.value, ' ', category.measure)
+        } else {
+            $sql = "SELECT  device.name as 'device', category.name as 'category', CONCAT(log.value, ' ', category.measure) as 'value', log.date";
+        }
+        $sql = $sql . " FROM log 
                 LEFT JOIN device ON device.id = log.device_id
                 LEFT JOIN category ON category.id = device.category_id
                 WHERE device.line = :line and device.position = :position;";
+
+        if ($onlyValues) {
+            $sql = $sql . " ORDER BY log.date DESC LIMIT " . $limit;
+        }
 
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($row);

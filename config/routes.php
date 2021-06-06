@@ -38,7 +38,11 @@ return function (App $app) {
     $app->get('/webcams', \App\Action\HomeAction::class . ":webcams")->setName('webcams')->add(UserAuthMiddleware::class);
     $app->get('/device/view/{id}', \App\Action\DevicesAction::class . ":view")->setName('deviceView')->add(UserAuthMiddleware::class);
     $app->get('/plant/view/{id}', \App\Action\PlantsAction::class . ":view")->setName('plantView')->add(UserAuthMiddleware::class);
+
     $app->get('/logs[/]', \App\Action\LogsAction::class . ":index")->setName('logIndex')->add(UserAuthMiddleware::class);
+    $app->get('/logs/device/{id}', \App\Action\LogsAction::class . ":chartByDevice")->setName('chartByDevice')->add(UserAuthMiddleware::class);
+    $app->get('/logs/plant/{line}/{position}', \App\Action\LogsAction::class . ":chartByPlant")->setName('chartByPlant')->add(UserAuthMiddleware::class);
+
     /*
      * Request for dynamic updated content in dashboard page
      */

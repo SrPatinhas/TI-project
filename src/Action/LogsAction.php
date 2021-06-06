@@ -71,4 +71,38 @@ final class LogsAction
         $this->renderer->addAttribute('list', $list);
         return $this->renderer->render($response, 'logs/list.php');
     }
+
+
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
+    public function chartByPlant(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
+        $list = $this->logModel->getLogByPlant($params["line"], $params["position"]);
+
+        $this->renderer->addAttribute('list', $list);
+        return $this->renderer->render($response, 'logs/list.php');
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param $params
+     * @return ResponseInterface
+     */
+    public function chartByDevice(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
+        $list = $this->logModel->getLogByDevice($params["id"], true);
+
+        $info = chart_format($list);
+
+        // Build the HTTP response
+        $response->getBody()->write((string)json_encode($info));
+
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(201);
+    }
 }
