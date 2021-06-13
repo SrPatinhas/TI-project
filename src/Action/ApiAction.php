@@ -149,4 +149,50 @@ final class ApiAction
             ->withHeader('Content-Type', 'application/json')
             ->withStatus(201);
     }
+
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
+    public function addSecurity(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        // Collect input from the HTTP request
+        $directory =  __DIR__ . '/public/faces';
+        $uploadedFiles = $request->getUploadedFiles();
+
+        // handle single input with single file upload
+        $uploadedFile = $_FILES;
+        var_dump($uploadedFile);
+        if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+            $filename = $this->moveUploadedFile($directory, $uploadedFile);
+            $response->getBody()->write($filename);
+        }
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(201);
+    }
+
+
+    /**
+     * Moves the uploaded file to the upload directory and assigns it a unique name
+     * to avoid overwriting an existing uploaded file.
+     *
+     * @param string $directory The directory to which the file is moved
+     * @param UploadedFileInterface $uploadedFile The file uploaded file to move
+     *
+     * @return string The filename of moved file
+     */
+    function moveUploadedFile(string $directory, UploadedFileInterface $uploadedFile)
+    {
+        $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
+
+        // see http://php.net/manual/en/function.random-bytes.php
+        $basename = bin2hex(random_bytes(8));
+        $filename = _date('m-d-Y_hia') . "_" .sprintf('%s.%0.8s', $basename, $extension);
+
+        $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
+
+        return $filename;
+    }
 }

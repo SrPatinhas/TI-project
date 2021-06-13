@@ -21,6 +21,11 @@ return function (App $app) {
     $app->get('/login', \App\Action\LoginAction::class . ":login")->setName('login');
     $app->post('/login', \App\Action\LoginAction::class . ":loginCheck")->setName('loginPost');
     $app->get('/logout', \App\Action\LoginAction::class . ":logout")->setName('logout');
+
+    /*
+     * Run script from Python
+     */
+    $app->get('/security', \App\Action\HomeAction::class . ":getPyFace")->setName('security');
     /*
      * API Routes
      */
@@ -30,6 +35,7 @@ return function (App $app) {
         $group->get('[/]', \App\Action\ApiAction::class . ":index")->setName('api');
         $group->get('/log/{line}/{position}/{name}', \App\Action\ApiAction::class . ":getLog")->setName('apiLogGet');
         $group->post('/log[/]', \App\Action\ApiAction::class . ":addLog")->setName('apiLogAdd');
+        $group->post('/security', \App\Action\ApiAction::class . ":addSecurity")->setName('apiSecurity');
     });
 
     /*

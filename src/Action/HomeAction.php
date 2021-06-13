@@ -166,4 +166,10 @@ final class HomeAction
     }
 
 
+    public function getPyFace(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        $command = escapeshellcmd('../../python/face_detection.py');
+        shell_exec($command);
+
+        return $this->renderer->render($response, 'components/refresh-list-plants.php');
+    }
 }
