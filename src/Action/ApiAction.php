@@ -19,7 +19,9 @@ use App\Domain\Log\Service\Log;
 
 final class ApiAction
 {
-
+    /*
+     * This file will return always a JSON response
+     */
     /**
      * @var Log
      */
@@ -34,7 +36,8 @@ final class ApiAction
     private $userModel;
 
     /**
-     * ApiAction constructor.
+     * ApiAction constructor
+     * initiate the variables for any information needed
      * @param Log $logModel
      * @param UserLogin $userModel
      */
@@ -51,24 +54,10 @@ final class ApiAction
      * @return ResponseInterface
      */
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        // return API version
         $response->getBody()->write(json_encode(['version' => '1.0']));
-
         return $response->withHeader('Content-Type', 'application/json'); //->withStatus(422);
     }
-
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @return ResponseInterface
-     */
-    public function device(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        // TODO save info in BD
-        $response->getBody()->write(json_encode(['msg' => 'Log saved with success']));
-
-        return $response->withHeader('Content-Type', 'application/json'); //->withStatus(422);
-    }
-
 
     /**
      * @param ServerRequestInterface $request
@@ -76,11 +65,13 @@ final class ApiAction
      * @return ResponseInterface
      */
     public function addLog(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        /*
+         * Validate if request his authenticated
+         */
         $user = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '';
         $pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
-
         $is_valid = $this->userModel->checkUserLogin($user, $pass);
-
+        // if the user is not valid, will return a user unauthenticated
         if (!$is_valid) {
             // Build the HTTP response
             $response->getBody()->write((string)json_encode(['error' => 'user unauthenticated']));
@@ -92,7 +83,7 @@ final class ApiAction
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();
 
-        // Invoke the Domain with inputs and retain the result
+        // Invoke the Domain with inputs and retain the result, creating a log
         $log = $this->logModel->createLog($data);
         // Transform the result into the JSON representation
         $result = [
@@ -113,11 +104,13 @@ final class ApiAction
      * @return ResponseInterface
      */
     public function getLog(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
+        /*
+         * Validate if request his authenticated
+         */
         $user = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '';
         $pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
-
         $is_valid = $this->userModel->checkUserLogin($user, $pass);
-
+        // if the user is not valid, will return a user unauthenticated
         if (!$is_valid) {
             // Build the HTTP response
             $response->getBody()->write((string)json_encode(['error' => 'user unauthenticated']));
@@ -130,7 +123,7 @@ final class ApiAction
         // will get the value, after will be validated if the device needs to be on or off
         // check the device that wants information from
         $result = $this->logModel->getLastLogByDeviceId($device['device_bridge_id']);
-
+        // validates if the device needs to be ON or will return a object based on the last log related to the device
         $info = [];
         if($device["force_on"]) {
             $info["state"] = true;
@@ -162,11 +155,11 @@ final class ApiAction
         $uploadedFiles = $request->getUploadedFiles();
 
         // handle single input with single file upload
-        $uploadedFile = $_FILES;
-        var_dump($uploadedFile);
-        if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+        $uploadedFile = $uploadedFiles['media'];
+        if ($uploadedFiles->getError() === UPLOAD_ERR_OK) {
+            //moves file to selected directory
             $filename = $this->moveUploadedFile($directory, $uploadedFile);
-            $response->getBody()->write($filename);
+            $response->getBody()->write(json_encode(["filename" => $filename]));
         }
         return $response
             ->withHeader('Content-Type', 'application/json')
@@ -188,9 +181,11 @@ final class ApiAction
         $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
 
         // see http://php.net/manual/en/function.random-bytes.php
+        // generates a random string
         $basename = bin2hex(random_bytes(8));
+        // gives a name to the file, based in the date and the random string
         $filename = _date('m-d-Y_hia') . "_" .sprintf('%s.%0.8s', $basename, $extension);
-
+        // moves the file to the given directory
         $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
 
         return $filename;

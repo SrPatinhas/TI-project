@@ -4,17 +4,18 @@
 import cv2
 # module for posting files
 import requests
-
 from msvcrt import (kbhit, getch)
 
 # image from camera
 camera = cv2.VideoCapture(0)
 
+# function to send the image to the server
 def send_file():
     url = 'http://ti.test/api/v1/security'
     files = {'media': open('security.png', 'rb')}
     requests.post(url, files=files)
 
+# takes the picture
 def take_picture():
     ret, image = camera.read()
     print ("Foto tirada")
@@ -22,6 +23,8 @@ def take_picture():
     cv2.imwrite('security.png', image)
     #envia image para API
     send_file()
+
+#loop to keep running until the user press the "q" key
 while True:
     try:
         if kbhit():

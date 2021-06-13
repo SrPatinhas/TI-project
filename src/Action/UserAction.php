@@ -50,6 +50,7 @@ final class UserAction
      */
     public function __construct(User $userModel, PhpRenderer $renderer, SessionInterface $session)
     {
+        //initiates all the variables that will be needed in the functions
         $this->renderer = $renderer;
         $this->session = $session;
         $this->userModel = $userModel;
@@ -66,14 +67,17 @@ final class UserAction
      * @throws \Throwable
      */
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        //validates if the user is not an admin, will be redirect to the Dashboard page
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
-
+        // gets the users list
         $list = $this->userModel->getUsersList();
 
+        //adds the variables to the renderer function so we can use it in the template page
         $this->renderer->addAttribute('list', $list);
+        // returns the page that we want to render
         return $this->renderer->render($response, 'users/list.php');
     }
 
@@ -85,14 +89,16 @@ final class UserAction
      * @throws \Throwable
      */
     public function detail(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
+        //validates if the user is not an admin, will be redirect to the Dashboard page
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
-
+        // gets the user detail to view only
         $detail = $this->userModel->getUser( (int) $params["id"]);
-
+        //adds the variables to the renderer function so we can use it in the template page
         $this->renderer->addAttribute('detail', $detail);
+        // returns the page that we want to render
         return $this->renderer->render($response, 'users/detail.php');
     }
 
@@ -104,14 +110,16 @@ final class UserAction
      * @throws \Throwable
      */
     public function edit(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
+        //validates if the user is not an admin, will be redirect to the Dashboard page
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
-
+        // gets the user detail to edit
         $detail = $this->userModel->getUser( (int) $params["id"]);
-
+        //adds the variables to the renderer function so we can use it in the template page
         $this->renderer->addAttribute('detail', $detail);
+        // returns the page that we want to render
         return $this->renderer->render($response, 'users/edit.php');
     }
 
@@ -122,12 +130,15 @@ final class UserAction
      * @throws \Throwable
      */
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        //validates if the user is not an admin, will be redirect to the Dashboard page
         if ($this->userSession["role"] != "admin") {
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
-
+        // returns a empty array, so we prevent any runtime error
+        //adds the variable to the response, so we can use it in the template
         $this->renderer->addAttribute('detail', []);
+        // returns the page that we want to render
         return $this->renderer->render($response, 'users/edit.php');
     }
 
@@ -138,6 +149,7 @@ final class UserAction
      * @throws \Throwable
      */
     public function create(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        //validates if the user is not an admin, will be redirect to the Dashboard page
         if ($this->userSession["role"] != "admin") {
             // Get RouteParser from request to generate the urls
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
@@ -146,7 +158,7 @@ final class UserAction
 
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();
-
+        // generates a generic password for any user created by the admin
         if($data["type"] == "create_admin") {
             $data["password"] = "Qwerty";
         }
@@ -171,6 +183,7 @@ final class UserAction
      * @throws \Throwable
      */
     public function update(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        //validates if the user is not an admin, will be redirect to the Dashboard page
         if ($this->userSession["role"] != "admin") {
             // Get RouteParser from request to generate the urls
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
@@ -198,11 +211,13 @@ final class UserAction
      */
     public function delete(ServerRequestInterface $request, ResponseInterface $response, $params): ResponseInterface {
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+        //validates if the user is not an admin, will be redirect to the Dashboard page
         if ($this->userSession["role"] != "admin") {
             return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('dashboard'));
         }
+        // deletes the user by a given ID
         $this->userModel->deleteUser($params['id']);
-
+        // redirects to the users list page
         return $response->withStatus(403)->withHeader('Location', $routeParser->urlFor('users'));
     }
 }

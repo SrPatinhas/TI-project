@@ -43,6 +43,7 @@ final class LoginAction
      */
     public function __construct(PhpRenderer $renderer, UserLogin $userLogin, SessionInterface $session)
     {
+        //initiates all the variables that will be needed in the functions
         $this->session = $session;
         $this->renderer = $renderer;
         $this->userLogin = $userLogin;
@@ -55,6 +56,7 @@ final class LoginAction
      * @throws \Throwable
      */
     public function login(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+        //returns the login page
         return $this->renderer->render($response, 'login.php');
     }
 
@@ -77,7 +79,8 @@ final class LoginAction
             "email" => $email,
             "password" => $password,
         ]);
-
+        // if there is a user with the given credentials, it will do the login, create a session and redirect to the
+        // dashboard
         if ($userLoggedIn["user"]) {
             // Get RouteParser from request to generate the urls
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
@@ -92,6 +95,7 @@ final class LoginAction
             // Redirect to protected page
             return $response->withStatus(302)->withHeader('Location', $routeParser->urlFor('dashboard'));
         } else {
+            // if not, it will return to the login page with the error message to be displayed
             return $this->renderer->render($response, 'login.php', ['message_error' => $userLoggedIn["message"]]);
         }
 
@@ -103,7 +107,7 @@ final class LoginAction
      * @return ResponseInterface
      */
     public function logout(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
-        // Logout user
+        // Logout user, destroys the session and redirects to the login page
         $this->session->destroy();
 
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();

@@ -36,6 +36,8 @@ class PlantRepository
 
     /**
      * @return array
+     *
+     * gets a list of plants
      */
     public function getPlantsList(): array
     {
@@ -52,6 +54,8 @@ class PlantRepository
     /**
      * @param int $userId
      * @return array
+     *
+     * gets a list of plants owned by a specific user
      */
     public function getPlantsListByUser(int $userId): array
     {
@@ -72,6 +76,8 @@ class PlantRepository
      * @param int|null $plantId
      * @param string|null $name
      * @return array
+     *
+     * get the information from a given plant, by the Id or the name
      */
     public function getPlant(int $plantId = null, string $name = null): array
     {
@@ -99,6 +105,8 @@ class PlantRepository
 
     /**
      * @return array
+     *
+     * get a list of all the webcams associated to the plants
      */
     public function getWebcamsList(): array
     {
@@ -115,6 +123,8 @@ class PlantRepository
     /**
      * @param array $plant
      * @return int
+     *
+     * insert a new plant from the data given to the action
      */
     public function insertPlant(array $plant): int
     {
@@ -145,6 +155,8 @@ class PlantRepository
     /**
      * @param array $plant
      * @return int
+     *
+     * update all the fields of a single plant
      */
     public function updatePlant(array $plant): int
     {
@@ -176,6 +188,8 @@ class PlantRepository
     /**
      * @param int $plantId
      * @return bool
+     *
+     * deletes a plant by its Id
      */
     public function deletePlant(int $plantId ): bool
     {

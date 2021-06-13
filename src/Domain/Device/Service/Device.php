@@ -39,7 +39,7 @@ final class Device
      */
     public function getDevicesList(): array
     {
-        // Insert user
+        // gets a list of devices from the function
         return $this->repository->getDevicesList();
     }
 
@@ -48,7 +48,7 @@ final class Device
      */
     public function getDevicesListByType(string $type): array
     {
-        // Insert user
+        // gets a list of devices, based on a type of device
         return $this->repository->getDevicesListByType($type);
     }
 
@@ -62,7 +62,7 @@ final class Device
         if ($deviceId == null && $name == null) {
             return [];
         }
-        // Insert user
+        // gets a device information, based on a device ID or name
         return $this->repository->getDevice($deviceId, $name);
     }
 
@@ -76,7 +76,7 @@ final class Device
         if ($deviceId == null && $name == null && $local_name == null) {
             return [];
         }
-        // Get device info
+        // gets a device information, based on a device ID or name or local name
         return $this->repository->getDeviceInfo($deviceId, $name, $local_name);
     }
 
@@ -86,7 +86,7 @@ final class Device
      */
     public function getCategoriesList(): array
     {
-        // Insert user
+        // gets a list of categories saved in the DB
         return $this->repository->getCategoriesList();
     }
 
@@ -96,16 +96,15 @@ final class Device
      */
     public function createDevice(array $device): array
     {
-        // Input validation
+        // Input validation for a new device
         $checkData = $this->validateNewDevice($device);
-
+        // if any error, will return a list of errors
         if ($checkData) {
             return $checkData;
         }
-
-        // Insert user
+        // Insert a new device
         $deviceId = $this->repository->insertDevice($device);
-
+        // returns a ID of the new device
         $result = [
             'id' => $deviceId
         ];
@@ -120,21 +119,18 @@ final class Device
      */
     public function updateDevice(array $device): array
     {
-        // Input validation
+        // Input validation for the device
         $checkData = $this->validateNewDevice($device);
-
+        // if any error, will return a list of errors
         if ($checkData) {
             return $checkData;
         }
-
-        // Insert user
+        // Update a given device
         $deviceId = $this->repository->updateDevice($device);
-
+        // returns a ID of the new device
         $result = [
             'id' => $deviceId
         ];
-        // Logging here: Device created successfully
-        //$this->logger->info(sprintf('Device created successfully: %s', $deviceId));
         return $result;
     }
 
@@ -144,14 +140,12 @@ final class Device
      */
     public function updateDeviceField(array $device): array
     {
-        // Insert user
+        // updated a single field of a device
         $deviceId = $this->repository->updateDeviceField($device);
-
+        // returns a ID of the new device
         $result = [
             'id' => $deviceId
         ];
-        // Logging here: Device created successfully
-        //$this->logger->info(sprintf('Device created successfully: %s', $deviceId));
         return $result;
     }
 
@@ -163,9 +157,11 @@ final class Device
      */
     public function deleteDevice(int $deviceId ): bool
     {
+        // validates if the device ID exists
         if (!$deviceId) {
             return (bool)false;
         }
+        //requests for the device to be deleted
         return $this->repository->deleteDevice($deviceId);
     }
 
@@ -180,9 +176,7 @@ final class Device
     private function validateNewDevice(array $data): array
     {
         $errors = [];
-
-        // Here you can also use your preferred validation library
-
+        // validates several fields and returns the appropriated error message
         if (empty($data['name_local'])) {
             $errors['name_local'] = 'Local Name required';
         } else {
@@ -206,10 +200,6 @@ final class Device
         if (empty($data['name'])) {
             $errors['name'] = 'Name required';
         }
-
-        /*if ($errors) {
-            //throw new ValidationException('Please check your input', $errors);
-        }*/
         return $errors;
     }
 }

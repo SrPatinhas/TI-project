@@ -35,6 +35,7 @@ class DeviceRepository
 
     /**
      * @return array
+     * this will return a list of all the devices saved in the BD
      */
     public function getDevicesList(): array
     {
@@ -49,6 +50,7 @@ class DeviceRepository
 
     /**
      * @return array
+     * returns a list of devices filtered by the type
      */
     public function getDevicesListByType(string $type = null): array
     {
@@ -68,6 +70,8 @@ class DeviceRepository
      * @param int|null $deviceId
      * @param string|null $name
      * @return array
+     *
+     * returns a single device, based in the id or the name
      */
     public function getDevice(int $deviceId = null, string $name = null): array
     {
@@ -97,6 +101,8 @@ class DeviceRepository
      * @param int|null $deviceId
      * @param string|null $name
      * @return array
+     *
+     * returns all the info, based in the device id, name or local_name
      */
     public function getDeviceInfo(int $deviceId = null, string $name = null, string $local_name = null): array
     {
@@ -128,6 +134,8 @@ class DeviceRepository
 
     /**
      * @return array
+     *
+     * get a list of all the categories saved in the DB, order by the name
      */
     public function getCategoriesList(): array
     {
@@ -144,6 +152,8 @@ class DeviceRepository
      * @param $id
      * @param $local_name
      * @return bool
+     *
+     * get all the data from a device based on the local name and ID or just local name
      */
     public function checkDeviceName($id, $local_name): bool
     {
@@ -170,6 +180,9 @@ class DeviceRepository
     /**
      * @param array $device
      * @return int
+     *
+     * insert a new device, with all the information given in a previous function
+     * and returns the ID
      */
     public function insertDevice(array $device): int
     {
@@ -208,6 +221,8 @@ class DeviceRepository
     /**
      * @param array $device
      * @return int
+     *
+     * updates a device with new information, filtered by the ID and returns the ID
      */
     public function updateDevice(array $device): int
     {
@@ -248,6 +263,8 @@ class DeviceRepository
     /**
      * @param array $device
      * @return int
+     *
+     * update a single field of the device, validated previously
      */
     public function updateDeviceField(array $device): int
     {
@@ -266,6 +283,8 @@ class DeviceRepository
     /**
      * @param int $deviceId
      * @return bool
+     *
+     * deletes a device from a given device ID
      */
     public function deleteDevice(int $deviceId ): bool
     {

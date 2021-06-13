@@ -36,6 +36,8 @@ class LogRepository
 
     /**
      * @return array
+     *
+     * this will return a list of all the logs and device information saved in the BD
      */
     public function getLogsList(): array
     {
@@ -55,6 +57,8 @@ class LogRepository
     /**
      * @param int|null $userId
      * @return array
+     *
+     * this will return all the logs associated to a user, filtered by its plants position
      */
     public function getLogByUser(int $userId = null): array
     {
@@ -79,6 +83,8 @@ class LogRepository
     /**
      * @param int|null $deviceId
      * @return array
+     *
+     * get all logs from a device, returns only the values, for the JSON/ChartJs or all the information
      */
     public function getLogByDevice(int $deviceId = null, bool $onlyValues = false, int $limit = 15): array
     {
@@ -111,6 +117,8 @@ class LogRepository
      * @param int $line
      * @param int $position
      * @return array
+     *
+     * get all logs by a plant
      */
     public function getLogByPlant(int $line, int $position, bool $onlyValues = false, int $limit = 15): array
     {
@@ -145,6 +153,8 @@ class LogRepository
      * @param int $line
      * @param int $position
      * @return array
+     *
+     * get the last log for every category
      */
     public function getLastLog(int $line, int $position): array
     {
@@ -174,6 +184,8 @@ class LogRepository
     /**
      * @param string $localName
      * @return int
+     *
+     * get a device by ID (used in the logs service)
      */
     public function getDeviceId(string $localName): int
     {
@@ -196,6 +208,8 @@ class LogRepository
      * @param int $line
      * @param int $position
      * @return array
+     *
+     * get the last log by a single given category
      */
     public function getLastLogByCategory(int $line, int $position, int $category): array
     {
@@ -221,6 +235,8 @@ class LogRepository
      * @param int $line
      * @param int $position
      * @return array
+     *
+     * get the last log from a given device ID
      */
     public function getLastLogByDeviceId(int $deviceId = null): array
     {
@@ -245,6 +261,8 @@ class LogRepository
     /**
      * @param array $log
      * @return int
+     *
+     * insert a new log in the DB
      */
     public function insertLog(array $log): int
     {
@@ -268,6 +286,8 @@ class LogRepository
     /**
      * @param int $LogId
      * @return bool
+     *
+     * delete a given log by its Is
      */
     public function deleteLog(int $LogId ): bool
     {

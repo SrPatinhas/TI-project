@@ -32,6 +32,7 @@ return [
     },
 
     SessionInterface::class => function (ContainerInterface $container) {
+        // load settings for any needed config in the app
         $settings = $container->get('settings');
         $session = new PhpSession();
         $session->setOptions((array)$settings['session']);
@@ -53,7 +54,9 @@ return [
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
         return $container->get(App::class)->getResponseFactory();
     },
-
+    /*
+     * log any errors that  occurred
+     */
     ErrorMiddleware::class => function (ContainerInterface $container) {
         $app = $container->get(App::class);
         $settings = $container->get('settings')['error'];
@@ -70,7 +73,9 @@ return [
     BasePathMiddleware::class => function (ContainerInterface $container) {
         return new BasePathMiddleware($container->get(App::class));
     },
-
+    /*
+     * Loader of the mysql connection
+     */
     PDO::class => function (ContainerInterface $container) {
         $settings = $container->get('settings')['db'];
 
@@ -85,10 +90,16 @@ return [
         return new PDO($dsn, $username, $password, $flags);
     },
 
+    /*
+     * start the engine of the template render
+     */
     PhpRenderer::class => function (ContainerInterface $container) {
         return new PhpRenderer($container->get('settings')['view']['path']);
     },
 
+    /*
+     * starter for the logger in the app to log in the file in any error occurred
+     */
     LoggerFactory::class => function (ContainerInterface $container) {
         return new LoggerFactory($container->get('settings')['logger']);
     },

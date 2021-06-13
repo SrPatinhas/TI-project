@@ -40,19 +40,18 @@ final class UserLogin
      */
     public function loginUser(array $data): array
     {
-        // Input validation
+        // Input validation for the login form
         $errors = $this->validateLoginUser($data);
-
+        // if any error, will return a list of errors
         if (!empty($errors)) {
             return [
                 "user" => false,
                 "message" => $errors
             ];
         }
-        // Logging here: User created successfully
-        //$this->logger->info(sprintf('User logged in successfully: %s', $userId));
-
-        // Validates if user has account
+        // if is the correct user, will return an object with all the information to create
+        // the session object and prevent several requests any time that we need to get the
+        // logged user information
         return $this->repository->loginUser($data);
     }
 
@@ -63,6 +62,7 @@ final class UserLogin
      */
     public function checkUserLogin(string $email, string $password): bool
     {
+        // validates if the user email and password have data
        if(empty($email) || empty($password)) {
            return false;
        }
@@ -77,7 +77,7 @@ final class UserLogin
     private function validateLoginUser(array $data): array
     {
         $errors = [];
-
+        // validates several fields and returns the appropriated error message
         if (empty($data['email'])) {
             $errors['email'] = 'Input required';
         } elseif (filter_var($data['email'], FILTER_VALIDATE_EMAIL) === false) {
@@ -87,10 +87,6 @@ final class UserLogin
         if (empty($data['password'])) {
             $errors['password'] = 'Password required';
         }
-
-        if ($errors) {
-            return (array)$errors;
-        }
-        return (array)[];
+        return $errors;
     }
 }

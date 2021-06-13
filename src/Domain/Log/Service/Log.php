@@ -39,7 +39,7 @@ final class Log
      */
     public function getLogsList(): array
     {
-        // Insert user
+        // gets a list of logs from the function
         return $this->repository->getLogsList();
     }
 
@@ -49,7 +49,7 @@ final class Log
      */
     public function getLogByUser(int $userId): array
     {
-        // Insert user
+        // gets a list of logs for a specific user, based on its plants and location of those
         return $this->repository->getLogByUser($userId);
     }
 
@@ -59,7 +59,7 @@ final class Log
      */
     public function getLogByDevice(int $deviceId, bool $onlyValues = false): array
     {
-        // Insert user
+        // get all the logs by a single device
         return $this->repository->getLogByDevice($deviceId, $onlyValues);
     }
 
@@ -70,7 +70,7 @@ final class Log
      */
     public function getLogByPlant(int $line, int $position, bool $onlyValues = false): array
     {
-        // Insert user
+        // get a list of logs from a specific position, where the given plant is
         return $this->repository->getLogByPlant($line, $position, $onlyValues);
     }
 
@@ -81,7 +81,7 @@ final class Log
      */
     public function getLastLog(int $line, int $position): array
     {
-        // Insert user
+        // get the last log in the given position for every category
         return $this->repository->getLastLog($line, $position);
     }
 
@@ -92,7 +92,7 @@ final class Log
      */
     public function getLastLogByDeviceId(int $deviceId): array
     {
-        // Insert user
+        // get the last log from a single device
         return $this->repository->getLastLogByDeviceId($deviceId);
     }
 
@@ -103,7 +103,7 @@ final class Log
      */
     public function getLastLogByCategory(int $line, int $position, int $category): array
     {
-        // Insert user
+        // get the last log for the given category
         return $this->repository->getLastLogByCategory($line, $position, $category);
     }
 
@@ -113,7 +113,7 @@ final class Log
      */
     public function createLog(array $log): array
     {
-        // Insert user
+        // Insert a new log
         $logId = $this->repository->insertLog($log);
 
         $result = [

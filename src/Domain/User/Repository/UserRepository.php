@@ -38,6 +38,7 @@ class UserRepository
      *  Get users list
      *
      * @return array
+     *
      */
     public function getUsersList(): array
     {
@@ -58,6 +59,8 @@ class UserRepository
      * @param string|null $email
      *
      * @return array
+     *
+     * get user information for a given Id
      */
     public function getUser(int $userId = null, string $email = null): array
     {
@@ -83,7 +86,7 @@ class UserRepository
     }
 
     /**
-     * Insert user row.
+     * Insert user row from a given data
      *
      * @param array $user The user
      *
@@ -112,7 +115,8 @@ class UserRepository
     }
 
     /**
-     * Update user row.
+     * Update a user row from a given data, if the password is given, then, it will be hashed
+     * and saved as well
      *
      * @param array $user The user
      *
@@ -148,6 +152,8 @@ class UserRepository
     /**
      * @param int $userId
      * @return bool
+     *
+     * deletes a user from a given Id
      */
     public function deleteUser(int $userId ): bool
     {

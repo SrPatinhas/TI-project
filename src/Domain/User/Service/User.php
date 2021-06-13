@@ -41,7 +41,7 @@ final class User
      */
     public function getUsersList(): array
     {
-        // Insert user
+        // gets a list of all the users
         return $this->repository->getUsersList();
     }
 
@@ -54,10 +54,11 @@ final class User
      */
     public function getUser(int $userId = null, string $email = null): array
     {
+        // validates if the userId or email was passed by
         if ($userId == null && $email == null) {
             return [];
         }
-        // Insert user
+        // returns an array of the requested user
         return $this->repository->getUser($userId, $email);
     }
 
@@ -70,21 +71,18 @@ final class User
      */
     public function createUser(array $data): array
     {
-        // Input validation
+        // Input validation for the user
         $checkData = $this->validateNewUser($data);
-
+        // if any error, will return a list of errors
         if ($checkData) {
             return $checkData;
         }
-
-        // Insert user
+        // Insert a new user
         $userId = $this->repository->insertUser($data);
-
+        // returns a ID of the new user
         $result = [
             'id' => $userId
         ];
-        // Logging here: Plant created successfully
-        //$this->logger->info(sprintf('Plant created successfully: %s', $plantId));
         return $result;
     }
 
@@ -94,20 +92,18 @@ final class User
      */
     public function updateUser(array $user): array
     {
-        // Input validation
+        // Input validation for the user
         $checkData = $this->validateNewUser($user);
-
+        // if any error, will return a list of errors
         if ($checkData) {
             return $checkData;
         }
-        // Insert user
+        // Update a given user
         $userId = $this->repository->updateUser($user);
-
+        // returns a ID of the given user
         $result = [
             'id' => $userId
         ];
-        // Logging here: User created successfully
-        //$this->logger->info(sprintf('User created successfully: %s', $userId));
         return $result;
     }
 
@@ -117,9 +113,11 @@ final class User
      */
     public function deleteUser(int $userId ): bool
     {
+        // validates if the user ID exists
         if (!$userId) {
             return (bool)false;
         }
+        //requests for the user to be deleted
         return $this->repository->deleteUser($userId);
     }
 
@@ -136,8 +134,7 @@ final class User
     private function validateNewUser(array $data): array
     {
         $errors = [];
-
-        // Here you can also use your preferred validation library
+        // validates several fields and returns the appropriated error message
         if (empty($data["id"])) {
             if (empty($data['password'])) {
                 $errors['password'] = 'Password required';
@@ -151,10 +148,6 @@ final class User
         } elseif (filter_var($data['email'], FILTER_VALIDATE_EMAIL) === false) {
             $errors['email'] = 'Invalid email address';
         }
-
-        /*if ($errors) {
-            //throw new ValidationException('Please check your input', $errors);
-        }*/
         return $errors;
     }
 }

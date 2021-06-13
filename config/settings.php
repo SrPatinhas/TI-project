@@ -75,6 +75,13 @@ $settings['logger'] = [
     'file_permission' => 0775,
 ];
 
+/*
+ * Specific settings for the app
+ * This will say the structure of the garden
+ * giving the number of lines that exists and
+ * the number of positions available, like a
+ * grid.
+ */
 $settings["greenhouse"] = [
     "line" => 4,
     "position" => 4

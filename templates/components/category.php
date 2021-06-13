@@ -1,3 +1,5 @@
+<!--  Displays a select box of all the categories returned -->
+
 <div class="mb-3">
     <label for="select_category" class="form-label">Category</label>
     <select id="select_category" class="form-select" name="category_id" required>

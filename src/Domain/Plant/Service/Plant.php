@@ -40,7 +40,7 @@ final class Plant
      */
     public function getPlantsList(): array
     {
-        // Insert user
+        // gets a list of all the plants
         return $this->repository->getPlantsList();
     }
 
@@ -51,7 +51,7 @@ final class Plant
      */
     public function getPlantsListByUser(int $userId): array
     {
-        // Insert user
+        // gets a list of plants owned by a specific user
         return $this->repository->getPlantsListByUser($userId);
     }
 
@@ -60,7 +60,7 @@ final class Plant
      */
     public function getWebcamsList(): array
     {
-        // Insert user
+        // gets a list of all the webcams saved in the plants information
         return $this->repository->getPlantsList();
     }
 
@@ -72,10 +72,11 @@ final class Plant
      */
     public function getPlant(int $plantId = null, string $name = null): array
     {
+        // validated if the filters have data
         if ($plantId == null && $name == null) {
             return [];
         }
-        // Insert user
+        // returns a specific plant, based on the params given
         return $this->repository->getPlant($plantId, $name);
     }
 
@@ -86,21 +87,18 @@ final class Plant
      */
     public function createPlant(array $plant): array
     {
-        // Input validation
+        // Input validation for a new plant
         $checkData = $this->validateNewPlant($plant);
-
+        // if any error, will return a list of errors
         if ($checkData) {
             return $checkData;
         }
-
-        // Insert user
+        // Insert a new plant
         $plantId = $this->repository->insertPlant($plant);
-
+        // returns a ID of the new plant
         $result = [
             'id' => $plantId
         ];
-        // Logging here: Plant created successfully
-        //$this->logger->info(sprintf('Plant created successfully: %s', $plantId));
         return $result;
     }
 
@@ -110,21 +108,18 @@ final class Plant
      */
     public function updatePlant(array $plant): array
     {
-        // Input validation
+        // Input validation for a given plant
         $checkData = $this->validateNewPlant($plant);
-
+        // if any error, will return a list of errors
         if ($checkData) {
             return $checkData;
         }
-
-        // Insert user
+        // update a given plant
         $plantId = $this->repository->updatePlant($plant);
-
+        // returns a ID of the updated plant
         $result = [
             'id' => $plantId
         ];
-        // Logging here: Plant created successfully
-        //$this->logger->info(sprintf('Plant created successfully: %s', $plantId));
         return $result;
     }
 
@@ -134,12 +129,13 @@ final class Plant
      */
     public function deletePlant(int $plantId ): bool
     {
+        // validates if the plant ID exists
         if (!$plantId) {
             return (bool)false;
         }
+        //requests for the plant to be deleted
         return $this->repository->deletePlant($plantId);
     }
-
 
     /**
      * @param array $data
@@ -148,9 +144,7 @@ final class Plant
     private function validateNewPlant(array $data): array
     {
         $errors = [];
-
-        // Here you can also use your preferred validation library
-
+        // validates several fields and returns the appropriated error message
         if (empty($data['line'])) {
             $errors['line'] = 'Line required';
         }
@@ -160,10 +154,6 @@ final class Plant
         if (empty($data['name'])) {
             $errors['name'] = 'Name required';
         }
-
-        /*if ($errors) {
-            //throw new ValidationException('Please check your input', $errors);
-        }*/
         return $errors;
     }
 }

@@ -40,6 +40,7 @@ class UserLoginRepository
      */
     public function loginUser(array $user): array
     {
+        // associated the email to the object for the sql validation
         $row = [
             'email' => $user['email']
         ];
@@ -48,8 +49,13 @@ class UserLoginRepository
         $stmt->execute($row);
         $user_query = $stmt->fetch();
 
-
+        // after fetching the account, validates if exists, and if so, uses the password_verify function
+        // to validate if the hash is the same, as the passwords are encrypted in the DB and not as
+        // plain text
         if ($user_query && password_verify($user['password'], $user_query['password'])) {
+            // if is the correct user, will return an object with all the information to create
+            // the session object and prevent several requests any time that we need to get the
+            // logged user information
             return (array)[
                 "user" => true,
                 "id" => $user_query["id"],
@@ -60,6 +66,7 @@ class UserLoginRepository
                 "created_at" => $user_query["created_at"],
             ];
         } else {
+            //returns an error message
             return (array)["user" => false, "message" => ["data" => "User not found or inputs wrong!"]];
         }
     }
@@ -72,6 +79,7 @@ class UserLoginRepository
      */
     public function checkUserLogin(string $email, string $password): bool
     {
+        // just validates if the user is the correct one, mostly used for the API calls
         $row = [
             'email' => $email
         ];
