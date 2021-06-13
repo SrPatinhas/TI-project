@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 05-Jun-2021 às 19:49
+-- Tempo de geração: 14-Jun-2021 às 00:18
 -- Versão do servidor: 10.4.18-MariaDB
 -- versão do PHP: 8.0.3
 
@@ -31,11 +31,11 @@ USE `greenhouse`;
 
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
-                            `id` int(11) NOT NULL,
-                            `name` varchar(255) NOT NULL,
-                            `description` text DEFAULT NULL,
-                            `measure` varchar(255) NOT NULL COMMENT '% for humidity or lux for light',
-                            `created_at` int(11) NOT NULL
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `measure` varchar(255) NOT NULL COMMENT '% for humidity or lux for light',
+  `created_at` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -63,19 +63,19 @@ INSERT INTO `category` (`id`, `name`, `description`, `measure`, `created_at`) VA
 
 DROP TABLE IF EXISTS `device`;
 CREATE TABLE `device` (
-                          `id` int(11) NOT NULL,
-                          `category_id` int(11) NOT NULL,
-                          `name_local` varchar(255) NOT NULL,
-                          `name` varchar(255) NOT NULL,
-                          `description` text NOT NULL,
-                          `line` int(11) NOT NULL,
-                          `position` int(11) NOT NULL,
-                          `type` enum('sensor','actuators','other') NOT NULL,
-                          `force_on` tinyint(1) NOT NULL,
-                          `switch_value` int(11) NOT NULL,
-                          `device_bridge_id` int(11) NOT NULL,
-                          `is_active` tinyint(1) NOT NULL,
-                          `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `name_local` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `line` int(11) NOT NULL,
+  `position` int(11) NOT NULL,
+  `type` enum('sensor','actuators','other') NOT NULL,
+  `force_on` tinyint(1) NOT NULL,
+  `switch_value` int(11) NOT NULL,
+  `device_bridge_id` int(11) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -83,30 +83,38 @@ CREATE TABLE `device` (
 --
 
 INSERT INTO `device` (`id`, `category_id`, `name_local`, `name`, `description`, `line`, `position`, `type`, `force_on`, `switch_value`, `device_bridge_id`, `is_active`, `created_at`) VALUES
-(1, 11, 'humidity_sensor_1_1', 'Humidity Sensor', '                                                                            ', 1, 1, 'sensor', 0, 70, 13, 1, '2021-06-05 16:39:13'),
-(2, 11, 'humidity_sensor_1_2', 'Humidity Sensor', '                                                                            ', 1, 2, 'sensor', 0, 70, 14, 1, '2021-06-05 16:39:18'),
-(3, 11, 'humidity_sensor_1_3', 'Humidity Sensor', ' ', 1, 3, 'sensor', 0, 70, 15, 1, '2021-06-05 16:39:20'),
-(4, 11, 'humidity_sensor_1_4', 'Humidity Sensor', ' ', 1, 4, 'sensor', 0, 70, 16, 1, '2021-06-05 16:39:22'),
-(5, 11, 'humidity_sensor_2_1', 'Humidity Sensor', ' ', 2, 1, 'sensor', 0, 70, 17, 1, '2021-06-05 16:39:26'),
-(6, 11, 'humidity_sensor_2_2', 'Humidity Sensor', ' ', 2, 2, 'sensor', 0, 70, 18, 1, '2021-06-05 16:39:28'),
-(7, 11, 'humidity_sensor_2_3', 'Humidity Sensor', ' ', 2, 3, 'sensor', 0, 70, 19, 1, '2021-06-05 16:39:30'),
-(8, 11, 'humidity_sensor_2_4', 'Humidity Sensor', ' ', 2, 4, 'sensor', 0, 70, 20, 1, '2021-06-05 16:39:32'),
-(9, 11, 'humidity_sensor_3_1', 'Humidity Sensor', ' ', 3, 1, 'sensor', 0, 70, 21, 1, '2021-06-05 16:39:35'),
+(1, 11, 'humidity_sensor_1_1', 'Humidity Sensor', '                                                                            ', 1, 1, 'sensor', 0, 70, 13, 1, '2021-06-05 19:55:35'),
+(2, 11, 'humidity_sensor_1_2', 'Humidity Sensor', '                                                                            ', 1, 2, 'sensor', 0, 70, 14, 1, '2021-06-05 19:55:50'),
+(3, 11, 'humidity_sensor_1_3', 'Humidity Sensor', ' ', 1, 3, 'sensor', 0, 70, 15, 0, '2021-06-05 19:53:58'),
+(4, 11, 'humidity_sensor_1_4', 'Humidity Sensor', ' ', 1, 4, 'sensor', 0, 70, 16, 1, '2021-06-05 19:55:38'),
+(5, 11, 'humidity_sensor_2_1', 'Humidity Sensor', ' ', 2, 1, 'sensor', 0, 70, 17, 1, '2021-06-05 19:55:51'),
+(6, 11, 'humidity_sensor_2_2', 'Humidity Sensor', ' ', 2, 2, 'sensor', 0, 70, 18, 0, '2021-06-05 19:53:57'),
+(7, 11, 'humidity_sensor_2_3', 'Humidity Sensor', ' ', 2, 3, 'sensor', 0, 70, 19, 1, '2021-06-05 19:55:55'),
+(8, 11, 'humidity_sensor_2_4', 'Humidity Sensor', ' ', 2, 4, 'sensor', 0, 70, 20, 1, '2021-06-05 19:55:56'),
+(9, 11, 'humidity_sensor_3_1', 'Humidity Sensor', ' ', 3, 1, 'sensor', 0, 70, 21, 0, '2021-06-05 19:53:54'),
 (10, 11, 'humidity_sensor_3_2', 'Humidity Sensor', ' ', 3, 2, 'sensor', 0, 70, 22, 1, '2021-06-05 16:39:40'),
 (11, 11, 'humidity_sensor_3_3', 'Humidity Sensor', ' ', 3, 3, 'sensor', 0, 70, 23, 1, '2021-06-05 16:39:43'),
 (12, 11, 'humidity_sensor_3_4', 'Humidity Sensor', ' ', 3, 4, 'sensor', 0, 70, 24, 1, '2021-06-05 16:39:47'),
-(13, 8, 'sprinkler_1_1', 'Sprinkler', '                                                                            ', 1, 1, 'actuators', 0, 71, 1, 1, '2021-06-05 16:24:35'),
+(13, 8, 'sprinkler_1_1', 'Sprinkler', '                                                                            ', 1, 1, 'actuators', 1, 71, 1, 1, '2021-06-05 19:56:07'),
 (14, 8, 'sprinkler_1_2', 'Sprinkler', '                                                                            ', 1, 2, 'actuators', 0, 71, 1, 1, '2021-06-05 16:24:35'),
 (15, 8, 'sprinkler_1_3', 'Sprinkler', '                                                                             ', 1, 3, 'actuators', 0, 27, 3, 1, '2021-06-05 17:03:34'),
-(16, 8, 'sprinkler_1_4', 'Sprinkler', ' ', 1, 4, 'actuators', 0, 71, 4, 1, '2021-06-05 16:27:57'),
-(17, 8, 'sprinkler_2_1', 'Sprinkler', ' ', 2, 1, 'actuators', 0, 71, 5, 1, '2021-06-05 16:28:10'),
+(16, 8, 'sprinkler_1_4', 'Sprinkler', ' ', 1, 4, 'actuators', 1, 71, 4, 1, '2021-06-05 19:56:05'),
+(17, 8, 'sprinkler_2_1', 'Sprinkler', ' ', 2, 1, 'actuators', 1, 71, 5, 1, '2021-06-05 19:48:23'),
 (18, 8, 'sprinkler_2_2', 'Sprinkler', ' ', 2, 2, 'actuators', 0, 71, 6, 1, '2021-06-05 16:28:20'),
-(19, 8, 'sprinkler_2_3', 'Sprinkler', ' ', 2, 3, 'actuators', 0, 71, 7, 1, '2021-06-05 16:28:31'),
+(19, 8, 'sprinkler_2_3', 'Sprinkler', ' ', 2, 3, 'actuators', 1, 71, 7, 1, '2021-06-05 19:56:01'),
 (20, 8, 'sprinkler_2_4', 'Sprinkler', ' ', 2, 4, 'actuators', 0, 71, 8, 1, '2021-06-05 16:28:42'),
 (21, 8, 'sprinkler_3_1', 'Sprinkler', ' ', 3, 1, 'actuators', 0, 71, 9, 1, '2021-06-05 16:28:58'),
 (22, 8, 'sprinkler_3_2', 'Sprinkler', ' ', 3, 2, 'actuators', 0, 71, 10, 1, '2021-06-05 16:29:35'),
 (23, 8, 'sprinkler_3_3', 'Sprinkler', ' ', 3, 3, 'actuators', 0, 71, 11, 1, '2021-06-05 16:29:44'),
-(24, 8, 'sprinkler_3_4', 'Sprinkler', ' ', 3, 4, 'actuators', 0, 71, 12, 1, '2021-06-05 16:29:52');
+(24, 8, 'sprinkler_3_4', 'Sprinkler', ' ', 3, 4, 'actuators', 0, 71, 12, 1, '2021-06-05 16:29:52'),
+(25, 11, 'humidity_sensor_4_1', 'Humidity Sensor', ' ', 4, 1, 'sensor', 0, 70, 24, 1, '2021-06-05 16:39:47'),
+(26, 11, 'humidity_sensor_4_2', 'Humidity Sensor', ' ', 4, 2, 'sensor', 0, 70, 24, 1, '2021-06-05 18:25:46'),
+(27, 11, 'humidity_sensor_4_3', 'Humidity Sensor', ' ', 4, 3, 'sensor', 0, 70, 24, 1, '2021-06-05 18:25:53'),
+(28, 11, 'humidity_sensor_4_4', 'Humidity Sensor', ' ', 4, 4, 'sensor', 0, 70, 24, 1, '2021-06-05 18:26:00'),
+(29, 8, 'sprinkler_4_1', 'Sprinkler', ' ', 4, 1, 'actuators', 0, 71, 25, 1, '2021-06-05 16:29:52'),
+(30, 8, 'sprinkler_4_2', 'Sprinkler', ' ', 4, 2, 'actuators', 0, 71, 26, 1, '2021-06-05 18:26:58'),
+(31, 8, 'sprinkler_4_3', 'Sprinkler', ' ', 4, 3, 'actuators', 0, 71, 27, 1, '2021-06-05 18:27:11'),
+(32, 8, 'sprinkler_4_4', 'Sprinkler', ' ', 4, 4, 'actuators', 0, 71, 28, 1, '2021-06-05 18:27:22');
 
 -- --------------------------------------------------------
 
@@ -116,11 +124,11 @@ INSERT INTO `device` (`id`, `category_id`, `name_local`, `name`, `description`, 
 
 DROP TABLE IF EXISTS `log`;
 CREATE TABLE `log` (
-                       `id` int(11) NOT NULL,
-                       `device_id` int(11) NOT NULL,
-                       `value` varchar(255) NOT NULL,
-                       `date` datetime NOT NULL,
-                       `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `id` int(11) NOT NULL,
+  `device_id` int(11) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  `date` datetime NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -151,15 +159,15 @@ INSERT INTO `log` (`id`, `device_id`, `value`, `date`, `created_at`) VALUES
 
 DROP TABLE IF EXISTS `plant`;
 CREATE TABLE `plant` (
-                         `id` int(11) NOT NULL,
-                         `name` varchar(255) NOT NULL,
-                         `line` int(11) NOT NULL,
-                         `position` int(11) NOT NULL,
-                         `cover` varchar(255) NOT NULL,
-                         `webcam` varchar(255) NOT NULL,
-                         `is_active` tinyint(1) NOT NULL,
-                         `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-                         `created_by` int(11) NOT NULL
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `line` int(11) NOT NULL,
+  `position` int(11) NOT NULL,
+  `cover` varchar(255) NOT NULL,
+  `webcam` varchar(255) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -169,7 +177,7 @@ CREATE TABLE `plant` (
 INSERT INTO `plant` (`id`, `name`, `line`, `position`, `cover`, `webcam`, `is_active`, `created_at`, `created_by`) VALUES
 (1, 'morangos', 1, 3, '/storage/1725fca7-f369-4b13-a6ea-87dbfee88aa9.jpg', 'http://178.203.161.161:81/mjpg/video.mjpg', 1, '2021-04-29 02:43:18', 1),
 (2, 'Maças', 3, 3, '/storage/e2e83b21-c3fb-4115-8501-23b7b0c6a99a.jpg', 'http://79.108.129.167:9000/mjpg/video.mjpg', 1, '2021-04-29 02:43:31', 1),
-(3, 'Watermelon', 2, 3, '/storage/55f918dc-8f2c-4373-8646-aba0e72a59e8.jpg', 'http://201.213.190.16:80/mjpg/video.mjpg', 1, '2021-05-03 18:49:14', 3);
+(3, 'Watermelon', 1, 1, '/storage/55f918dc-8f2c-4373-8646-aba0e72a59e8.jpg', 'http://201.213.190.16:80/mjpg/video.mjpg', 1, '2021-05-03 18:49:14', 3);
 
 -- --------------------------------------------------------
 
@@ -179,13 +187,13 @@ INSERT INTO `plant` (`id`, `name`, `line`, `position`, `cover`, `webcam`, `is_ac
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-                        `id` int(11) NOT NULL,
-                        `email` varchar(255) NOT NULL,
-                        `name` varchar(255) NOT NULL,
-                        `password` varchar(255) NOT NULL,
-                        `role` enum('admin','gardener','user','device') NOT NULL,
-                        `is_active` tinyint(1) NOT NULL,
-                        `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` enum('admin','gardener','user','device') NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -209,36 +217,36 @@ INSERT INTO `user` (`id`, `email`, `name`, `password`, `role`, `is_active`, `cre
 -- Índices para tabela `category`
 --
 ALTER TABLE `category`
-    ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Índices para tabela `device`
 --
 ALTER TABLE `device`
-    ADD PRIMARY KEY (`id`),
-    ADD UNIQUE KEY `name_local` (`name_local`),
-    ADD KEY `category_id` (`category_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name_local` (`name_local`),
+  ADD KEY `category_id` (`category_id`);
 
 --
 -- Índices para tabela `log`
 --
 ALTER TABLE `log`
-    ADD PRIMARY KEY (`id`),
-    ADD KEY `device_id` (`device_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `device_id` (`device_id`);
 
 --
 -- Índices para tabela `plant`
 --
 ALTER TABLE `plant`
-    ADD PRIMARY KEY (`id`),
-    ADD KEY `created_by` (`created_by`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `created_by` (`created_by`);
 
 --
 -- Índices para tabela `user`
 --
 ALTER TABLE `user`
-    ADD PRIMARY KEY (`id`),
-    ADD UNIQUE KEY `email` (`email`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT de tabelas despejadas
@@ -248,31 +256,31 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT de tabela `category`
 --
 ALTER TABLE `category`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de tabela `device`
 --
 ALTER TABLE `device`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT de tabela `log`
 --
 ALTER TABLE `log`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de tabela `plant`
 --
 ALTER TABLE `plant`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `user`
 --
 ALTER TABLE `user`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restrições para despejos de tabelas
@@ -282,13 +290,13 @@ ALTER TABLE `user`
 -- Limitadores para a tabela `device`
 --
 ALTER TABLE `device`
-    ADD CONSTRAINT `category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
+  ADD CONSTRAINT `category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
 
 --
 -- Limitadores para a tabela `log`
 --
 ALTER TABLE `log`
-    ADD CONSTRAINT `device_id` FOREIGN KEY (`device_id`) REFERENCES `device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `device_id` FOREIGN KEY (`device_id`) REFERENCES `device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
