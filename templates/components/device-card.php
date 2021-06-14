@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="card-body">
-            <h5 class="card-title" data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$item["local_name"]?>"><?=$item["name"]?></h5>
+            <h5 class="card-title" data-bs-toggle="tooltip" data-bs-placement="top" title="<?=$item["name_local"]?>"><?=$item["name"]?></h5>
             <p class="card-text"></p>
             <a href="/device/view/<?=$item["id"]?>" class="btn btn-primary">More details</a>
         </div>
